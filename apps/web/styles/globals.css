@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-chetana-50: #f0f4ff;
+  --color-chetana-100: #dbe4ff;
+  --color-chetana-200: #bac8ff;
+  --color-chetana-300: #91a7ff;
+  --color-chetana-400: #748ffc;
+  --color-chetana-500: #5c7cfa;
+  --color-chetana-600: #4c6ef5;
+  --color-chetana-700: #4263eb;
+  --color-chetana-800: #3b5bdb;
+  --color-chetana-900: #364fc7;
+  --color-chetana-950: #1a2a6c;
+
+  --color-consciousness-low: #ff6b6b;
+  --color-consciousness-mid: #ffd43b;
+  --color-consciousness-high: #51cf66;
+
+  --color-theory-gwt: #4c6ef5;
+  --color-theory-iit: #ae3ec9;
+  --color-theory-hot: #f76707;
+  --color-theory-rpt: #20c997;
+  --color-theory-pp: #fab005;
+  --color-theory-ast: #e64980;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-100 antialiased;
+  }
+}
