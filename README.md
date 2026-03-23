@@ -2,6 +2,8 @@
 
 > AI Consciousness Research Platform
 
+🌐 **Live Demo:** [https://mukundakatta.github.io/chetana/](https://mukundakatta.github.io/chetana/)
+
 ## Overview
 
 Chetana (Sanskrit: चेतन, meaning "consciousness" or "awareness") is a research platform for testing AI models against consciousness indicators derived from six major scientific theories. It provides a standardized framework for evaluating whether and to what degree AI systems exhibit markers associated with consciousness.
