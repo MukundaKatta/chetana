@@ -44,7 +44,7 @@ export default function HomePage() {
 
           <div className="mt-10 flex items-center justify-center gap-4">
             <Link
-              href="/audit/new"
+              href="/try"
               className="rounded-xl bg-chetana-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-chetana-600/25 transition hover:bg-chetana-500 hover:shadow-chetana-500/25"
             >
               Run a Consciousness Audit
@@ -303,7 +303,7 @@ export default function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/auth/signup"
+                  href="/try"
                   className={`mt-8 block rounded-lg py-2.5 text-center text-sm font-medium transition ${
                     key === "researcher"
                       ? "bg-chetana-600 text-white hover:bg-chetana-500"
@@ -329,7 +329,7 @@ export default function HomePage() {
             more urgent. Start measuring.
           </p>
           <Link
-            href="/audit/new"
+            href="/try"
             className="mt-8 inline-flex rounded-xl bg-chetana-600 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-chetana-600/25 transition hover:bg-chetana-500"
           >
             Run Your First Audit — Free

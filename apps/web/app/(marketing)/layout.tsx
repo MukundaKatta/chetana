@@ -38,10 +38,10 @@ export default function MarketingLayout({
               Sign In
             </Link>
             <Link
-              href="/auth/signup"
+              href="/try"
               className="rounded-lg bg-chetana-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-chetana-500"
             >
-              Start Auditing
+              Try Free
             </Link>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function MarketingLayout({
             <div>
               <h4 className="text-sm font-semibold text-gray-300">Product</h4>
               <div className="mt-3 flex flex-col gap-2 text-sm text-gray-400">
-                <Link href="/audit/new" className="hover:text-white">Run an Audit</Link>
+                <Link href="/try" className="hover:text-white">Run an Audit</Link>
                 <Link href="/leaderboard" className="hover:text-white">Leaderboard</Link>
                 <Link href="/compare" className="hover:text-white">Compare Models</Link>
               </div>
