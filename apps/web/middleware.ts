@@ -1,7 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const hasSupabase =
+  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
 export async function middleware(request: NextRequest) {
+  // Demo mode: skip auth when Supabase isn't configured
+  if (!hasSupabase) {
+    return NextResponse.next();
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -30,9 +39,9 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protect dashboard routes
-  if (!user && request.nextUrl.pathname.startsWith("/(dashboard)")) {
+  if (!user && request.nextUrl.pathname.match(/^\/(audit|compare|experiments|leaderboard|research|settings)/)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
