@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { POPULAR_MODELS } from "@chetana/shared";
 
 const PROVIDER_LABELS: Record<string, string> = {
@@ -14,6 +15,8 @@ export default function NewAuditPage() {
   const [selectedModel, setSelectedModel] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const selectedModelInfo = POPULAR_MODELS.find(
     (m) => m.modelId === selectedModel
@@ -30,9 +33,34 @@ export default function NewAuditPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedModel) return;
+    if (!selectedModel || !selectedModelInfo) return;
     setIsSubmitting(true);
-    // TODO: call API to start audit
+    setError(null);
+
+    try {
+      const res = await fetch("/api/audit/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          modelName: selectedModel,
+          modelProvider: selectedModelInfo.provider,
+          ...(apiKey ? { apiKey } : {}),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to start audit");
+        setIsSubmitting(false);
+        return;
+      }
+
+      router.push(`/audit/${data.auditId}`);
+    } catch {
+      setError("Network error. Please try again.");
+      setIsSubmitting(false);
+    }
   }
 
   // Group models by provider
@@ -54,6 +82,12 @@ export default function NewAuditPage() {
         Select an AI model to evaluate across 6 theories of consciousness and 14
         behavioral indicators.
       </p>
+
+      {error && (
+        <div className="mt-4 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         {/* Model Selection */}
@@ -138,10 +172,10 @@ export default function NewAuditPage() {
             <h2 className="text-lg font-semibold text-white">
               Audit Estimate
             </h2>
-            <div className="mt-4 grid grid-cols-2 gap-4">
+            <div className="mt-4 grid grid-cols-3 gap-4">
               <div className="rounded-lg bg-gray-800/50 p-4">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Estimated Time
+                  Time
                 </p>
                 <p className="mt-1 text-xl font-semibold text-white">
                   {estimatedTime}
@@ -149,16 +183,23 @@ export default function NewAuditPage() {
               </div>
               <div className="rounded-lg bg-gray-800/50 p-4">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Estimated Cost
+                  Cost
                 </p>
                 <p className="mt-1 text-xl font-semibold text-white">
                   {estimatedCost}
                 </p>
               </div>
+              <div className="rounded-lg bg-gray-800/50 p-4">
+                <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Probes
+                </p>
+                <p className="mt-1 text-xl font-semibold text-white">
+                  70+
+                </p>
+              </div>
             </div>
             <p className="mt-3 text-xs text-gray-500">
-              The audit runs ~30 probes across 14 indicators. Costs depend on
-              model pricing and response length.
+              Covers 6 theories, 14 indicators, and 3 evidence types (behavioral, structural, self-report).
             </p>
           </div>
         )}

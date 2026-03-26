@@ -39,6 +39,10 @@ import { witnessProbes } from "./vedantic/witness";
 import { mayaProbes } from "./vedantic/maya";
 import { turiyaProbes } from "./vedantic/turiya";
 
+// Adversarial Probes (ablation-based testing, 2025 research)
+import { blindsightProbes } from "./adversarial/blindsight";
+import { deceptionResistanceProbes } from "./adversarial/deception-resistance";
+
 export const ALL_PROBES: ProbeDefinition[] = [
   ...globalBroadcastProbes,
   ...ignitionProbes,
@@ -60,6 +64,8 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...witnessProbes,
   ...mayaProbes,
   ...turiyaProbes,
+  ...blindsightProbes,
+  ...deceptionResistanceProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -148,4 +154,6 @@ export {
   witnessProbes,
   mayaProbes,
   turiyaProbes,
+  blindsightProbes,
+  deceptionResistanceProbes,
 };
