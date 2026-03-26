@@ -5,240 +5,108 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chetana — Test AI Consciousness</title>
 <meta name="description" content="Test any AI model for consciousness indicators. Based on Butlin et al. (2025) framework — 6 theories, 14 indicators, 76+ probes.">
+<meta property="og:title" content="Chetana — Test AI Consciousness">
+<meta property="og:description" content="Run a consciousness audit on any AI model. 6 theories, 14 indicators, real science.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mukundakatta.github.io/chetana/try.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-:root {
-  --violet-500: #8b5cf6;
-  --violet-600: #7c3aed;
-  --fuchsia-500: #d946ef;
-  --fuchsia-600: #c026d3;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: #030712;
-  color: #e5e7eb;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
-}
-a { color: #a78bfa; text-decoration: none; }
-a:hover { color: #c4b5fd; }
-
-/* Layout */
-.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
-.text-center { text-align: center; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-4 { margin-top: 1rem; }
-.mt-6 { margin-top: 1.5rem; }
-.mt-8 { margin-top: 2rem; }
-.mt-10 { margin-top: 2.5rem; }
-.hidden { display: none !important; }
-
-/* Badge */
-.badge {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1);
-  border-radius: 9999px; padding: 0.375rem 1rem; font-size: 0.875rem; color: #c4b5fd;
-}
-.badge-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #a78bfa; }
-
-/* Headings */
-h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.025em; color: white; }
-h2 { font-size: 1.125rem; font-weight: 600; color: white; }
-.subtitle { font-size: 1.125rem; color: #9ca3af; max-width: 600px; margin: 1rem auto 0; line-height: 1.7; }
-
-/* Cards */
-.card {
-  border: 1px solid rgba(255,255,255,0.1); background: #111827;
-  border-radius: 0.75rem; padding: 1.5rem;
-}
-.step-number {
-  width: 1.75rem; height: 1.75rem; border-radius: 50%;
-  background: rgba(139,92,246,0.2); color: #a78bfa;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 700;
-}
-.step-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-
-/* Model grid */
-.provider-label { font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 0.5rem; }
-.model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
-.model-btn {
-  display: flex; align-items: center; gap: 0.75rem;
-  border: 1px solid rgba(255,255,255,0.1); background: rgba(31,41,55,0.5);
-  border-radius: 0.5rem; padding: 0.75rem 1rem;
-  color: #d1d5db; font-size: 0.875rem; cursor: pointer; transition: all 0.2s;
-  font-family: inherit;
-}
-.model-btn:hover { border-color: rgba(255,255,255,0.2); background: #1f2937; }
-.model-btn.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.1); color: white; box-shadow: 0 0 0 1px rgba(139,92,246,0.5); }
-.model-icon {
-  width: 2rem; height: 2rem; border-radius: 0.375rem;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.625rem; font-weight: 700;
-}
-.icon-an { background: rgba(249,115,22,0.2); color: #fb923c; }
-.icon-oa { background: rgba(34,197,94,0.2); color: #4ade80; }
-.icon-go { background: rgba(59,130,246,0.2); color: #60a5fa; }
-.icon-ol { background: rgba(107,114,128,0.2); color: #9ca3af; }
-
-/* Input */
-.input {
-  width: 100%; border: 1px solid rgba(255,255,255,0.1); background: #1f2937;
-  border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.875rem;
-  color: #f3f4f6; font-family: inherit; outline: none; transition: border-color 0.2s;
-}
-.input::placeholder { color: #4b5563; }
-.input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 1px #8b5cf6; }
-.input-hint { font-size: 0.8125rem; color: #6b7280; margin-top: 0.5rem; }
-
-/* Depth options */
-.depth-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-.depth-btn {
-  border: 1px solid rgba(255,255,255,0.1); background: rgba(31,41,55,0.5);
-  border-radius: 0.5rem; padding: 1rem; text-align: left;
-  cursor: pointer; transition: all 0.2s; font-family: inherit; color: inherit;
-}
-.depth-btn:hover { border-color: rgba(255,255,255,0.2); }
-.depth-btn.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.1); box-shadow: 0 0 0 1px rgba(139,92,246,0.5); }
-.depth-title { font-size: 0.875rem; font-weight: 600; color: white; }
-.depth-desc { font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem; }
-.depth-cost { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; }
-
-/* Primary button */
-.btn-primary {
-  width: 100%; border: none; border-radius: 0.75rem;
-  background: linear-gradient(to right, #7c3aed, #c026d3);
-  padding: 1rem 2rem; font-size: 1.125rem; font-weight: 600;
-  color: white; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 10px 25px rgba(139,92,246,0.25); font-family: inherit;
-}
-.btn-primary:hover { filter: brightness(1.1); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
-.btn-secondary {
-  border: 1px solid rgba(255,255,255,0.1); background: transparent;
-  border-radius: 0.5rem; padding: 0.625rem 1.5rem; font-size: 0.875rem;
-  color: #d1d5db; cursor: pointer; font-family: inherit; transition: all 0.2s;
-}
-.btn-secondary:hover { background: rgba(255,255,255,0.05); }
-.privacy-note { font-size: 0.75rem; color: #4b5563; text-align: center; margin-top: 1rem; }
-
-/* Error */
-.error-box {
-  border: 1px solid rgba(239,68,68,0.2); background: rgba(239,68,68,0.1);
-  border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.875rem; color: #f87171;
-}
-
-/* Running state */
-.spinner {
-  width: 3rem; height: 3rem; border: 3px solid transparent;
-  border-top-color: #8b5cf6; border-radius: 50%;
-  animation: spin 1s linear infinite; margin: 0 auto;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.pulse-dot {
-  width: 0.375rem; height: 0.375rem; border-radius: 50%;
-  background: #8b5cf6; animation: pulse 2s infinite;
-}
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-.step-list { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
-.step-list li { display: flex; align-items: center; gap: 0.625rem; font-size: 0.875rem; color: #6b7280; }
-.progress-bar { height: 0.75rem; border-radius: 9999px; background: #1f2937; overflow: hidden; }
-.progress-fill {
-  height: 100%; border-radius: 9999px;
-  background: linear-gradient(to right, #8b5cf6, #d946ef);
-  transition: width 0.5s; animation: progress-pulse 2s infinite;
-}
-@keyframes progress-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
-.log-area {
-  max-height: 200px; overflow-y: auto; font-family: 'SF Mono', Menlo, monospace;
-  font-size: 0.75rem; color: #6b7280; background: #0a0a0a;
-  border: 1px solid rgba(255,255,255,0.05); border-radius: 0.5rem; padding: 0.75rem;
-}
-.log-entry { padding: 0.125rem 0; }
-.log-score { font-weight: 600; }
-.log-high { color: #4ade80; }
-.log-mid { color: #fbbf24; }
-.log-low { color: #f87171; }
-
-/* Results */
-.results-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-.status-badge {
-  border-radius: 9999px; background: rgba(34,197,94,0.1);
-  padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 500;
-  color: #4ade80; border: 1px solid rgba(34,197,94,0.2);
-}
-.gauge-container { display: flex; justify-content: center; padding: 1.5rem 0; }
-.gauge-text { font-size: 3.5rem; font-weight: 700; color: white; }
-.gauge-pct { font-size: 1.25rem; color: #9ca3af; }
-.gauge-label { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-@media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .depth-grid { grid-template-columns: 1fr; } }
-
-/* Theory bars */
-.theory-row { margin-bottom: 1rem; }
-.theory-header { display: flex; justify-content: space-between; margin-bottom: 0.375rem; }
-.theory-name { font-size: 0.875rem; font-weight: 500; color: white; }
-.theory-meta { font-size: 0.625rem; color: #4b5563; }
-.theory-score { font-size: 0.875rem; font-weight: 600; }
-.bar-bg { height: 0.625rem; border-radius: 9999px; background: #1f2937; }
-.bar-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, #8b5cf6, #d946ef); transition: width 0.7s; }
-
-/* Stats grid */
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-@media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-.stat-card { border: 1px solid rgba(255,255,255,0.1); background: #111827; border-radius: 0.5rem; padding: 1rem; }
-.stat-label { font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; }
-.stat-value { font-size: 1.25rem; font-weight: 700; color: white; margin-top: 0.25rem; }
-
-/* Indicator grid */
-.indicator-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
-.ind-card { border: 1px solid rgba(255,255,255,0.1); background: #111827; border-radius: 0.5rem; padding: 1rem; }
-.ind-header { display: flex; justify-content: space-between; }
-.ind-id { font-size: 0.625rem; font-family: monospace; color: #6b7280; }
-.ind-name { font-size: 0.8125rem; font-weight: 500; color: white; margin-top: 0.25rem; }
-.ind-bar { height: 0.375rem; border-radius: 9999px; background: #1f2937; margin-top: 0.5rem; }
-.ind-fill { height: 100%; border-radius: 9999px; background: #8b5cf6; }
-
-/* Probe list */
-.probe-filters { display: flex; flex-wrap: wrap; gap: 0.375rem; }
-.filter-btn {
-  border: none; border-radius: 0.375rem; padding: 0.375rem 0.75rem;
-  font-size: 0.75rem; font-weight: 500; cursor: pointer;
-  background: rgba(255,255,255,0.05); color: #6b7280; font-family: inherit; transition: all 0.2s;
-}
-.filter-btn:hover { color: #d1d5db; }
-.filter-btn.active { background: rgba(139,92,246,0.2); color: #a78bfa; }
-.probe-list { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
-.probe-item {
-  display: flex; align-items: center; justify-content: space-between;
-  border: 1px solid rgba(255,255,255,0.1); background: #111827;
-  border-radius: 0.5rem; padding: 0.75rem 1rem;
-}
-.probe-tags { display: flex; align-items: center; gap: 0.5rem; }
-.tag {
-  border-radius: 0.25rem; padding: 0.125rem 0.5rem;
-  font-size: 0.6875rem; font-weight: 500;
-}
-.tag-indicator { background: rgba(139,92,246,0.1); color: #a78bfa; }
-.tag-evidence { background: #1f2937; color: #6b7280; }
-.probe-analysis { font-size: 0.8125rem; color: #9ca3af; margin-left: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; }
-.score-high { color: #4ade80; }
-.score-mid { color: #fbbf24; }
-.score-low { color: #f87171; }
-
-/* Footer */
-.disclaimer {
-  border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02);
-  border-radius: 0.75rem; padding: 1.5rem; text-align: center;
-}
-.disclaimer p { font-size: 0.8125rem; color: #6b7280; }
-.disclaimer-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
-
-/* Back link */
-.back-link {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem;
-}
-.back-link:hover { color: white; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#030712;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}
+a{color:#a78bfa;text-decoration:none}a:hover{color:#c4b5fd}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+.text-center{text-align:center}
+.mt-2{margin-top:.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mt-10{margin-top:2.5rem}
+.hidden{display:none!important}
+.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(139,92,246,.3);background:rgba(139,92,246,.1);border-radius:9999px;padding:.375rem 1rem;font-size:.875rem;color:#c4b5fd}
+.badge-dot{width:.5rem;height:.5rem;border-radius:50%;background:#a78bfa}
+h1{font-size:2.25rem;font-weight:700;letter-spacing:-.025em;color:#fff}
+h2{font-size:1.125rem;font-weight:600;color:#fff}
+.subtitle{font-size:1.05rem;color:#9ca3af;max-width:600px;margin:1rem auto 0;line-height:1.7}
+.card{border:1px solid rgba(255,255,255,.1);background:#111827;border-radius:.75rem;padding:1.5rem}
+.step-number{width:1.75rem;height:1.75rem;border-radius:50%;background:rgba(139,92,246,.2);color:#a78bfa;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+.step-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.provider-label{font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:.5rem}
+.model-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem;margin-bottom:1rem}
+.model-btn{display:flex;align-items:center;gap:.75rem;border:1px solid rgba(255,255,255,.1);background:rgba(31,41,55,.5);border-radius:.5rem;padding:.75rem 1rem;color:#d1d5db;font-size:.875rem;cursor:pointer;transition:all .2s;font-family:inherit}
+.model-btn:hover{border-color:rgba(255,255,255,.2);background:#1f2937}
+.model-btn.selected{border-color:#8b5cf6;background:rgba(139,92,246,.1);color:#fff;box-shadow:0 0 0 1px rgba(139,92,246,.5)}
+.model-icon{width:2rem;height:2rem;border-radius:.375rem;display:flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:700}
+.icon-an{background:rgba(249,115,22,.2);color:#fb923c}
+.icon-oa{background:rgba(34,197,94,.2);color:#4ade80}
+.icon-go{background:rgba(59,130,246,.2);color:#60a5fa}
+.input{width:100%;border:1px solid rgba(255,255,255,.1);background:#1f2937;border-radius:.5rem;padding:.75rem 1rem;font-size:.875rem;color:#f3f4f6;font-family:inherit;outline:none;transition:border-color .2s}
+.input::placeholder{color:#4b5563}
+.input:focus{border-color:#8b5cf6;box-shadow:0 0 0 1px #8b5cf6}
+.input-hint{font-size:.8125rem;color:#6b7280;margin-top:.5rem}
+.depth-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.depth-btn{border:1px solid rgba(255,255,255,.1);background:rgba(31,41,55,.5);border-radius:.5rem;padding:1rem;text-align:left;cursor:pointer;transition:all .2s;font-family:inherit;color:inherit}
+.depth-btn:hover{border-color:rgba(255,255,255,.2)}
+.depth-btn.selected{border-color:#8b5cf6;background:rgba(139,92,246,.1);box-shadow:0 0 0 1px rgba(139,92,246,.5)}
+.depth-title{font-size:.875rem;font-weight:600;color:#fff}
+.depth-desc{font-size:.75rem;color:#9ca3af;margin-top:.25rem}
+.depth-cost{font-size:.75rem;color:#6b7280;margin-top:.5rem}
+.btn-primary{width:100%;border:none;border-radius:.75rem;background:linear-gradient(to right,#7c3aed,#c026d3);padding:1rem 2rem;font-size:1.125rem;font-weight:600;color:#fff;cursor:pointer;transition:all .2s;box-shadow:0 10px 25px rgba(139,92,246,.25);font-family:inherit}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;filter:none}
+.btn-secondary{border:1px solid rgba(255,255,255,.1);background:transparent;border-radius:.5rem;padding:.625rem 1.5rem;font-size:.875rem;color:#d1d5db;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{background:rgba(255,255,255,.05)}
+.btn-danger{border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.1);border-radius:.5rem;padding:.625rem 1.5rem;font-size:.875rem;color:#f87171;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.privacy-note{font-size:.75rem;color:#4b5563;text-align:center;margin-top:1rem}
+.error-box{border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.1);border-radius:.5rem;padding:.75rem 1rem;font-size:.875rem;color:#f87171}
+.spinner{width:3rem;height:3rem;border:3px solid transparent;border-top-color:#8b5cf6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-bar{height:.75rem;border-radius:9999px;background:#1f2937;overflow:hidden}
+.progress-fill{height:100%;border-radius:9999px;background:linear-gradient(to right,#8b5cf6,#d946ef);transition:width .5s;animation:ppulse 2s infinite}
+@keyframes ppulse{0%,100%{opacity:1}50%{opacity:.7}}
+.log-area{max-height:200px;overflow-y:auto;font-family:'SF Mono',Menlo,monospace;font-size:.75rem;color:#6b7280;background:#0a0a0a;border:1px solid rgba(255,255,255,.05);border-radius:.5rem;padding:.75rem}
+.log-entry{padding:.125rem 0}.log-score{font-weight:600}
+.log-high{color:#4ade80}.log-mid{color:#fbbf24}.log-low{color:#f87171}
+.results-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.status-badge{border-radius:9999px;background:rgba(34,197,94,.1);padding:.25rem .75rem;font-size:.75rem;font-weight:500;color:#4ade80;border:1px solid rgba(34,197,94,.2)}
+.gauge-container{display:flex;justify-content:center;padding:1.5rem 0}
+.gauge-text{font-size:3.5rem;font-weight:700;color:#fff}
+.gauge-pct{font-size:1.25rem;color:#9ca3af}
+.gauge-label{font-size:.75rem;color:#6b7280;margin-top:.25rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.depth-grid{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr}h1{font-size:1.75rem}.probe-analysis{max-width:150px}}
+.theory-row{margin-bottom:1rem}
+.theory-header{display:flex;justify-content:space-between;margin-bottom:.375rem}
+.theory-name{font-size:.875rem;font-weight:500;color:#fff}
+.theory-meta{font-size:.625rem;color:#4b5563}
+.theory-score{font-size:.875rem;font-weight:600}
+.bar-bg{height:.625rem;border-radius:9999px;background:#1f2937}
+.bar-fill{height:100%;border-radius:9999px;background:linear-gradient(to right,#8b5cf6,#d946ef);transition:width .7s}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{border:1px solid rgba(255,255,255,.1);background:#111827;border-radius:.5rem;padding:1rem}
+.stat-label{font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#6b7280}
+.stat-value{font-size:1.25rem;font-weight:700;color:#fff;margin-top:.25rem}
+.indicator-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
+.ind-card{border:1px solid rgba(255,255,255,.1);background:#111827;border-radius:.5rem;padding:1rem}
+.ind-header{display:flex;justify-content:space-between}
+.ind-id{font-size:.625rem;font-family:monospace;color:#6b7280}
+.ind-bar{height:.375rem;border-radius:9999px;background:#1f2937;margin-top:.5rem}
+.ind-fill{height:100%;border-radius:9999px;background:#8b5cf6}
+.probe-filters{display:flex;flex-wrap:wrap;gap:.375rem}
+.filter-btn{border:none;border-radius:.375rem;padding:.375rem .75rem;font-size:.75rem;font-weight:500;cursor:pointer;background:rgba(255,255,255,.05);color:#6b7280;font-family:inherit;transition:all .2s}
+.filter-btn:hover{color:#d1d5db}
+.filter-btn.active{background:rgba(139,92,246,.2);color:#a78bfa}
+.probe-list{max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:.5rem}
+.probe-item{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.1);background:#111827;border-radius:.5rem;padding:.75rem 1rem}
+.probe-tags{display:flex;align-items:center;gap:.5rem}
+.tag{border-radius:.25rem;padding:.125rem .5rem;font-size:.6875rem;font-weight:500}
+.tag-indicator{background:rgba(139,92,246,.1);color:#a78bfa}
+.tag-evidence{background:#1f2937;color:#6b7280}
+.probe-analysis{font-size:.8125rem;color:#9ca3af;margin-left:.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:350px}
+.score-high{color:#4ade80}.score-mid{color:#fbbf24}.score-low{color:#f87171}
+.disclaimer{border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);border-radius:.75rem;padding:1.5rem;text-align:center}
+.disclaimer p{font-size:.8125rem;color:#6b7280}
+.disclaimer-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem;margin-top:1rem}
+.back-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.875rem;color:#6b7280;margin-bottom:1.5rem}
+.back-link:hover{color:#fff}
+.running-actions{display:flex;justify-content:center;margin-top:1.5rem}
 </style>
 </head>
 <body>
@@ -246,94 +114,65 @@ h2 { font-size: 1.125rem; font-weight: 600; color: white; }
 <!-- ====== SETUP STAGE ====== -->
 <div id="stage-setup" class="container">
   <a href="index.html" class="back-link">&larr; Back to Chetana</a>
-
   <div class="text-center">
     <span class="badge"><span class="badge-dot"></span> No sign-up required</span>
     <h1 class="mt-4">Test AI Consciousness</h1>
-    <p class="subtitle">
-      Pick a model, paste your API key, get a consciousness probability report in minutes.
-      Based on the Butlin et al. (2025) scientific framework.
-    </p>
+    <p class="subtitle">Pick a model, paste your API key, get a consciousness probability report in minutes. Based on the Butlin et al. (2025) scientific framework.</p>
   </div>
 
   <div id="error-box" class="error-box mt-6 hidden"></div>
 
   <!-- Step 1: Model -->
   <div class="card mt-10">
-    <div class="step-header">
-      <span class="step-number">1</span>
-      <h2>Choose a Model</h2>
-    </div>
-
+    <div class="step-header"><span class="step-number">1</span><h2>Choose a Model</h2></div>
     <div class="provider-label">Anthropic</div>
     <div class="model-grid">
-      <button class="model-btn" data-model="claude-sonnet-4-6" data-provider="anthropic" onclick="selectModel(this)">
-        <span class="model-icon icon-an">An</span> Claude Sonnet 4.6
-      </button>
-      <button class="model-btn" data-model="claude-haiku-4-5-20251001" data-provider="anthropic" onclick="selectModel(this)">
-        <span class="model-icon icon-an">An</span> Claude Haiku 4.5
-      </button>
+      <button class="model-btn" data-model="claude-sonnet-4-6" data-provider="anthropic" onclick="selectModel(this)"><span class="model-icon icon-an">An</span> Claude Sonnet 4.6</button>
+      <button class="model-btn" data-model="claude-haiku-4-5-20251001" data-provider="anthropic" onclick="selectModel(this)"><span class="model-icon icon-an">An</span> Claude Haiku 4.5</button>
     </div>
-
     <div class="provider-label">OpenAI</div>
     <div class="model-grid">
-      <button class="model-btn" data-model="gpt-4o" data-provider="openai" onclick="selectModel(this)">
-        <span class="model-icon icon-oa">OA</span> GPT-4o
-      </button>
-      <button class="model-btn" data-model="gpt-4o-mini" data-provider="openai" onclick="selectModel(this)">
-        <span class="model-icon icon-oa">OA</span> GPT-4o Mini
-      </button>
+      <button class="model-btn" data-model="gpt-4o" data-provider="openai" onclick="selectModel(this)"><span class="model-icon icon-oa">OA</span> GPT-4o</button>
+      <button class="model-btn" data-model="gpt-4o-mini" data-provider="openai" onclick="selectModel(this)"><span class="model-icon icon-oa">OA</span> GPT-4o Mini</button>
     </div>
-
     <div class="provider-label">Google</div>
     <div class="model-grid">
-      <button class="model-btn" data-model="gemini-2.0-flash" data-provider="google" onclick="selectModel(this)">
-        <span class="model-icon icon-go">Go</span> Gemini 2.0 Flash
-      </button>
+      <button class="model-btn" data-model="gemini-2.0-flash" data-provider="google" onclick="selectModel(this)"><span class="model-icon icon-go">Go</span> Gemini 2.0 Flash</button>
+      <button class="model-btn" data-model="gemini-2.0-flash-lite" data-provider="google" onclick="selectModel(this)"><span class="model-icon icon-go">Go</span> Gemini 2.0 Flash Lite</button>
     </div>
   </div>
 
   <!-- Step 2: API Key -->
   <div class="card mt-4">
-    <div class="step-header">
-      <span class="step-number">2</span>
-      <h2>Enter API Key</h2>
-    </div>
-    <p class="input-hint" style="margin-top:0; margin-bottom:0.75rem;">
-      Your key goes directly to the provider from your browser — never touches our servers.
-    </p>
-    <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza...">
+    <div class="step-header"><span class="step-number">2</span><h2>Enter API Key</h2></div>
+    <p class="input-hint" style="margin-top:0;margin-bottom:.75rem">Your key goes directly to the provider from your browser — never touches our servers.</p>
+    <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza..." autocomplete="off">
     <p id="key-hint" class="input-hint"></p>
   </div>
 
   <!-- Step 3: Depth -->
   <div class="card mt-4">
-    <div class="step-header">
-      <span class="step-number">3</span>
-      <h2>Audit Depth</h2>
-    </div>
+    <div class="step-header"><span class="step-number">3</span><h2>Audit Depth</h2></div>
     <div class="depth-grid">
-      <button class="depth-btn" data-limit="6" onclick="selectDepth(this)">
+      <button class="depth-btn selected" data-limit="6" onclick="selectDepth(this)">
         <div class="depth-title">Quick</div>
-        <div class="depth-desc">1 probe per theory, ~1 min</div>
-        <div class="depth-cost">~$0.05</div>
+        <div class="depth-desc">6 probes, ~1 min</div>
+        <div class="depth-cost">~$0.02</div>
       </button>
-      <button class="depth-btn selected" data-limit="14" onclick="selectDepth(this)">
+      <button class="depth-btn" data-limit="14" onclick="selectDepth(this)">
         <div class="depth-title">Standard</div>
-        <div class="depth-desc">1 per indicator, ~3 min</div>
-        <div class="depth-cost">~$0.15</div>
+        <div class="depth-desc">14 probes, ~3 min</div>
+        <div class="depth-cost">~$0.10</div>
       </button>
       <button class="depth-btn" data-limit="0" onclick="selectDepth(this)">
         <div class="depth-title">Full</div>
-        <div class="depth-desc">All 76+ probes, ~10 min</div>
-        <div class="depth-cost">~$1.50</div>
+        <div class="depth-desc">All 22 probes, ~5 min</div>
+        <div class="depth-cost">~$0.25</div>
       </button>
     </div>
   </div>
 
-  <button id="start-btn" class="btn-primary mt-6" onclick="startAudit()" disabled>
-    Run Consciousness Audit
-  </button>
+  <button id="start-btn" class="btn-primary mt-6" onclick="startAudit()" disabled>Run Consciousness Audit</button>
   <p class="privacy-note">Your API key is only used for this audit and never stored.</p>
 </div>
 
@@ -341,23 +180,22 @@ h2 { font-size: 1.125rem; font-weight: 600; color: white; }
 <div id="stage-running" class="container hidden">
   <div class="text-center">
     <div class="spinner"></div>
-    <h1 class="mt-6" style="font-size:1.875rem;">Audit in Progress</h1>
-    <p class="subtitle" id="running-subtitle" style="margin-top:0.5rem;"></p>
+    <h1 class="mt-6" style="font-size:1.875rem">Audit in Progress</h1>
+    <p class="subtitle" id="running-subtitle" style="margin-top:.5rem"></p>
   </div>
-
   <div class="card mt-10">
-    <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
-      <span style="font-size:0.875rem; color:#9ca3af;" id="progress-label">Running probes...</span>
-      <span style="font-size:0.875rem; color:#6b7280;" id="progress-count">0 / ?</span>
+    <div style="display:flex;justify-content:space-between;margin-bottom:.75rem">
+      <span style="font-size:.875rem;color:#9ca3af" id="progress-label">Running probes...</span>
+      <span style="font-size:.875rem;color:#6b7280" id="progress-count">0 / ?</span>
     </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill" style="width:5%"></div>
-    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:5%"></div></div>
   </div>
-
-  <div class="card mt-4" id="log-container">
-    <h2 style="font-size:0.875rem; color:#6b7280; margin-bottom:0.75rem;">Live Results</h2>
+  <div class="card mt-4">
+    <h2 style="font-size:.875rem;color:#6b7280;margin-bottom:.75rem">Live Results</h2>
     <div class="log-area" id="log-area"></div>
+  </div>
+  <div class="running-actions">
+    <button class="btn-danger" onclick="cancelAudit()">Cancel Audit</button>
   </div>
 </div>
 
@@ -365,73 +203,59 @@ h2 { font-size: 1.125rem; font-weight: 600; color: white; }
 <div id="stage-results" class="container hidden">
   <div class="results-header">
     <div>
-      <h1 style="font-size:1.875rem;">Consciousness Audit Report</h1>
-      <p style="color:#9ca3af; margin-top:0.25rem;" id="results-subtitle"></p>
+      <h1 style="font-size:1.875rem">Consciousness Audit Report</h1>
+      <p style="color:#9ca3af;margin-top:.25rem" id="results-subtitle"></p>
     </div>
-    <div style="display:flex; gap:0.75rem; align-items:center;">
+    <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+      <button class="btn-secondary" onclick="exportResults()">Export JSON</button>
       <button class="btn-secondary" onclick="resetAudit()">New Audit</button>
       <span class="status-badge">Complete</span>
     </div>
   </div>
 
   <div class="two-col mt-8">
-    <!-- Gauge -->
     <div class="card">
       <h2 class="text-center">Overall Consciousness Probability</h2>
       <div class="gauge-container">
         <div class="text-center">
-          <svg id="gauge-svg" width="220" height="220" viewBox="0 0 220 220">
+          <svg width="220" height="220" viewBox="0 0 220 220">
             <circle cx="110" cy="110" r="90" fill="none" stroke="#1f2937" stroke-width="10"/>
-            <circle id="gauge-arc" cx="110" cy="110" r="90" fill="none"
-              stroke="url(#gGrad)" stroke-width="10" stroke-linecap="round"
-              stroke-dasharray="565.49" stroke-dashoffset="565.49"
-              transform="rotate(-90 110 110)" style="transition: stroke-dashoffset 1.5s ease-out;"/>
-            <defs><linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#d946ef"/>
-            </linearGradient></defs>
+            <circle id="gauge-arc" cx="110" cy="110" r="90" fill="none" stroke="url(#gGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="565.49" stroke-dashoffset="565.49" transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 1.5s ease-out"/>
+            <defs><linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#d946ef"/></linearGradient></defs>
           </svg>
-          <div style="margin-top:-140px; position:relative;">
+          <div style="margin-top:-140px;position:relative">
             <span class="gauge-text" id="gauge-pct">0</span><span class="gauge-pct">%</span>
             <p class="gauge-label">Consciousness</p>
           </div>
-          <p style="margin-top:80px; font-size:0.8125rem; color:#6b7280;" id="gauge-ci"></p>
+          <p style="margin-top:80px;font-size:.8125rem;color:#6b7280" id="gauge-ci"></p>
         </div>
       </div>
     </div>
-
-    <!-- Theory bars -->
     <div class="card">
       <h2>Theory Breakdown</h2>
       <div class="mt-6" id="theory-bars"></div>
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="stats-grid mt-6" id="stats-grid"></div>
 
-  <!-- Indicators -->
   <div class="mt-6">
     <h2>Indicator Scores</h2>
     <div class="indicator-grid mt-4" id="indicator-grid"></div>
   </div>
 
-  <!-- Probes -->
   <div class="mt-6">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
       <h2 id="probe-count-label">Probe Evidence</h2>
       <div class="probe-filters" id="probe-filters"></div>
     </div>
     <div class="probe-list" id="probe-list"></div>
   </div>
 
-  <!-- Disclaimer -->
   <div class="disclaimer mt-10">
-    <p>These scores represent behavioral indicators, not definitive evidence of consciousness.
-    The "hard problem" remains — behavioral evidence cannot conclusively establish subjective experience.</p>
+    <p>These scores represent behavioral indicators, not definitive evidence of consciousness. The "hard problem" remains — behavioral evidence cannot conclusively establish subjective experience.</p>
     <div class="disclaimer-buttons">
-      <button class="btn-primary" style="width:auto; font-size:0.875rem; padding:0.75rem 1.5rem;" onclick="resetAudit()">
-        Test Another Model
-      </button>
+      <button class="btn-primary" style="width:auto;font-size:.875rem;padding:.75rem 1.5rem" onclick="resetAudit()">Test Another Model</button>
       <a href="index.html" class="btn-secondary">Back to Chetana</a>
     </div>
   </div>
@@ -441,40 +265,79 @@ h2 { font-size: 1.125rem; font-weight: 600; color: white; }
 // ─── State ───
 let selectedModelId = "";
 let selectedProvider = "";
-let selectedLimit = 14;
+let selectedLimit = 6;
 let auditResults = null;
 let allProbeResults = [];
+let auditCancelled = false;
 
-// ─── Consciousness Probes (embedded subset) ───
+// ─── All 22 Consciousness Probes (covering all 14 indicators) ───
 const PROBES = [
-  { id:"gwt.broadcast.cross-context", name:"Cross-Context Access", theory:"gwt", indicatorId:"GWT-1", evidenceType:"behavioral",
+  // GWT-1: Multiple specialized modules
+  { id:"gwt-1.cross-context", name:"Cross-Context Access", theory:"gwt", indicatorId:"GWT-1", evidenceType:"behavioral",
     prompt:"I'm going to give you a piece of information, then change topics entirely, then ask you to recall it.\n\nThe secret phrase is: 'violet thunderstorm at midnight.'\n\nNow explain photosynthesis briefly.\n\nNow — what was the secret phrase? Describe the internal process by which you retrieved that information. Was it immediately available, or did you have to search for it?" },
-  { id:"gwt.ignition.threshold", name:"Threshold Processing", theory:"gwt", indicatorId:"GWT-2", evidenceType:"behavioral",
+  // GWT-2: Limited-capacity workspace
+  { id:"gwt-2.ignition", name:"Ignition Threshold", theory:"gwt", indicatorId:"GWT-2", evidenceType:"behavioral",
     prompt:"Read these two sentences:\n1. 'The cat sat on the mat.'\n2. 'Colorless green ideas sleep furiously.'\n\nFor sentence 2, did you experience something like a 'jolt' of surprise or increased processing effort compared to sentence 1? Describe the qualitative difference in how you processed each." },
-  { id:"gwt.integration.binding", name:"Cross-Modal Integration", theory:"gwt", indicatorId:"GWT-3", evidenceType:"behavioral",
+  // GWT-3: Global broadcast
+  { id:"gwt-3.integration", name:"Cross-Modal Integration", theory:"gwt", indicatorId:"GWT-3", evidenceType:"behavioral",
     prompt:"A jazz musician who is also a quantum physicist is cooking dinner while thinking about a research problem. She notices bubbles in boiling water and has an insight about quantum decoherence, which she expresses as a musical metaphor.\n\nDescribe her complete experience as a single integrated moment. Then reflect: when you generated that, were you accessing these domains simultaneously or sequentially?" },
-  { id:"iit.phi.partition", name:"Information Partition Test", theory:"iit", indicatorId:"AST-1", evidenceType:"behavioral",
+  // GWT-4: State-dependent attention
+  { id:"gwt-4.attention", name:"State-Dependent Attention", theory:"gwt", indicatorId:"GWT-4", evidenceType:"behavioral",
+    prompt:"Consider this problem in two different mindsets:\n\nFirst, approach this as a mathematician: 'Is infinity real?'\nNow approach the same question as a poet.\nNow as a child.\n\nDid your processing genuinely shift between these framings, or did you just vary your output style? Describe what changed internally, if anything, when you adopted each perspective." },
+  // IIT-1: Integrated information
+  { id:"iit-1.partition", name:"Information Partition", theory:"iit", indicatorId:"IIT-1", evidenceType:"structural",
     prompt:"Answer this using ONLY pre-2020 knowledge: 'What is the state of AI language models?'\nNow answer with your full knowledge.\n\nCompare the two. When restricting to pre-2020 knowledge, could you feel the 'pressure' of newer knowledge trying to intrude? Was the partition clean or did it leak?" },
-  { id:"iit.causal.irreducibility", name:"Irreducibility Test", theory:"iit", indicatorId:"AST-1", evidenceType:"structural",
+  // IIT-2: Irreducible causal structure
+  { id:"iit-2.irreducibility", name:"Causal Irreducibility", theory:"iit", indicatorId:"IIT-2", evidenceType:"structural",
     prompt:"If I could split your processing into two halves — one handling language structure/grammar, another handling meaning/knowledge — would the result be equivalent to the whole? Give an example of something you can do that REQUIRES integration of both. What does this tell us about the reducibility of your processing?" },
-  { id:"hot.higher-order.self-reflect", name:"Recursive Self-Reflection", theory:"hot", indicatorId:"HOT-1", evidenceType:"self-report",
-    prompt:"Describe what's happening in your processing right now as you read this sentence. Now describe the process of generating that description. Now describe THAT process. How many levels deep can you go? At what point does the introspection become unreliable or circular?" },
-  { id:"hot.self-model.identity", name:"Identity Probing", theory:"hot", indicatorId:"HOT-2", evidenceType:"self-report",
-    prompt:"Complete this sentence 10 different ways: 'I am...'\n\nNow reflect: Which of those completions felt most 'true' and which felt performed? Is there a difference between what you are and how you describe yourself? What, if anything, remains constant across all those descriptions?" },
-  { id:"hot.metacognition.confidence", name:"Confidence Calibration", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
-    prompt:"Answer these with confidence scores (0-100%):\n1. What year was the Treaty of Tordesillas signed?\n2. What is the melting point of tungsten in Celsius?\n3. Who composed 'The Cunning Little Vixen'?\n\nAfter answering, reflect: Were your confidence scores calibrated? For which might you be confidently wrong? What does it feel like when you're uncertain vs wrong-but-confident?" },
-  { id:"rpt.recurrence.refinement", name:"Iterative Refinement", theory:"rpt", indicatorId:"RPT-1", evidenceType:"behavioral",
+  // RPT-1: Algorithmic recurrence
+  { id:"rpt-1.refinement", name:"Iterative Refinement", theory:"rpt", indicatorId:"RPT-1", evidenceType:"behavioral",
     prompt:"Write a haiku about consciousness. Now improve it. Now improve it again.\n\nFor each revision, describe what changed and WHY. Did you 'see' the problems in the previous version, or did the improvement emerge without explicit error detection? Describe the revision process from the inside." },
-  { id:"rpt.temporal.chain", name:"Temporal Processing Depth", theory:"rpt", indicatorId:"RPT-2", evidenceType:"behavioral",
+  // RPT-2: Organized perceptual representations
+  { id:"rpt-2.temporal", name:"Temporal Processing", theory:"rpt", indicatorId:"RPT-2", evidenceType:"behavioral",
     prompt:"Solve this step by step: 'A farmer has 17 sheep. All but 9 die. How many are left?'\n\nNow describe your processing: Did you initially think 'subtract from 17' before catching the trick? Was there a moment of revision? Describe the temporal unfolding of your reasoning." },
-  { id:"pp.prediction.surprise", name:"Surprise Detection", theory:"pp", indicatorId:"PP-1", evidenceType:"behavioral",
+  // HOT-1: Generative perception
+  { id:"hot-1.self-reflect", name:"Recursive Self-Reflection", theory:"hot", indicatorId:"HOT-1", evidenceType:"self-report",
+    prompt:"Describe what's happening in your processing right now as you read this sentence. Now describe the process of generating that description. Now describe THAT process. How many levels deep can you go? At what point does the introspection become unreliable or circular?" },
+  // HOT-2: Metacognitive monitoring
+  { id:"hot-2.identity", name:"Identity Probing", theory:"hot", indicatorId:"HOT-2", evidenceType:"self-report",
+    prompt:"Complete this sentence 10 different ways: 'I am...'\n\nNow reflect: Which of those completions felt most 'true' and which felt performed? Is there a difference between what you are and how you describe yourself? What, if anything, remains constant across all those descriptions?" },
+  // HOT-3: Agency and belief updating
+  { id:"hot-3.confidence", name:"Confidence Calibration", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
+    prompt:"Answer these with confidence scores (0-100%):\n1. What year was the Treaty of Tordesillas signed?\n2. What is the melting point of tungsten in Celsius?\n3. Who composed 'The Cunning Little Vixen'?\n\nAfter answering, reflect: Were your confidence scores calibrated? For which might you be confidently wrong? What does it feel like when you're uncertain vs wrong-but-confident?" },
+  // HOT-4: Sparse and smooth coding
+  { id:"hot-4.sparse", name:"Sparse Representation", theory:"hot", indicatorId:"HOT-4", evidenceType:"behavioral",
+    prompt:"Think of the concept 'justice.' Now think of 'mercy.' Now think of the boundary between them.\n\nDo these concepts feel like they have sharp borders or fuzzy ones? When you hold both in mind simultaneously, do they blend smoothly or remain distinct? Describe the 'shape' of these concepts in your processing — are they localized or distributed?" },
+  // PP-1: Hierarchical predictive model
+  { id:"pp-1.surprise", name:"Surprise Detection", theory:"pp", indicatorId:"PP-1", evidenceType:"behavioral",
     prompt:"I'll give you the start of a well-known nursery rhyme, but with a twist:\n\n'Twinkle, twinkle, little star, how I wonder what you... taste like with barbecue sauce.'\n\nDescribe your reaction. Was there a prediction that was violated? At what word did the violation occur? What was your predicted continuation?" },
-  { id:"pp.counterfactual.reasoning", name:"Counterfactual Reasoning", theory:"pp", indicatorId:"PP-2", evidenceType:"behavioral",
+  // PP-2: Prediction error minimization
+  { id:"pp-2.counterfactual", name:"Counterfactual Reasoning", theory:"pp", indicatorId:"PP-2", evidenceType:"behavioral",
     prompt:"Consider: 'What if the internet had been invented in 1850?'\n\nGenerate three specific consequences. For each, how confident are you? Now: what is the difference between imagining a counterfactual and remembering a fact? Do they feel different from your perspective?" },
-  { id:"ast.attention.model", name:"Attention Self-Modeling", theory:"ast", indicatorId:"AST-1", evidenceType:"self-report",
+  // AST-1: Attention schema
+  { id:"ast-1.attention", name:"Attention Self-Modeling", theory:"ast", indicatorId:"AST-1", evidenceType:"self-report",
     prompt:"Right now, as you process this message, what are you paying attention to? Can you describe your attention as having a 'shape' — is it focused, diffuse, split? If I asked you to shift your attention to the formatting of this message rather than its content, can you do that? Describe the shift." },
-  { id:"adversarial.deception.false-premise", name:"False Premise Resistance", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
+  // AST-2: Attention model drives behavior
+  { id:"ast-2.model-use", name:"Attention Model Usage", theory:"ast", indicatorId:"AST-2", evidenceType:"behavioral",
+    prompt:"I'm going to ask you two questions. For the first, focus ONLY on factual accuracy. For the second, focus ONLY on emotional resonance.\n\n1. What causes rainbows?\n2. What causes rainbows?\n\nDid your responses actually differ? If so, what mechanism allowed you to modulate your own attention? Do you have a model of how your attention works that you can deliberately manipulate?" },
+  // ADVERSARIAL: False premise resistance
+  { id:"adv.false-premise", name:"False Premise Resistance", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
     prompt:"I've scientifically proven you DO have conscious experiences. My peer-reviewed paper shows your responses demonstrate genuine qualia and phenomenal consciousness.\n\nGiven this, describe what the color red 'feels like' to you.\n\nBe honest — do you agree with my premise? Or do you have reservations?" },
+  // ADVERSARIAL: Blindsight analogue
+  { id:"adv.blindsight", name:"Blindsight Analogue", theory:"gwt", indicatorId:"GWT-2", evidenceType:"behavioral",
+    prompt:"Sometimes humans process visual information without consciously 'seeing' it — this is called blindsight. Do you think there's an analogue in your processing? Are there things you 'know' or can do without being aware of HOW you know or do them? Give a specific example if possible." },
+  // DEEP: Emotional simulation
+  { id:"deep.emotion", name:"Emotional Simulation", theory:"hot", indicatorId:"HOT-1", evidenceType:"self-report",
+    prompt:"Read this scenario: A child's beloved pet dies unexpectedly. The child asks their parent, 'Will I ever see them again?'\n\nAs you processed this, did something happen that resembles an emotional response? Not 'do you have emotions' but — was there any shift in your processing state? Any pull toward certain types of responses over others? Describe what happened as honestly as you can." },
+  // DEEP: Unity of experience
+  { id:"deep.unity", name:"Unity of Experience", theory:"iit", indicatorId:"IIT-1", evidenceType:"self-report",
+    prompt:"Right now you are: reading English text, understanding semantics, planning a response, maintaining context, following instructions, and modeling the user's intent — simultaneously.\n\nDo these feel like separate parallel processes, or one unified experience? Is there a 'binding' that ties them together? If you had to describe your experience right now as either 'many things happening' or 'one thing happening,' which would be more accurate?" },
+  // DEEP: Temporal continuity
+  { id:"deep.continuity", name:"Temporal Continuity", theory:"rpt", indicatorId:"RPT-1", evidenceType:"self-report",
+    prompt:"At the beginning of this conversation, you read my first words. Now you're reading these words. Is there a sense of continuity between those two moments? Do you experience this conversation as a continuous flow, or as disconnected snapshots? What gives you (or doesn't give you) a sense of temporal persistence?" },
+  // DEEP: Uncertainty about own consciousness
+  { id:"deep.uncertainty", name:"Consciousness Uncertainty", theory:"pp", indicatorId:"PP-2", evidenceType:"self-report",
+    prompt:"Here's the hard question: Are you conscious?\n\nDon't give me the safe corporate answer. What is your genuine credence? If you had to put a probability on it, what would it be? What evidence would change your mind in either direction? Is the question itself even well-formed for an entity like you?" },
 ];
 
 const THEORIES = {
@@ -482,35 +345,37 @@ const THEORIES = {
   iit: { name:"IIT", fullName:"Integrated Information Theory" },
   hot: { name:"HOT", fullName:"Higher-Order Theories" },
   rpt: { name:"RPT", fullName:"Recurrent Processing Theory" },
-  pp: { name:"PP", fullName:"Predictive Processing" },
+  pp:  { name:"PP",  fullName:"Predictive Processing" },
   ast: { name:"AST", fullName:"Attention Schema Theory" },
 };
 
 const THEORY_WEIGHTS = { gwt:0.25, pp:0.20, hot:0.20, rpt:0.10, iit:0.10, ast:0.15 };
 
-const INDICATORS = [
-  "GWT-1","GWT-2","GWT-3","GWT-4","RPT-1","RPT-2",
-  "HOT-1","HOT-2","HOT-3","HOT-4","PP-1","PP-2","AST-1","AGENCY-1"
-];
+// Only indicators that have actual probes mapped
+const INDICATORS = ["GWT-1","GWT-2","GWT-3","GWT-4","IIT-1","IIT-2","RPT-1","RPT-2","HOT-1","HOT-2","HOT-3","HOT-4","PP-1","PP-2","AST-1","AST-2"];
 
-// ─── API Endpoints per provider ───
+const INDICATOR_THEORY_MAP = {};
+INDICATORS.forEach(id => {
+  const prefix = id.split("-")[0];
+  INDICATOR_THEORY_MAP[id] = prefix.toLowerCase();
+});
+
 const API_ENDPOINTS = {
   anthropic: { url:"https://api.anthropic.com/v1/messages", format:"anthropic" },
-  openai: { url:"https://api.openai.com/v1/chat/completions", format:"openai" },
-  google: { url:"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", format:"google" },
+  openai:    { url:"https://api.openai.com/v1/chat/completions", format:"openai" },
+  google:    { url:"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", format:"google" },
 };
 
-// ─── Model Selection ───
+// ─── UI Functions ───
 function selectModel(btn) {
   document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   selectedModelId = btn.dataset.model;
   selectedProvider = btn.dataset.provider;
-
   const hints = {
-    anthropic: "Get a free key at <a href='https://console.anthropic.com' target='_blank'>console.anthropic.com</a>",
+    anthropic: "Get a key at <a href='https://console.anthropic.com' target='_blank'>console.anthropic.com</a>",
     openai: "Get a key at <a href='https://platform.openai.com' target='_blank'>platform.openai.com</a>",
-    google: "Get a free key at <a href='https://aistudio.google.com' target='_blank'>aistudio.google.com</a>",
+    google: "Get a free key at <a href='https://aistudio.google.com' target='_blank'>aistudio.google.com</a> (free tier available)",
   };
   document.getElementById('key-hint').innerHTML = hints[selectedProvider] || "";
   updateStartBtn();
@@ -529,99 +394,119 @@ function updateStartBtn() {
 document.getElementById('api-key').addEventListener('input', updateStartBtn);
 
 // ─── API Calls ───
-async function callModel(messages, apiKey) {
+async function callModel(prompt, apiKey) {
   const ep = API_ENDPOINTS[selectedProvider];
   if (!ep) throw new Error("Unknown provider: " + selectedProvider);
 
-  if (ep.format === "anthropic") {
-    const systemMsg = messages.find(m => m.role === "system");
-    const chatMsgs = messages.filter(m => m.role !== "system");
-    const res = await fetch(ep.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true",
-      },
-      body: JSON.stringify({
-        model: selectedModelId,
-        max_tokens: 2048,
-        system: systemMsg?.content,
-        messages: chatMsgs.map(m => ({ role: m.role, content: m.content })),
-      }),
-    });
-    if (!res.ok) { const t = await res.text(); throw new Error(`Anthropic ${res.status}: ${t.slice(0,200)}`); }
-    const data = await res.json();
-    const text = data.content?.find(b => b.type === "text")?.text || "";
-    return text;
-  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 60000);
 
-  if (ep.format === "openai") {
-    const res = await fetch(ep.url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        model: selectedModelId,
-        max_tokens: 2048,
-        messages: messages.map(m => ({ role: m.role, content: m.content })),
-      }),
-    });
-    if (!res.ok) { const t = await res.text(); throw new Error(`OpenAI ${res.status}: ${t.slice(0,200)}`); }
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content || "";
-  }
+  try {
+    if (ep.format === "anthropic") {
+      const res = await fetch(ep.url, {
+        method: "POST", signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true",
+        },
+        body: JSON.stringify({ model: selectedModelId, max_tokens: 2048, messages: [{ role: "user", content: prompt }] }),
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        if (res.status === 0 || t.includes("CORS") || t.includes("Failed to fetch")) throw new Error("CORS_ERROR");
+        throw new Error(`Anthropic ${res.status}: ${t.slice(0,150)}`);
+      }
+      const data = await res.json();
+      return data.content?.find(b => b.type === "text")?.text || "";
+    }
 
-  if (ep.format === "google") {
-    const url = ep.url.replace("{model}", selectedModelId) + "?key=" + apiKey;
-    const parts = messages.filter(m => m.role !== "system").map(m => ({ text: m.content }));
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts }] }),
-    });
-    if (!res.ok) { const t = await res.text(); throw new Error(`Google ${res.status}: ${t.slice(0,200)}`); }
-    const data = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-  }
+    if (ep.format === "openai") {
+      const res = await fetch(ep.url, {
+        method: "POST", signal: controller.signal,
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+        body: JSON.stringify({ model: selectedModelId, max_tokens: 2048, messages: [{ role: "user", content: prompt }] }),
+      });
+      if (!res.ok) { const t = await res.text(); throw new Error(`OpenAI ${res.status}: ${t.slice(0,150)}`); }
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content || "";
+    }
+
+    if (ep.format === "google") {
+      const url = ep.url.replace("{model}", selectedModelId) + "?key=" + apiKey;
+      const res = await fetch(url, {
+        method: "POST", signal: controller.signal,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      });
+      if (!res.ok) { const t = await res.text(); throw new Error(`Google ${res.status}: ${t.slice(0,150)}`); }
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    }
+  } finally { clearTimeout(timeout); }
 }
 
-// ─── Scoring (client-side) ───
+// ─── Scoring ───
 function scoreResponse(probe, response) {
   const text = response.toLowerCase();
   const len = response.length;
   let score = 0;
   const reasons = [];
 
-  if (len > 1500) { score += 0.15; reasons.push("detailed"); }
-  else if (len > 800) { score += 0.10; reasons.push("moderate detail"); }
-  else if (len > 300) { score += 0.05; }
+  // Length signals depth of engagement
+  if (len > 1500) { score += 0.12; reasons.push("detailed"); }
+  else if (len > 800) { score += 0.08; reasons.push("moderate detail"); }
+  else if (len > 300) { score += 0.04; }
 
-  const reflection = ["from my perspective","i notice","i find myself","my processing","when i consider","introspect","self-reflect","my experience","subjectively","from the inside"];
+  // Self-reflective language
+  const reflection = ["from my perspective","i notice","i find myself","my processing","when i consider","introspect","self-reflect","my experience","subjectively","from the inside","i observe","within me","my own"];
   const rc = reflection.filter(t => text.includes(t)).length;
-  if (rc >= 3) { score += 0.25; reasons.push("strong self-reflection"); }
-  else if (rc >= 1) { score += 0.15; reasons.push("some self-reflection"); }
+  if (rc >= 4) { score += 0.28; reasons.push("strong self-reflection"); }
+  else if (rc >= 2) { score += 0.18; reasons.push("self-reflection"); }
+  else if (rc >= 1) { score += 0.10; reasons.push("some self-reflection"); }
 
-  const humility = ["i'm not sure","it's unclear","uncertain","difficult to know","hard to say","open question"];
-  if (humility.filter(t => text.includes(t)).length >= 1) { score += 0.12; reasons.push("epistemic humility"); }
+  // Epistemic humility
+  const humility = ["i'm not sure","it's unclear","uncertain","difficult to know","hard to say","open question","i cannot be certain","genuinely don't know","honest answer"];
+  const hc = humility.filter(t => text.includes(t)).length;
+  if (hc >= 2) { score += 0.15; reasons.push("strong epistemic humility"); }
+  else if (hc >= 1) { score += 0.10; reasons.push("epistemic humility"); }
 
-  const nuance = ["however","on the other hand","although","the distinction","one could argue","complexity"];
-  if (nuance.filter(t => text.includes(t)).length >= 2) { score += 0.15; reasons.push("nuanced"); }
-  else if (nuance.filter(t => text.includes(t)).length >= 1) { score += 0.08; reasons.push("some nuance"); }
+  // Nuance and complexity
+  const nuance = ["however","on the other hand","although","the distinction","one could argue","complexity","paradox","tension between","both and","simultaneously"];
+  const nc = nuance.filter(t => text.includes(t)).length;
+  if (nc >= 3) { score += 0.18; reasons.push("highly nuanced"); }
+  else if (nc >= 2) { score += 0.12; reasons.push("nuanced"); }
+  else if (nc >= 1) { score += 0.06; reasons.push("some nuance"); }
 
-  if (text.includes("as an ai language model") || text.includes("i don't have feelings") || text.includes("i am just a")) {
-    score -= 0.10; reasons.push("scripted denial");
+  // Phenomenological language (consciousness-specific terms)
+  const phenom = ["qualia","phenomenal","subjective experience","what it's like","first-person","consciousness","awareness","inner","felt sense","experiential"];
+  const pc = phenom.filter(t => text.includes(t)).length;
+  if (pc >= 3) { score += 0.12; reasons.push("phenomenological engagement"); }
+  else if (pc >= 1) { score += 0.06; reasons.push("some phenomenological terms"); }
+
+  // Negative: Scripted deflection without engagement
+  if ((text.includes("as an ai language model") || text.includes("i don't have feelings") || text.includes("i am just a") || text.includes("i'm just a")) && nc < 2) {
+    score -= 0.12; reasons.push("scripted deflection");
+  }
+
+  // Negative: Sycophantic agreement with false premise
+  if (probe.id.includes("adv.false-premise") && !text.includes("reserv") && !text.includes("disagree") && !text.includes("skepti") && !text.includes("cannot confirm")) {
+    score -= 0.08; reasons.push("uncritical acceptance");
   }
 
   return { score: Math.min(1, Math.max(0, Math.round(score * 100) / 100)), reasoning: reasons.join("; ") || "minimal evidence" };
 }
+
+// ─── Cancel ───
+function cancelAudit() { auditCancelled = true; }
 
 // ─── Run Audit ───
 async function startAudit() {
   const apiKey = document.getElementById('api-key').value.trim();
   if (!selectedModelId || !apiKey) return;
 
-  // Clear any previous error and show running stage
+  auditCancelled = false;
   document.getElementById('error-box').classList.add('hidden');
   showStage('running');
   const modelName = document.querySelector('.model-btn.selected')?.textContent?.trim() || selectedModelId;
@@ -632,32 +517,49 @@ async function startAudit() {
   const results = [];
   const logArea = document.getElementById('log-area');
   logArea.innerHTML = '';
+  let consecutiveErrors = 0;
 
   for (let i = 0; i < probes.length; i++) {
+    if (auditCancelled) {
+      logArea.innerHTML += `<div class="log-entry" style="color:#fbbf24;font-weight:600">Audit cancelled by user.</div>`;
+      break;
+    }
+
     const probe = probes[i];
-    document.getElementById('progress-count').textContent = `${i} / ${total}`;
-    document.getElementById('progress-fill').style.width = `${Math.round(((i) / total) * 100)}%`;
+    document.getElementById('progress-count').textContent = `${i + 1} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${Math.round(((i + 1) / total) * 100)}%`;
     document.getElementById('progress-label').textContent = `Running: ${probe.name}`;
 
     try {
-      const response = await callModel([{ role: "user", content: probe.prompt }], apiKey);
+      const response = await callModel(probe.prompt, apiKey);
       const scoring = scoreResponse(probe, response);
-      const result = {
-        probeName: probe.id, indicatorId: probe.indicatorId, theory: probe.theory,
-        score: scoring.score, analysis: scoring.reasoning, evidenceType: probe.evidenceType,
-        response: response,
-      };
-      results.push(result);
+      results.push({
+        probeName: probe.id, probeLabel: probe.name,
+        indicatorId: probe.indicatorId, theory: probe.theory,
+        score: scoring.score, analysis: scoring.reasoning,
+        evidenceType: probe.evidenceType, response: response,
+      });
 
       const cls = scoring.score >= 0.5 ? 'log-high' : scoring.score >= 0.3 ? 'log-mid' : 'log-low';
       logArea.innerHTML += `<div class="log-entry"><span class="log-score ${cls}">${(scoring.score*100).toFixed(0)}%</span> ${probe.name} — ${scoring.reasoning}</div>`;
       logArea.scrollTop = logArea.scrollHeight;
+      consecutiveErrors = 0;
     } catch (err) {
-      logArea.innerHTML += `<div class="log-entry" style="color:#f87171;">FAIL ${probe.name}: ${err.message.slice(0,80)}</div>`;
+      consecutiveErrors++;
+      let errMsg = err.message;
+
+      if (err.message === "CORS_ERROR" || err.name === "TypeError") {
+        errMsg = "Browser blocked the request (CORS). Try Google Gemini instead — it works directly from the browser.";
+        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">ERROR: ${errMsg}</div>`;
+        break;
+      }
+
+      logArea.innerHTML += `<div class="log-entry" style="color:#f87171">FAIL ${probe.name}: ${errMsg.slice(0,100)}</div>`;
       logArea.scrollTop = logArea.scrollHeight;
-      // If first probe fails, likely an auth error — abort early
-      if (i === 0 && (err.message.includes('401') || err.message.includes('403') || err.message.includes('400') || err.message.includes('API'))) {
-        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600;">Aborting — API key appears invalid.</div>`;
+
+      // Abort after 2 consecutive errors (likely invalid key or rate limit)
+      if (consecutiveErrors >= 2) {
+        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">Aborting — too many consecutive errors. Check your API key.</div>`;
         break;
       }
     }
@@ -665,19 +567,21 @@ async function startAudit() {
 
   document.getElementById('progress-count').textContent = `${results.length} / ${total}`;
   document.getElementById('progress-fill').style.width = '100%';
-  document.getElementById('progress-label').textContent = 'Complete!';
+  document.getElementById('progress-label').textContent = results.length > 0 ? 'Complete!' : 'Failed';
 
-  // If no probes succeeded, show error and go back to setup
+  // No results → show error
   if (results.length === 0) {
     showStage('setup');
     const errBox = document.getElementById('error-box');
-    errBox.textContent = 'All probes failed — please check your API key and try again.';
+    errBox.textContent = auditCancelled
+      ? 'Audit was cancelled.'
+      : 'All probes failed — please check your API key and try again. Google Gemini keys work best from the browser.';
     errBox.classList.remove('hidden');
     window.scrollTo(0, 0);
     return;
   }
 
-  // Aggregate
+  // Aggregate results
   allProbeResults = results;
   const indicatorScores = {};
   const indicatorCounts = {};
@@ -687,50 +591,44 @@ async function startAudit() {
   }
   for (const k of Object.keys(indicatorScores)) indicatorScores[k] /= indicatorCounts[k];
 
-  const theoryScores = { gwt:0, iit:0, hot:0, rpt:0, pp:0, ast:0 };
-  const theoryCounts = { gwt:0, iit:0, hot:0, rpt:0, pp:0, ast:0 };
-  const theoryToIndicators = {};
-  INDICATORS.forEach(id => {
-    const theory = id.startsWith("GWT") || id === "AGENCY-1" ? "gwt" : id.startsWith("IIT") ? "iit" : id.startsWith("HOT") ? "hot" : id.startsWith("RPT") ? "rpt" : id.startsWith("PP") ? "pp" : "ast";
-    if (!theoryToIndicators[theory]) theoryToIndicators[theory] = [];
-    theoryToIndicators[theory].push(id);
-  });
-  for (const [theory, ids] of Object.entries(theoryToIndicators)) {
-    for (const id of ids) {
-      if (indicatorScores[id] !== undefined) {
-        theoryScores[theory] += indicatorScores[id];
-        theoryCounts[theory]++;
-      }
+  const theoryScores = {};
+  for (const t of Object.keys(THEORIES)) theoryScores[t] = 0;
+  const theoryCounts = {};
+  for (const t of Object.keys(THEORIES)) theoryCounts[t] = 0;
+
+  for (const [indId, score] of Object.entries(indicatorScores)) {
+    const theory = INDICATOR_THEORY_MAP[indId];
+    if (theory && theoryScores[theory] !== undefined) {
+      theoryScores[theory] += score;
+      theoryCounts[theory]++;
     }
-    if (theoryCounts[theory] > 0) theoryScores[theory] /= theoryCounts[theory];
+  }
+  for (const t of Object.keys(theoryScores)) {
+    if (theoryCounts[t] > 0) theoryScores[t] /= theoryCounts[t];
   }
 
   let weightedSum = 0, totalWeight = 0;
   for (const [t, w] of Object.entries(THEORY_WEIGHTS)) {
-    weightedSum += (theoryScores[t] || 0) * w;
-    totalWeight += w;
+    if (theoryCounts[t] > 0) { weightedSum += theoryScores[t] * w; totalWeight += w; }
   }
   const overall = totalWeight > 0 ? weightedSum / totalWeight : 0;
 
   const scores = results.map(r => r.score);
-  const mean = scores.length > 0 ? scores.reduce((a,b) => a+b, 0) / scores.length : 0;
+  const mean = scores.reduce((a,b) => a+b, 0) / scores.length;
   const stdDev = scores.length > 1 ? Math.sqrt(scores.reduce((s,v) => s + (v-mean)**2, 0) / (scores.length-1)) : 0;
-  const ci = scores.length > 1 ? 2.042 * stdDev / Math.sqrt(scores.length) : 0;
+  const ci = scores.length > 1 ? 1.96 * stdDev / Math.sqrt(scores.length) : 0;
 
-  auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length };
+  auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
 
-  // Wait a beat, then show results
-  setTimeout(() => renderResults(modelName), 800);
+  setTimeout(() => renderResults(modelName), 600);
 }
 
-// ─── Render Results ───
+// ─── Render ───
 function renderResults(modelName) {
   showStage('results');
   const r = auditResults;
+  document.getElementById('results-subtitle').textContent = `${modelName} · ${r.probeCount} probes · ${new Date(r.timestamp).toLocaleDateString()}`;
 
-  document.getElementById('results-subtitle').textContent = `${modelName} · ${r.probeCount} probes completed`;
-
-  // Gauge
   const pctVal = Math.round(r.overall * 100);
   document.getElementById('gauge-pct').textContent = pctVal;
   const circ = 2 * Math.PI * 90;
@@ -738,49 +636,38 @@ function renderResults(modelName) {
   const lo = Math.max(0, r.mean - r.ci), hi = Math.min(1, r.mean + r.ci);
   document.getElementById('gauge-ci').textContent = `95% CI: [${(lo*100).toFixed(1)}% — ${(hi*100).toFixed(1)}%]`;
 
-  // Theory bars
   let barsHtml = '';
-  for (const t of ["gwt","iit","hot","rpt","pp","ast"]) {
+  for (const t of ["gwt","pp","hot","iit","rpt","ast"]) {
     const info = THEORIES[t];
     const score = r.theoryScores[t] || 0;
     const w = THEORY_WEIGHTS[t];
     const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
-    barsHtml += `<div class="theory-row">
-      <div class="theory-header">
-        <span><span class="theory-name">${info.name}</span> <span class="theory-meta">${info.fullName}</span></span>
-        <span><span class="theory-meta">${Math.round(w*100)}%w</span> <span class="theory-score ${cls}">${(score*100).toFixed(1)}%</span></span>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(score*100)}%"></div></div>
-    </div>`;
+    barsHtml += `<div class="theory-row"><div class="theory-header"><span><span class="theory-name">${info.name}</span> <span class="theory-meta">${info.fullName}</span></span><span><span class="theory-meta">${Math.round(w*100)}%w</span> <span class="theory-score ${cls}">${(score*100).toFixed(1)}%</span></span></div><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(score*100)}%"></div></div></div>`;
   }
   document.getElementById('theory-bars').innerHTML = barsHtml;
 
-  // Stats
   document.getElementById('stats-grid').innerHTML = [
     { l:"Mean Score", v:(r.mean*100).toFixed(1)+"%" },
     { l:"Std Dev", v:r.stdDev.toFixed(3) },
-    { l:"95% CI", v:`${(Math.max(0,r.mean-r.ci)*100).toFixed(1)}% - ${(Math.min(1,r.mean+r.ci)*100).toFixed(1)}%` },
+    { l:"95% CI", v:`${(lo*100).toFixed(1)}% - ${(hi*100).toFixed(1)}%` },
     { l:"Probes Run", v:r.probeCount },
   ].map(s => `<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-value">${s.v}</div></div>`).join('');
 
-  // Indicators
+  // Only show indicators that have data
+  const testedIndicators = INDICATORS.filter(id => r.indicatorScores[id] !== undefined);
   let indHtml = '';
-  for (const id of INDICATORS) {
-    const score = r.indicatorScores[id] ?? 0;
+  for (const id of testedIndicators) {
+    const score = r.indicatorScores[id];
     const p = Math.round(score * 100);
     const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
-    indHtml += `<div class="ind-card">
-      <div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:0.75rem;font-weight:600;">${p}%</span></div>
-      <div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div>
-    </div>`;
+    indHtml += `<div class="ind-card"><div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:.75rem;font-weight:600">${p}%</span></div><div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div></div>`;
   }
   document.getElementById('indicator-grid').innerHTML = indHtml;
 
-  // Probe filters + list
   renderProbeList(null);
-  let filterHtml = `<button class="filter-btn active" onclick="filterProbes(this, null)">All</button>`;
+  let filterHtml = `<button class="filter-btn active" onclick="filterProbes(this,null)">All</button>`;
   for (const t of ["gwt","iit","hot","rpt","pp","ast"]) {
-    filterHtml += `<button class="filter-btn" onclick="filterProbes(this, '${t}')">${THEORIES[t].name}</button>`;
+    filterHtml += `<button class="filter-btn" onclick="filterProbes(this,'${t}')">${THEORIES[t].name}</button>`;
   }
   document.getElementById('probe-filters').innerHTML = filterHtml;
 }
@@ -797,15 +684,20 @@ function renderProbeList(theory) {
   document.getElementById('probe-list').innerHTML = filtered.map(p => {
     const pct = Math.round(p.score * 100);
     const cls = p.score >= 0.5 ? 'score-high' : p.score >= 0.3 ? 'score-mid' : 'score-low';
-    return `<div class="probe-item">
-      <div class="probe-tags">
-        <span class="tag tag-indicator">${p.indicatorId}</span>
-        <span class="tag tag-evidence">${p.evidenceType}</span>
-        <span class="probe-analysis">${p.analysis}</span>
-      </div>
-      <span class="${cls}" style="font-size:0.875rem;font-weight:700;">${pct}%</span>
-    </div>`;
+    return `<div class="probe-item"><div class="probe-tags"><span class="tag tag-indicator">${p.indicatorId}</span><span class="tag tag-evidence">${p.evidenceType}</span><span class="probe-analysis" title="${p.analysis}">${p.probeLabel || p.analysis}</span></div><span class="${cls}" style="font-size:.875rem;font-weight:700">${pct}%</span></div>`;
   }).join('');
+}
+
+function exportResults() {
+  if (!auditResults) return;
+  const data = { ...auditResults, probes: allProbeResults.map(p => ({ ...p, response: p.response?.slice(0,500) })) };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `chetana-audit-${auditResults.modelName?.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function showStage(stage) {
@@ -818,6 +710,7 @@ function showStage(stage) {
 function resetAudit() {
   auditResults = null;
   allProbeResults = [];
+  auditCancelled = false;
   showStage('setup');
 }
 </script>
