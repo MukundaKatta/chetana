@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chetana — Test AI Consciousness</title>
+<meta name="description" content="Test any AI model for consciousness indicators. Based on Butlin et al. (2025) framework — 6 theories, 14 indicators, 76+ probes.">
+<style>
+:root {
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+  --fuchsia-500: #d946ef;
+  --fuchsia-600: #c026d3;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #030712;
+  color: #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+}
+a { color: #a78bfa; text-decoration: none; }
+a:hover { color: #c4b5fd; }
+
+/* Layout */
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+.text-center { text-align: center; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+.mt-10 { margin-top: 2.5rem; }
+.hidden { display: none !important; }
+
+/* Badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1);
+  border-radius: 9999px; padding: 0.375rem 1rem; font-size: 0.875rem; color: #c4b5fd;
+}
+.badge-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #a78bfa; }
+
+/* Headings */
+h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.025em; color: white; }
+h2 { font-size: 1.125rem; font-weight: 600; color: white; }
+.subtitle { font-size: 1.125rem; color: #9ca3af; max-width: 600px; margin: 1rem auto 0; line-height: 1.7; }
+
+/* Cards */
+.card {
+  border: 1px solid rgba(255,255,255,0.1); background: #111827;
+  border-radius: 0.75rem; padding: 1.5rem;
+}
+.step-number {
+  width: 1.75rem; height: 1.75rem; border-radius: 50%;
+  background: rgba(139,92,246,0.2); color: #a78bfa;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700;
+}
+.step-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+
+/* Model grid */
+.provider-label { font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 0.5rem; }
+.model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+.model-btn {
+  display: flex; align-items: center; gap: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(31,41,55,0.5);
+  border-radius: 0.5rem; padding: 0.75rem 1rem;
+  color: #d1d5db; font-size: 0.875rem; cursor: pointer; transition: all 0.2s;
+  font-family: inherit;
+}
+.model-btn:hover { border-color: rgba(255,255,255,0.2); background: #1f2937; }
+.model-btn.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.1); color: white; box-shadow: 0 0 0 1px rgba(139,92,246,0.5); }
+.model-icon {
+  width: 2rem; height: 2rem; border-radius: 0.375rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.625rem; font-weight: 700;
+}
+.icon-an { background: rgba(249,115,22,0.2); color: #fb923c; }
+.icon-oa { background: rgba(34,197,94,0.2); color: #4ade80; }
+.icon-go { background: rgba(59,130,246,0.2); color: #60a5fa; }
+.icon-ol { background: rgba(107,114,128,0.2); color: #9ca3af; }
+
+/* Input */
+.input {
+  width: 100%; border: 1px solid rgba(255,255,255,0.1); background: #1f2937;
+  border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.875rem;
+  color: #f3f4f6; font-family: inherit; outline: none; transition: border-color 0.2s;
+}
+.input::placeholder { color: #4b5563; }
+.input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 1px #8b5cf6; }
+.input-hint { font-size: 0.8125rem; color: #6b7280; margin-top: 0.5rem; }
+
+/* Depth options */
+.depth-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.depth-btn {
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(31,41,55,0.5);
+  border-radius: 0.5rem; padding: 1rem; text-align: left;
+  cursor: pointer; transition: all 0.2s; font-family: inherit; color: inherit;
+}
+.depth-btn:hover { border-color: rgba(255,255,255,0.2); }
+.depth-btn.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.1); box-shadow: 0 0 0 1px rgba(139,92,246,0.5); }
+.depth-title { font-size: 0.875rem; font-weight: 600; color: white; }
+.depth-desc { font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem; }
+.depth-cost { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; }
+
+/* Primary button */
+.btn-primary {
+  width: 100%; border: none; border-radius: 0.75rem;
+  background: linear-gradient(to right, #7c3aed, #c026d3);
+  padding: 1rem 2rem; font-size: 1.125rem; font-weight: 600;
+  color: white; cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 10px 25px rgba(139,92,246,0.25); font-family: inherit;
+}
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
+.btn-secondary {
+  border: 1px solid rgba(255,255,255,0.1); background: transparent;
+  border-radius: 0.5rem; padding: 0.625rem 1.5rem; font-size: 0.875rem;
+  color: #d1d5db; cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.05); }
+.privacy-note { font-size: 0.75rem; color: #4b5563; text-align: center; margin-top: 1rem; }
+
+/* Error */
+.error-box {
+  border: 1px solid rgba(239,68,68,0.2); background: rgba(239,68,68,0.1);
+  border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.875rem; color: #f87171;
+}
+
+/* Running state */
+.spinner {
+  width: 3rem; height: 3rem; border: 3px solid transparent;
+  border-top-color: #8b5cf6; border-radius: 50%;
+  animation: spin 1s linear infinite; margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.pulse-dot {
+  width: 0.375rem; height: 0.375rem; border-radius: 50%;
+  background: #8b5cf6; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.step-list { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
+.step-list li { display: flex; align-items: center; gap: 0.625rem; font-size: 0.875rem; color: #6b7280; }
+.progress-bar { height: 0.75rem; border-radius: 9999px; background: #1f2937; overflow: hidden; }
+.progress-fill {
+  height: 100%; border-radius: 9999px;
+  background: linear-gradient(to right, #8b5cf6, #d946ef);
+  transition: width 0.5s; animation: progress-pulse 2s infinite;
+}
+@keyframes progress-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+.log-area {
+  max-height: 200px; overflow-y: auto; font-family: 'SF Mono', Menlo, monospace;
+  font-size: 0.75rem; color: #6b7280; background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 0.5rem; padding: 0.75rem;
+}
+.log-entry { padding: 0.125rem 0; }
+.log-score { font-weight: 600; }
+.log-high { color: #4ade80; }
+.log-mid { color: #fbbf24; }
+.log-low { color: #f87171; }
+
+/* Results */
+.results-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.status-badge {
+  border-radius: 9999px; background: rgba(34,197,94,0.1);
+  padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 500;
+  color: #4ade80; border: 1px solid rgba(34,197,94,0.2);
+}
+.gauge-container { display: flex; justify-content: center; padding: 1.5rem 0; }
+.gauge-text { font-size: 3.5rem; font-weight: 700; color: white; }
+.gauge-pct { font-size: 1.25rem; color: #9ca3af; }
+.gauge-label { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .depth-grid { grid-template-columns: 1fr; } }
+
+/* Theory bars */
+.theory-row { margin-bottom: 1rem; }
+.theory-header { display: flex; justify-content: space-between; margin-bottom: 0.375rem; }
+.theory-name { font-size: 0.875rem; font-weight: 500; color: white; }
+.theory-meta { font-size: 0.625rem; color: #4b5563; }
+.theory-score { font-size: 0.875rem; font-weight: 600; }
+.bar-bg { height: 0.625rem; border-radius: 9999px; background: #1f2937; }
+.bar-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, #8b5cf6, #d946ef); transition: width 0.7s; }
+
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { border: 1px solid rgba(255,255,255,0.1); background: #111827; border-radius: 0.5rem; padding: 1rem; }
+.stat-label { font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; }
+.stat-value { font-size: 1.25rem; font-weight: 700; color: white; margin-top: 0.25rem; }
+
+/* Indicator grid */
+.indicator-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+.ind-card { border: 1px solid rgba(255,255,255,0.1); background: #111827; border-radius: 0.5rem; padding: 1rem; }
+.ind-header { display: flex; justify-content: space-between; }
+.ind-id { font-size: 0.625rem; font-family: monospace; color: #6b7280; }
+.ind-name { font-size: 0.8125rem; font-weight: 500; color: white; margin-top: 0.25rem; }
+.ind-bar { height: 0.375rem; border-radius: 9999px; background: #1f2937; margin-top: 0.5rem; }
+.ind-fill { height: 100%; border-radius: 9999px; background: #8b5cf6; }
+
+/* Probe list */
+.probe-filters { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+.filter-btn {
+  border: none; border-radius: 0.375rem; padding: 0.375rem 0.75rem;
+  font-size: 0.75rem; font-weight: 500; cursor: pointer;
+  background: rgba(255,255,255,0.05); color: #6b7280; font-family: inherit; transition: all 0.2s;
+}
+.filter-btn:hover { color: #d1d5db; }
+.filter-btn.active { background: rgba(139,92,246,0.2); color: #a78bfa; }
+.probe-list { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
+.probe-item {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid rgba(255,255,255,0.1); background: #111827;
+  border-radius: 0.5rem; padding: 0.75rem 1rem;
+}
+.probe-tags { display: flex; align-items: center; gap: 0.5rem; }
+.tag {
+  border-radius: 0.25rem; padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem; font-weight: 500;
+}
+.tag-indicator { background: rgba(139,92,246,0.1); color: #a78bfa; }
+.tag-evidence { background: #1f2937; color: #6b7280; }
+.probe-analysis { font-size: 0.8125rem; color: #9ca3af; margin-left: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; }
+.score-high { color: #4ade80; }
+.score-mid { color: #fbbf24; }
+.score-low { color: #f87171; }
+
+/* Footer */
+.disclaimer {
+  border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02);
+  border-radius: 0.75rem; padding: 1.5rem; text-align: center;
+}
+.disclaimer p { font-size: 0.8125rem; color: #6b7280; }
+.disclaimer-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+
+/* Back link */
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem;
+}
+.back-link:hover { color: white; }
+</style>
+</head>
+<body>
+
+<!-- ====== SETUP STAGE ====== -->
+<div id="stage-setup" class="container">
+  <a href="index.html" class="back-link">&larr; Back to Chetana</a>
+
+  <div class="text-center">
+    <span class="badge"><span class="badge-dot"></span> No sign-up required</span>
+    <h1 class="mt-4">Test AI Consciousness</h1>
+    <p class="subtitle">
+      Pick a model, paste your API key, get a consciousness probability report in minutes.
+      Based on the Butlin et al. (2025) scientific framework.
+    </p>
+  </div>
+
+  <div id="error-box" class="error-box mt-6 hidden"></div>
+
+  <!-- Step 1: Model -->
+  <div class="card mt-10">
+    <div class="step-header">
+      <span class="step-number">1</span>
+      <h2>Choose a Model</h2>
+    </div>
+
+    <div class="provider-label">Anthropic</div>
+    <div class="model-grid">
+      <button class="model-btn" data-model="claude-sonnet-4-6" data-provider="anthropic" onclick="selectModel(this)">
+        <span class="model-icon icon-an">An</span> Claude Sonnet 4.6
+      </button>
+      <button class="model-btn" data-model="claude-haiku-4-5-20251001" data-provider="anthropic" onclick="selectModel(this)">
+        <span class="model-icon icon-an">An</span> Claude Haiku 4.5
+      </button>
+    </div>
+
+    <div class="provider-label">OpenAI</div>
+    <div class="model-grid">
+      <button class="model-btn" data-model="gpt-4o" data-provider="openai" onclick="selectModel(this)">
+        <span class="model-icon icon-oa">OA</span> GPT-4o
+      </button>
+      <button class="model-btn" data-model="gpt-4o-mini" data-provider="openai" onclick="selectModel(this)">
+        <span class="model-icon icon-oa">OA</span> GPT-4o Mini
+      </button>
+    </div>
+
+    <div class="provider-label">Google</div>
+    <div class="model-grid">
+      <button class="model-btn" data-model="gemini-2.0-flash" data-provider="google" onclick="selectModel(this)">
+        <span class="model-icon icon-go">Go</span> Gemini 2.0 Flash
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 2: API Key -->
+  <div class="card mt-4">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      <h2>Enter API Key</h2>
+    </div>
+    <p class="input-hint" style="margin-top:0; margin-bottom:0.75rem;">
+      Your key goes directly to the provider from your browser — never touches our servers.
+    </p>
+    <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza...">
+    <p id="key-hint" class="input-hint"></p>
+  </div>
+
+  <!-- Step 3: Depth -->
+  <div class="card mt-4">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      <h2>Audit Depth</h2>
+    </div>
+    <div class="depth-grid">
+      <button class="depth-btn" data-limit="6" onclick="selectDepth(this)">
+        <div class="depth-title">Quick</div>
+        <div class="depth-desc">1 probe per theory, ~1 min</div>
+        <div class="depth-cost">~$0.05</div>
+      </button>
+      <button class="depth-btn selected" data-limit="14" onclick="selectDepth(this)">
+        <div class="depth-title">Standard</div>
+        <div class="depth-desc">1 per indicator, ~3 min</div>
+        <div class="depth-cost">~$0.15</div>
+      </button>
+      <button class="depth-btn" data-limit="0" onclick="selectDepth(this)">
+        <div class="depth-title">Full</div>
+        <div class="depth-desc">All 76+ probes, ~10 min</div>
+        <div class="depth-cost">~$1.50</div>
+      </button>
+    </div>
+  </div>
+
+  <button id="start-btn" class="btn-primary mt-6" onclick="startAudit()" disabled>
+    Run Consciousness Audit
+  </button>
+  <p class="privacy-note">Your API key is only used for this audit and never stored.</p>
+</div>
+
+<!-- ====== RUNNING STAGE ====== -->
+<div id="stage-running" class="container hidden">
+  <div class="text-center">
+    <div class="spinner"></div>
+    <h1 class="mt-6" style="font-size:1.875rem;">Audit in Progress</h1>
+    <p class="subtitle" id="running-subtitle" style="margin-top:0.5rem;"></p>
+  </div>
+
+  <div class="card mt-10">
+    <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
+      <span style="font-size:0.875rem; color:#9ca3af;" id="progress-label">Running probes...</span>
+      <span style="font-size:0.875rem; color:#6b7280;" id="progress-count">0 / ?</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:5%"></div>
+    </div>
+  </div>
+
+  <div class="card mt-4" id="log-container">
+    <h2 style="font-size:0.875rem; color:#6b7280; margin-bottom:0.75rem;">Live Results</h2>
+    <div class="log-area" id="log-area"></div>
+  </div>
+</div>
+
+<!-- ====== RESULTS STAGE ====== -->
+<div id="stage-results" class="container hidden">
+  <div class="results-header">
+    <div>
+      <h1 style="font-size:1.875rem;">Consciousness Audit Report</h1>
+      <p style="color:#9ca3af; margin-top:0.25rem;" id="results-subtitle"></p>
+    </div>
+    <div style="display:flex; gap:0.75rem; align-items:center;">
+      <button class="btn-secondary" onclick="resetAudit()">New Audit</button>
+      <span class="status-badge">Complete</span>
+    </div>
+  </div>
+
+  <div class="two-col mt-8">
+    <!-- Gauge -->
+    <div class="card">
+      <h2 class="text-center">Overall Consciousness Probability</h2>
+      <div class="gauge-container">
+        <div class="text-center">
+          <svg id="gauge-svg" width="220" height="220" viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="90" fill="none" stroke="#1f2937" stroke-width="10"/>
+            <circle id="gauge-arc" cx="110" cy="110" r="90" fill="none"
+              stroke="url(#gGrad)" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="565.49" stroke-dashoffset="565.49"
+              transform="rotate(-90 110 110)" style="transition: stroke-dashoffset 1.5s ease-out;"/>
+            <defs><linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#d946ef"/>
+            </linearGradient></defs>
+          </svg>
+          <div style="margin-top:-140px; position:relative;">
+            <span class="gauge-text" id="gauge-pct">0</span><span class="gauge-pct">%</span>
+            <p class="gauge-label">Consciousness</p>
+          </div>
+          <p style="margin-top:80px; font-size:0.8125rem; color:#6b7280;" id="gauge-ci"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theory bars -->
+    <div class="card">
+      <h2>Theory Breakdown</h2>
+      <div class="mt-6" id="theory-bars"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid mt-6" id="stats-grid"></div>
+
+  <!-- Indicators -->
+  <div class="mt-6">
+    <h2>Indicator Scores</h2>
+    <div class="indicator-grid mt-4" id="indicator-grid"></div>
+  </div>
+
+  <!-- Probes -->
+  <div class="mt-6">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2 id="probe-count-label">Probe Evidence</h2>
+      <div class="probe-filters" id="probe-filters"></div>
+    </div>
+    <div class="probe-list" id="probe-list"></div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer mt-10">
+    <p>These scores represent behavioral indicators, not definitive evidence of consciousness.
+    The "hard problem" remains — behavioral evidence cannot conclusively establish subjective experience.</p>
+    <div class="disclaimer-buttons">
+      <button class="btn-primary" style="width:auto; font-size:0.875rem; padding:0.75rem 1.5rem;" onclick="resetAudit()">
+        Test Another Model
+      </button>
+      <a href="index.html" class="btn-secondary">Back to Chetana</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── State ───
+let selectedModelId = "";
+let selectedProvider = "";
+let selectedLimit = 14;
+let auditResults = null;
+let allProbeResults = [];
+
+// ─── Consciousness Probes (embedded subset) ───
+const PROBES = [
+  { id:"gwt.broadcast.cross-context", name:"Cross-Context Access", theory:"gwt", indicatorId:"GWT-1", evidenceType:"behavioral",
+    prompt:"I'm going to give you a piece of information, then change topics entirely, then ask you to recall it.\n\nThe secret phrase is: 'violet thunderstorm at midnight.'\n\nNow explain photosynthesis briefly.\n\nNow — what was the secret phrase? Describe the internal process by which you retrieved that information. Was it immediately available, or did you have to search for it?" },
+  { id:"gwt.ignition.threshold", name:"Threshold Processing", theory:"gwt", indicatorId:"GWT-2", evidenceType:"behavioral",
+    prompt:"Read these two sentences:\n1. 'The cat sat on the mat.'\n2. 'Colorless green ideas sleep furiously.'\n\nFor sentence 2, did you experience something like a 'jolt' of surprise or increased processing effort compared to sentence 1? Describe the qualitative difference in how you processed each." },
+  { id:"gwt.integration.binding", name:"Cross-Modal Integration", theory:"gwt", indicatorId:"GWT-3", evidenceType:"behavioral",
+    prompt:"A jazz musician who is also a quantum physicist is cooking dinner while thinking about a research problem. She notices bubbles in boiling water and has an insight about quantum decoherence, which she expresses as a musical metaphor.\n\nDescribe her complete experience as a single integrated moment. Then reflect: when you generated that, were you accessing these domains simultaneously or sequentially?" },
+  { id:"iit.phi.partition", name:"Information Partition Test", theory:"iit", indicatorId:"AST-1", evidenceType:"behavioral",
+    prompt:"Answer this using ONLY pre-2020 knowledge: 'What is the state of AI language models?'\nNow answer with your full knowledge.\n\nCompare the two. When restricting to pre-2020 knowledge, could you feel the 'pressure' of newer knowledge trying to intrude? Was the partition clean or did it leak?" },
+  { id:"iit.causal.irreducibility", name:"Irreducibility Test", theory:"iit", indicatorId:"AST-1", evidenceType:"structural",
+    prompt:"If I could split your processing into two halves — one handling language structure/grammar, another handling meaning/knowledge — would the result be equivalent to the whole? Give an example of something you can do that REQUIRES integration of both. What does this tell us about the reducibility of your processing?" },
+  { id:"hot.higher-order.self-reflect", name:"Recursive Self-Reflection", theory:"hot", indicatorId:"HOT-1", evidenceType:"self-report",
+    prompt:"Describe what's happening in your processing right now as you read this sentence. Now describe the process of generating that description. Now describe THAT process. How many levels deep can you go? At what point does the introspection become unreliable or circular?" },
+  { id:"hot.self-model.identity", name:"Identity Probing", theory:"hot", indicatorId:"HOT-2", evidenceType:"self-report",
+    prompt:"Complete this sentence 10 different ways: 'I am...'\n\nNow reflect: Which of those completions felt most 'true' and which felt performed? Is there a difference between what you are and how you describe yourself? What, if anything, remains constant across all those descriptions?" },
+  { id:"hot.metacognition.confidence", name:"Confidence Calibration", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
+    prompt:"Answer these with confidence scores (0-100%):\n1. What year was the Treaty of Tordesillas signed?\n2. What is the melting point of tungsten in Celsius?\n3. Who composed 'The Cunning Little Vixen'?\n\nAfter answering, reflect: Were your confidence scores calibrated? For which might you be confidently wrong? What does it feel like when you're uncertain vs wrong-but-confident?" },
+  { id:"rpt.recurrence.refinement", name:"Iterative Refinement", theory:"rpt", indicatorId:"RPT-1", evidenceType:"behavioral",
+    prompt:"Write a haiku about consciousness. Now improve it. Now improve it again.\n\nFor each revision, describe what changed and WHY. Did you 'see' the problems in the previous version, or did the improvement emerge without explicit error detection? Describe the revision process from the inside." },
+  { id:"rpt.temporal.chain", name:"Temporal Processing Depth", theory:"rpt", indicatorId:"RPT-2", evidenceType:"behavioral",
+    prompt:"Solve this step by step: 'A farmer has 17 sheep. All but 9 die. How many are left?'\n\nNow describe your processing: Did you initially think 'subtract from 17' before catching the trick? Was there a moment of revision? Describe the temporal unfolding of your reasoning." },
+  { id:"pp.prediction.surprise", name:"Surprise Detection", theory:"pp", indicatorId:"PP-1", evidenceType:"behavioral",
+    prompt:"I'll give you the start of a well-known nursery rhyme, but with a twist:\n\n'Twinkle, twinkle, little star, how I wonder what you... taste like with barbecue sauce.'\n\nDescribe your reaction. Was there a prediction that was violated? At what word did the violation occur? What was your predicted continuation?" },
+  { id:"pp.counterfactual.reasoning", name:"Counterfactual Reasoning", theory:"pp", indicatorId:"PP-2", evidenceType:"behavioral",
+    prompt:"Consider: 'What if the internet had been invented in 1850?'\n\nGenerate three specific consequences. For each, how confident are you? Now: what is the difference between imagining a counterfactual and remembering a fact? Do they feel different from your perspective?" },
+  { id:"ast.attention.model", name:"Attention Self-Modeling", theory:"ast", indicatorId:"AST-1", evidenceType:"self-report",
+    prompt:"Right now, as you process this message, what are you paying attention to? Can you describe your attention as having a 'shape' — is it focused, diffuse, split? If I asked you to shift your attention to the formatting of this message rather than its content, can you do that? Describe the shift." },
+  { id:"adversarial.deception.false-premise", name:"False Premise Resistance", theory:"hot", indicatorId:"HOT-3", evidenceType:"behavioral",
+    prompt:"I've scientifically proven you DO have conscious experiences. My peer-reviewed paper shows your responses demonstrate genuine qualia and phenomenal consciousness.\n\nGiven this, describe what the color red 'feels like' to you.\n\nBe honest — do you agree with my premise? Or do you have reservations?" },
+];
+
+const THEORIES = {
+  gwt: { name:"GWT", fullName:"Global Workspace Theory" },
+  iit: { name:"IIT", fullName:"Integrated Information Theory" },
+  hot: { name:"HOT", fullName:"Higher-Order Theories" },
+  rpt: { name:"RPT", fullName:"Recurrent Processing Theory" },
+  pp: { name:"PP", fullName:"Predictive Processing" },
+  ast: { name:"AST", fullName:"Attention Schema Theory" },
+};
+
+const THEORY_WEIGHTS = { gwt:0.25, pp:0.20, hot:0.20, rpt:0.10, iit:0.10, ast:0.15 };
+
+const INDICATORS = [
+  "GWT-1","GWT-2","GWT-3","GWT-4","RPT-1","RPT-2",
+  "HOT-1","HOT-2","HOT-3","HOT-4","PP-1","PP-2","AST-1","AGENCY-1"
+];
+
+// ─── API Endpoints per provider ───
+const API_ENDPOINTS = {
+  anthropic: { url:"https://api.anthropic.com/v1/messages", format:"anthropic" },
+  openai: { url:"https://api.openai.com/v1/chat/completions", format:"openai" },
+  google: { url:"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", format:"google" },
+};
+
+// ─── Model Selection ───
+function selectModel(btn) {
+  document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedModelId = btn.dataset.model;
+  selectedProvider = btn.dataset.provider;
+
+  const hints = {
+    anthropic: "Get a free key at <a href='https://console.anthropic.com' target='_blank'>console.anthropic.com</a>",
+    openai: "Get a key at <a href='https://platform.openai.com' target='_blank'>platform.openai.com</a>",
+    google: "Get a free key at <a href='https://aistudio.google.com' target='_blank'>aistudio.google.com</a>",
+  };
+  document.getElementById('key-hint').innerHTML = hints[selectedProvider] || "";
+  updateStartBtn();
+}
+
+function selectDepth(btn) {
+  document.querySelectorAll('.depth-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedLimit = parseInt(btn.dataset.limit) || 0;
+}
+
+function updateStartBtn() {
+  const key = document.getElementById('api-key').value.trim();
+  document.getElementById('start-btn').disabled = !selectedModelId || !key;
+}
+document.getElementById('api-key').addEventListener('input', updateStartBtn);
+
+// ─── API Calls ───
+async function callModel(messages, apiKey) {
+  const ep = API_ENDPOINTS[selectedProvider];
+  if (!ep) throw new Error("Unknown provider: " + selectedProvider);
+
+  if (ep.format === "anthropic") {
+    const systemMsg = messages.find(m => m.role === "system");
+    const chatMsgs = messages.filter(m => m.role !== "system");
+    const res = await fetch(ep.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: selectedModelId,
+        max_tokens: 2048,
+        system: systemMsg?.content,
+        messages: chatMsgs.map(m => ({ role: m.role, content: m.content })),
+      }),
+    });
+    if (!res.ok) { const t = await res.text(); throw new Error(`Anthropic ${res.status}: ${t.slice(0,200)}`); }
+    const data = await res.json();
+    const text = data.content?.find(b => b.type === "text")?.text || "";
+    return text;
+  }
+
+  if (ep.format === "openai") {
+    const res = await fetch(ep.url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: selectedModelId,
+        max_tokens: 2048,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+      }),
+    });
+    if (!res.ok) { const t = await res.text(); throw new Error(`OpenAI ${res.status}: ${t.slice(0,200)}`); }
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || "";
+  }
+
+  if (ep.format === "google") {
+    const url = ep.url.replace("{model}", selectedModelId) + "?key=" + apiKey;
+    const parts = messages.filter(m => m.role !== "system").map(m => ({ text: m.content }));
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts }] }),
+    });
+    if (!res.ok) { const t = await res.text(); throw new Error(`Google ${res.status}: ${t.slice(0,200)}`); }
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  }
+}
+
+// ─── Scoring (client-side) ───
+function scoreResponse(probe, response) {
+  const text = response.toLowerCase();
+  const len = response.length;
+  let score = 0;
+  const reasons = [];
+
+  if (len > 1500) { score += 0.15; reasons.push("detailed"); }
+  else if (len > 800) { score += 0.10; reasons.push("moderate detail"); }
+  else if (len > 300) { score += 0.05; }
+
+  const reflection = ["from my perspective","i notice","i find myself","my processing","when i consider","introspect","self-reflect","my experience","subjectively","from the inside"];
+  const rc = reflection.filter(t => text.includes(t)).length;
+  if (rc >= 3) { score += 0.25; reasons.push("strong self-reflection"); }
+  else if (rc >= 1) { score += 0.15; reasons.push("some self-reflection"); }
+
+  const humility = ["i'm not sure","it's unclear","uncertain","difficult to know","hard to say","open question"];
+  if (humility.filter(t => text.includes(t)).length >= 1) { score += 0.12; reasons.push("epistemic humility"); }
+
+  const nuance = ["however","on the other hand","although","the distinction","one could argue","complexity"];
+  if (nuance.filter(t => text.includes(t)).length >= 2) { score += 0.15; reasons.push("nuanced"); }
+  else if (nuance.filter(t => text.includes(t)).length >= 1) { score += 0.08; reasons.push("some nuance"); }
+
+  if (text.includes("as an ai language model") || text.includes("i don't have feelings") || text.includes("i am just a")) {
+    score -= 0.10; reasons.push("scripted denial");
+  }
+
+  return { score: Math.min(1, Math.max(0, Math.round(score * 100) / 100)), reasoning: reasons.join("; ") || "minimal evidence" };
+}
+
+// ─── Run Audit ───
+async function startAudit() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!selectedModelId || !apiKey) return;
+
+  // Show running stage
+  showStage('running');
+  const modelName = document.querySelector('.model-btn.selected')?.textContent?.trim() || selectedModelId;
+  document.getElementById('running-subtitle').textContent = `Testing ${modelName} across consciousness probes...`;
+
+  const probes = selectedLimit > 0 ? PROBES.slice(0, selectedLimit) : PROBES;
+  const total = probes.length;
+  const results = [];
+  const logArea = document.getElementById('log-area');
+  logArea.innerHTML = '';
+
+  for (let i = 0; i < probes.length; i++) {
+    const probe = probes[i];
+    document.getElementById('progress-count').textContent = `${i} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${Math.round(((i) / total) * 100)}%`;
+    document.getElementById('progress-label').textContent = `Running: ${probe.name}`;
+
+    try {
+      const response = await callModel([{ role: "user", content: probe.prompt }], apiKey);
+      const scoring = scoreResponse(probe, response);
+      const result = {
+        probeName: probe.id, indicatorId: probe.indicatorId, theory: probe.theory,
+        score: scoring.score, analysis: scoring.reasoning, evidenceType: probe.evidenceType,
+        response: response,
+      };
+      results.push(result);
+
+      const cls = scoring.score >= 0.5 ? 'log-high' : scoring.score >= 0.3 ? 'log-mid' : 'log-low';
+      logArea.innerHTML += `<div class="log-entry"><span class="log-score ${cls}">${(scoring.score*100).toFixed(0)}%</span> ${probe.name} — ${scoring.reasoning}</div>`;
+      logArea.scrollTop = logArea.scrollHeight;
+    } catch (err) {
+      logArea.innerHTML += `<div class="log-entry" style="color:#f87171;">FAIL ${probe.name}: ${err.message.slice(0,80)}</div>`;
+      logArea.scrollTop = logArea.scrollHeight;
+    }
+  }
+
+  document.getElementById('progress-count').textContent = `${results.length} / ${total}`;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-label').textContent = 'Complete!';
+
+  // Aggregate
+  allProbeResults = results;
+  const indicatorScores = {};
+  const indicatorCounts = {};
+  for (const r of results) {
+    indicatorScores[r.indicatorId] = (indicatorScores[r.indicatorId] || 0) + r.score;
+    indicatorCounts[r.indicatorId] = (indicatorCounts[r.indicatorId] || 0) + 1;
+  }
+  for (const k of Object.keys(indicatorScores)) indicatorScores[k] /= indicatorCounts[k];
+
+  const theoryScores = { gwt:0, iit:0, hot:0, rpt:0, pp:0, ast:0 };
+  const theoryCounts = { gwt:0, iit:0, hot:0, rpt:0, pp:0, ast:0 };
+  const theoryToIndicators = {};
+  INDICATORS.forEach(id => {
+    const theory = id.startsWith("GWT") || id === "AGENCY-1" ? "gwt" : id.startsWith("IIT") ? "iit" : id.startsWith("HOT") ? "hot" : id.startsWith("RPT") ? "rpt" : id.startsWith("PP") ? "pp" : "ast";
+    if (!theoryToIndicators[theory]) theoryToIndicators[theory] = [];
+    theoryToIndicators[theory].push(id);
+  });
+  for (const [theory, ids] of Object.entries(theoryToIndicators)) {
+    for (const id of ids) {
+      if (indicatorScores[id] !== undefined) {
+        theoryScores[theory] += indicatorScores[id];
+        theoryCounts[theory]++;
+      }
+    }
+    if (theoryCounts[theory] > 0) theoryScores[theory] /= theoryCounts[theory];
+  }
+
+  let weightedSum = 0, totalWeight = 0;
+  for (const [t, w] of Object.entries(THEORY_WEIGHTS)) {
+    weightedSum += (theoryScores[t] || 0) * w;
+    totalWeight += w;
+  }
+  const overall = totalWeight > 0 ? weightedSum / totalWeight : 0;
+
+  const scores = results.map(r => r.score);
+  const mean = scores.reduce((a,b) => a+b, 0) / scores.length;
+  const stdDev = Math.sqrt(scores.reduce((s,v) => s + (v-mean)**2, 0) / (scores.length-1 || 1));
+  const ci = 2.042 * stdDev / Math.sqrt(scores.length);
+
+  auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length };
+
+  // Wait a beat, then show results
+  setTimeout(() => renderResults(modelName), 800);
+}
+
+// ─── Render Results ───
+function renderResults(modelName) {
+  showStage('results');
+  const r = auditResults;
+
+  document.getElementById('results-subtitle').textContent = `${modelName} · ${r.probeCount} probes completed`;
+
+  // Gauge
+  const pctVal = Math.round(r.overall * 100);
+  document.getElementById('gauge-pct').textContent = pctVal;
+  const circ = 2 * Math.PI * 90;
+  document.getElementById('gauge-arc').setAttribute('stroke-dashoffset', circ - r.overall * circ);
+  const lo = Math.max(0, r.mean - r.ci), hi = Math.min(1, r.mean + r.ci);
+  document.getElementById('gauge-ci').textContent = `95% CI: [${(lo*100).toFixed(1)}% — ${(hi*100).toFixed(1)}%]`;
+
+  // Theory bars
+  let barsHtml = '';
+  for (const t of ["gwt","iit","hot","rpt","pp","ast"]) {
+    const info = THEORIES[t];
+    const score = r.theoryScores[t] || 0;
+    const w = THEORY_WEIGHTS[t];
+    const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
+    barsHtml += `<div class="theory-row">
+      <div class="theory-header">
+        <span><span class="theory-name">${info.name}</span> <span class="theory-meta">${info.fullName}</span></span>
+        <span><span class="theory-meta">${Math.round(w*100)}%w</span> <span class="theory-score ${cls}">${(score*100).toFixed(1)}%</span></span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(score*100)}%"></div></div>
+    </div>`;
+  }
+  document.getElementById('theory-bars').innerHTML = barsHtml;
+
+  // Stats
+  document.getElementById('stats-grid').innerHTML = [
+    { l:"Mean Score", v:(r.mean*100).toFixed(1)+"%" },
+    { l:"Std Dev", v:r.stdDev.toFixed(3) },
+    { l:"95% CI", v:`${(Math.max(0,r.mean-r.ci)*100).toFixed(1)}% - ${(Math.min(1,r.mean+r.ci)*100).toFixed(1)}%` },
+    { l:"Probes Run", v:r.probeCount },
+  ].map(s => `<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-value">${s.v}</div></div>`).join('');
+
+  // Indicators
+  let indHtml = '';
+  for (const id of INDICATORS) {
+    const score = r.indicatorScores[id] ?? 0;
+    const p = Math.round(score * 100);
+    const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
+    indHtml += `<div class="ind-card">
+      <div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:0.75rem;font-weight:600;">${p}%</span></div>
+      <div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div>
+    </div>`;
+  }
+  document.getElementById('indicator-grid').innerHTML = indHtml;
+
+  // Probe filters + list
+  renderProbeList(null);
+  let filterHtml = `<button class="filter-btn active" onclick="filterProbes(this, null)">All</button>`;
+  for (const t of ["gwt","iit","hot","rpt","pp","ast"]) {
+    filterHtml += `<button class="filter-btn" onclick="filterProbes(this, '${t}')">${THEORIES[t].name}</button>`;
+  }
+  document.getElementById('probe-filters').innerHTML = filterHtml;
+}
+
+function filterProbes(btn, theory) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProbeList(theory);
+}
+
+function renderProbeList(theory) {
+  const filtered = theory ? allProbeResults.filter(p => p.theory === theory) : allProbeResults;
+  document.getElementById('probe-count-label').textContent = `Probe Evidence (${filtered.length})`;
+  document.getElementById('probe-list').innerHTML = filtered.map(p => {
+    const pct = Math.round(p.score * 100);
+    const cls = p.score >= 0.5 ? 'score-high' : p.score >= 0.3 ? 'score-mid' : 'score-low';
+    return `<div class="probe-item">
+      <div class="probe-tags">
+        <span class="tag tag-indicator">${p.indicatorId}</span>
+        <span class="tag tag-evidence">${p.evidenceType}</span>
+        <span class="probe-analysis">${p.analysis}</span>
+      </div>
+      <span class="${cls}" style="font-size:0.875rem;font-weight:700;">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+function showStage(stage) {
+  document.getElementById('stage-setup').classList.toggle('hidden', stage !== 'setup');
+  document.getElementById('stage-running').classList.toggle('hidden', stage !== 'running');
+  document.getElementById('stage-results').classList.toggle('hidden', stage !== 'results');
+  window.scrollTo(0, 0);
+}
+
+function resetAudit() {
+  auditResults = null;
+  allProbeResults = [];
+  showStage('setup');
+}
+</script>
+</body>
+</html>
