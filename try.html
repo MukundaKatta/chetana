@@ -621,7 +621,8 @@ async function startAudit() {
   const apiKey = document.getElementById('api-key').value.trim();
   if (!selectedModelId || !apiKey) return;
 
-  // Show running stage
+  // Clear any previous error and show running stage
+  document.getElementById('error-box').classList.add('hidden');
   showStage('running');
   const modelName = document.querySelector('.model-btn.selected')?.textContent?.trim() || selectedModelId;
   document.getElementById('running-subtitle').textContent = `Testing ${modelName} across consciousness probes...`;
@@ -654,12 +655,27 @@ async function startAudit() {
     } catch (err) {
       logArea.innerHTML += `<div class="log-entry" style="color:#f87171;">FAIL ${probe.name}: ${err.message.slice(0,80)}</div>`;
       logArea.scrollTop = logArea.scrollHeight;
+      // If first probe fails, likely an auth error — abort early
+      if (i === 0 && (err.message.includes('401') || err.message.includes('403') || err.message.includes('400') || err.message.includes('API'))) {
+        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600;">Aborting — API key appears invalid.</div>`;
+        break;
+      }
     }
   }
 
   document.getElementById('progress-count').textContent = `${results.length} / ${total}`;
   document.getElementById('progress-fill').style.width = '100%';
   document.getElementById('progress-label').textContent = 'Complete!';
+
+  // If no probes succeeded, show error and go back to setup
+  if (results.length === 0) {
+    showStage('setup');
+    const errBox = document.getElementById('error-box');
+    errBox.textContent = 'All probes failed — please check your API key and try again.';
+    errBox.classList.remove('hidden');
+    window.scrollTo(0, 0);
+    return;
+  }
 
   // Aggregate
   allProbeResults = results;
@@ -697,9 +713,9 @@ async function startAudit() {
   const overall = totalWeight > 0 ? weightedSum / totalWeight : 0;
 
   const scores = results.map(r => r.score);
-  const mean = scores.reduce((a,b) => a+b, 0) / scores.length;
-  const stdDev = Math.sqrt(scores.reduce((s,v) => s + (v-mean)**2, 0) / (scores.length-1 || 1));
-  const ci = 2.042 * stdDev / Math.sqrt(scores.length);
+  const mean = scores.length > 0 ? scores.reduce((a,b) => a+b, 0) / scores.length : 0;
+  const stdDev = scores.length > 1 ? Math.sqrt(scores.reduce((s,v) => s + (v-mean)**2, 0) / (scores.length-1)) : 0;
+  const ci = scores.length > 1 ? 2.042 * stdDev / Math.sqrt(scores.length) : 0;
 
   auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length };
 
