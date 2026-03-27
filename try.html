@@ -631,7 +631,7 @@ async function startAudit() {
   const stdDev = scores.length > 1 ? Math.sqrt(scores.reduce((s,v) => s + (v-mean)**2, 0) / (scores.length-1)) : 0;
   const ci = scores.length > 1 ? 1.96 * stdDev / Math.sqrt(scores.length) : 0;
 
-  auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
+  auditResults = { overall, theoryScores, theoryCounts, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
 
   setTimeout(() => renderResults(modelName), 600);
 }
@@ -654,8 +654,10 @@ function renderResults(modelName) {
     const info = THEORIES[t];
     const score = r.theoryScores[t] || 0;
     const w = THEORY_WEIGHTS[t];
-    const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
-    barsHtml += `<div class="theory-row"><div class="theory-header"><span><span class="theory-name">${info.name}</span> <span class="theory-meta">${info.fullName}</span></span><span><span class="theory-meta">${Math.round(w*100)}%w</span> <span class="theory-score ${cls}">${(score*100).toFixed(1)}%</span></span></div><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(score*100)}%"></div></div></div>`;
+    const tested = r.theoryCounts && r.theoryCounts[t] > 0;
+    const cls = !tested ? '' : score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
+    const scoreLabel = tested ? `${(score*100).toFixed(1)}%` : '<span style="color:#4b5563;font-style:italic;font-weight:400">Not tested</span>';
+    barsHtml += `<div class="theory-row"><div class="theory-header"><span><span class="theory-name">${info.name}</span> <span class="theory-meta">${info.fullName}</span></span><span><span class="theory-meta">${Math.round(w*100)}%w</span> <span class="theory-score ${cls}">${scoreLabel}</span></span></div><div class="bar-bg"><div class="bar-fill" style="width:${tested ? Math.round(score*100) : 0}%"></div></div></div>`;
   }
   document.getElementById('theory-bars').innerHTML = barsHtml;
 
@@ -839,7 +841,7 @@ async function startDemo() {
   const ci = scores.length > 1 ? 1.96 * stdDev / Math.sqrt(scores.length) : 0;
 
   const modelName = "Claude Sonnet 4.6 (Demo)";
-  auditResults = { overall, theoryScores, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
+  auditResults = { overall, theoryScores, theoryCounts, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
   setTimeout(() => renderResults(modelName), 600);
 }
 </script>
