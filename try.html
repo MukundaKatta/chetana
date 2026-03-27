@@ -557,7 +557,13 @@ async function startAudit() {
       logArea.innerHTML += `<div class="log-entry" style="color:#f87171">FAIL ${probe.name}: ${errMsg.slice(0,100)}</div>`;
       logArea.scrollTop = logArea.scrollHeight;
 
-      // Abort after 2 consecutive errors (likely invalid key or rate limit)
+      // Abort immediately on rate limit
+      if (errMsg.includes('429') || errMsg.includes('quota')) {
+        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">Rate limited — your API quota is exceeded. Wait a minute or check your billing at ai.google.dev.</div>`;
+        break;
+      }
+
+      // Abort after 2 consecutive errors (likely invalid key)
       if (consecutiveErrors >= 2) {
         logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">Aborting — too many consecutive errors. Check your API key.</div>`;
         break;
@@ -711,6 +717,7 @@ function resetAudit() {
   auditResults = null;
   allProbeResults = [];
   auditCancelled = false;
+  document.getElementById('error-box').classList.add('hidden');
   showStage('setup');
 }
 </script>
