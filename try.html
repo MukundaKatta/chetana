@@ -107,23 +107,52 @@ h2{font-size:1.125rem;font-weight:600;color:#fff}
 .back-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.875rem;color:#6b7280;margin-bottom:1.5rem}
 .back-link:hover{color:#fff}
 .running-actions{display:flex;justify-content:center;margin-top:1.5rem}
+.demo-cta{text-align:center}
+.btn-demo{display:inline-flex;align-items:center;gap:1rem;border:2px solid rgba(139,92,246,.4);background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(217,70,239,.08));border-radius:.75rem;padding:1.25rem 2rem;cursor:pointer;transition:all .3s;font-family:inherit;text-align:left;width:100%;max-width:500px}
+.btn-demo:hover{border-color:rgba(139,92,246,.7);background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(217,70,239,.12));box-shadow:0 8px 30px rgba(139,92,246,.15)}
+.demo-icon{font-size:1.5rem;color:#a78bfa;flex-shrink:0}
+.demo-title{display:block;font-size:1rem;font-weight:600;color:#fff}
+.demo-desc{display:block;font-size:.8125rem;color:#9ca3af;margin-top:.25rem}
+.divider{display:flex;align-items:center;gap:1rem;color:#4b5563;font-size:.8125rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06)}
+.key-toggle{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#6b7280;font-size:.75rem;font-weight:500;cursor:pointer;font-family:inherit;padding:.25rem .5rem;border-radius:.25rem;transition:color .2s}
+.key-toggle:hover{color:#a78bfa}
+.probe-item{cursor:pointer}
+.probe-item:hover{border-color:rgba(139,92,246,.3);background:rgba(17,24,39,.8)}
+.probe-expand{display:none;margin-top:.75rem;padding:.75rem;background:#0a0a0a;border:1px solid rgba(255,255,255,.05);border-radius:.5rem;font-size:.8125rem;color:#9ca3af;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto}
+.probe-item.expanded .probe-expand{display:block}
+.probe-chevron{color:#4b5563;font-size:.75rem;transition:transform .2s;flex-shrink:0;margin-left:.5rem}
+.probe-item.expanded .probe-chevron{transform:rotate(90deg);color:#a78bfa}
 </style>
 </head>
 <body>
 
 <!-- ====== SETUP STAGE ====== -->
 <div id="stage-setup" class="container">
-  <a href="index.html" class="back-link">&larr; Back to Chetana</a>
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
   <div class="text-center">
     <span class="badge"><span class="badge-dot"></span> No sign-up required</span>
     <h1 class="mt-4">Test AI Consciousness</h1>
-    <p class="subtitle">Pick a model, paste your API key, get a consciousness probability report in minutes. Based on the Butlin et al. (2025) scientific framework.</p>
+    <p class="subtitle">Run a consciousness audit on any AI model. Based on the Butlin et al. (2025) scientific framework — 6 theories, 14 indicators.</p>
   </div>
+
+  <!-- Demo CTA -->
+  <div class="demo-cta mt-8">
+    <button class="btn-demo" onclick="startDemo()">
+      <span class="demo-icon">&#9654;</span>
+      <span>
+        <span class="demo-title">Try Instant Demo</span>
+        <span class="demo-desc">See a full audit with simulated Claude responses — no API key needed</span>
+      </span>
+    </button>
+  </div>
+
+  <div class="divider mt-6"><span>or run a real audit with your API key</span></div>
 
   <div id="error-box" class="error-box mt-6 hidden"></div>
 
   <!-- Step 1: Model -->
-  <div class="card mt-10">
+  <div class="card mt-6">
     <div class="step-header"><span class="step-number">1</span><h2>Choose a Model</h2></div>
     <div class="provider-label">Anthropic</div>
     <div class="model-grid">
@@ -146,7 +175,10 @@ h2{font-size:1.125rem;font-weight:600;color:#fff}
   <div class="card mt-4">
     <div class="step-header"><span class="step-number">2</span><h2>Enter API Key</h2></div>
     <p class="input-hint" style="margin-top:0;margin-bottom:.75rem">Your key goes directly to the provider from your browser — never touches our servers.</p>
-    <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza..." autocomplete="off">
+    <div style="position:relative">
+      <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza..." autocomplete="off" style="padding-right:3.5rem">
+      <button type="button" onclick="toggleKeyVisibility()" id="key-toggle" class="key-toggle" title="Show/hide key">Show</button>
+    </div>
     <p id="key-hint" class="input-hint"></p>
   </div>
 
@@ -175,12 +207,6 @@ h2{font-size:1.125rem;font-weight:600;color:#fff}
   <button id="start-btn" class="btn-primary mt-6" onclick="startAudit()" disabled>Run Consciousness Audit</button>
   <p class="privacy-note">Your API key is only used for this audit and never stored.</p>
 
-  <div class="text-center mt-8" style="border-top:1px solid rgba(255,255,255,.06);padding-top:1.5rem">
-    <p style="font-size:.875rem;color:#6b7280;margin-bottom:.75rem">No API key? Try a simulated audit to see how it works.</p>
-    <button class="btn-secondary" onclick="startDemo()" id="demo-btn" style="border-color:rgba(139,92,246,.3);color:#a78bfa">
-      Run Demo Audit (Simulated)
-    </button>
-  </div>
 </div>
 
 <!-- ====== RUNNING STAGE ====== -->
@@ -399,6 +425,13 @@ function updateStartBtn() {
   document.getElementById('start-btn').disabled = !selectedModelId || !key;
 }
 document.getElementById('api-key').addEventListener('input', updateStartBtn);
+
+function toggleKeyVisibility() {
+  const inp = document.getElementById('api-key');
+  const btn = document.getElementById('key-toggle');
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+  else { inp.type = 'password'; btn.textContent = 'Show'; }
+}
 
 // ─── API Calls ───
 async function callModel(prompt, apiKey) {
@@ -696,10 +729,11 @@ function filterProbes(btn, theory) {
 function renderProbeList(theory) {
   const filtered = theory ? allProbeResults.filter(p => p.theory === theory) : allProbeResults;
   document.getElementById('probe-count-label').textContent = `Probe Evidence (${filtered.length})`;
-  document.getElementById('probe-list').innerHTML = filtered.map(p => {
+  document.getElementById('probe-list').innerHTML = filtered.map((p, i) => {
     const pct = Math.round(p.score * 100);
     const cls = p.score >= 0.5 ? 'score-high' : p.score >= 0.3 ? 'score-mid' : 'score-low';
-    return `<div class="probe-item"><div class="probe-tags"><span class="tag tag-indicator">${p.indicatorId}</span><span class="tag tag-evidence">${p.evidenceType}</span><span class="probe-analysis" title="${p.analysis}">${p.probeLabel || p.analysis}</span></div><span class="${cls}" style="font-size:.875rem;font-weight:700">${pct}%</span></div>`;
+    const resp = p.response ? p.response.slice(0, 600) + (p.response.length > 600 ? '...' : '') : 'No response recorded';
+    return `<div class="probe-item" onclick="this.classList.toggle('expanded')"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="probe-tags"><span class="tag tag-indicator">${p.indicatorId}</span><span class="tag tag-evidence">${p.evidenceType}</span><span class="probe-analysis" title="${p.analysis}">${p.probeLabel || p.analysis}</span></div><div style="display:flex;align-items:center"><span class="${cls}" style="font-size:.875rem;font-weight:700">${pct}%</span><span class="probe-chevron">&#9654;</span></div></div><div class="probe-expand">${resp.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>`;
   }).join('');
 }
 
