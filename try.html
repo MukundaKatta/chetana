@@ -282,6 +282,7 @@ h2{font-size:1.125rem;font-weight:600;color:#fff}
       <h2 id="probe-count-label">Probe Evidence</h2>
       <div class="probe-filters" id="probe-filters"></div>
     </div>
+    <p style="font-size:.75rem;color:#4b5563;margin-bottom:.5rem">Click any probe to see the AI's full response</p>
     <div class="probe-list" id="probe-list"></div>
   </div>
 
@@ -386,6 +387,7 @@ const THEORY_WEIGHTS = { gwt:0.25, pp:0.20, hot:0.20, rpt:0.10, iit:0.10, ast:0.
 
 // Only indicators that have actual probes mapped
 const INDICATORS = ["GWT-1","GWT-2","GWT-3","GWT-4","IIT-1","IIT-2","RPT-1","RPT-2","HOT-1","HOT-2","HOT-3","HOT-4","PP-1","PP-2","AST-1","AST-2"];
+const INDICATOR_NAMES = {"GWT-1":"Specialized Modules","GWT-2":"Limited Workspace","GWT-3":"Global Broadcast","GWT-4":"State Attention","IIT-1":"Integrated Info","IIT-2":"Causal Structure","RPT-1":"Recurrence","RPT-2":"Organized Percepts","HOT-1":"Generative Perception","HOT-2":"Metacognition","HOT-3":"Belief Updating","HOT-4":"Sparse Coding","PP-1":"Predictive Model","PP-2":"Error Minimization","AST-1":"Attention Schema","AST-2":"Schema Usage"};
 
 const INDICATOR_THEORY_MAP = {};
 INDICATORS.forEach(id => {
@@ -708,7 +710,8 @@ function renderResults(modelName) {
     const score = r.indicatorScores[id];
     const p = Math.round(score * 100);
     const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
-    indHtml += `<div class="ind-card"><div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:.75rem;font-weight:600">${p}%</span></div><div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div></div>`;
+    const iName = INDICATOR_NAMES[id] || '';
+    indHtml += `<div class="ind-card"><div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:.75rem;font-weight:600">${p}%</span></div><div style="font-size:.75rem;color:#9ca3af;margin-top:.125rem">${iName}</div><div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div></div>`;
   }
   document.getElementById('indicator-grid').innerHTML = indHtml;
 
@@ -811,7 +814,7 @@ async function startDemo() {
     document.getElementById('progress-fill').style.width = `${Math.round(((i + 1) / total) * 100)}%`;
     document.getElementById('progress-label').textContent = `Running: ${probe.name}`;
 
-    await new Promise(r => setTimeout(r, 300 + Math.random() * 400));
+    await new Promise(r => setTimeout(r, 80 + Math.random() * 120));
 
     const demo = DEMO_RESPONSES[probe.id];
     if (demo) {
