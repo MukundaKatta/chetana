@@ -594,6 +594,17 @@ async function startAudit() {
   const apiKey = document.getElementById('api-key').value.trim();
   if (!selectedModelId || !apiKey) return;
 
+  // Validate API key format
+  const keyPrefixes = { anthropic: 'sk-ant-', openai: 'sk-', google: 'AIza' };
+  const expectedPrefix = keyPrefixes[selectedProvider];
+  if (expectedPrefix && !apiKey.startsWith(expectedPrefix)) {
+    const errBox = document.getElementById('error-box');
+    const providerName = selectedProvider === 'anthropic' ? 'Anthropic' : selectedProvider === 'openai' ? 'OpenAI' : 'Google';
+    errBox.textContent = `Invalid API key format. ${providerName} keys should start with "${expectedPrefix}". Check your key and try again.`;
+    errBox.classList.remove('hidden');
+    return;
+  }
+
   auditCancelled = false;
   document.getElementById('error-box').classList.add('hidden');
   showStage('running');
@@ -637,7 +648,9 @@ async function startAudit() {
       let errMsg = err.message;
 
       if (err.message === "CORS_ERROR" || err.name === "TypeError") {
-        errMsg = "Browser blocked the request (CORS). Try Google Gemini instead — it works directly from the browser.";
+        errMsg = selectedProvider === 'google'
+          ? "Browser blocked the request (CORS). Check your API key and try again."
+          : "Browser blocked the request (CORS). Try Google Gemini instead — it works directly from the browser.";
         logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">ERROR: ${errMsg}</div>`;
         break;
       }
@@ -647,7 +660,8 @@ async function startAudit() {
 
       // Abort immediately on rate limit
       if (errMsg.includes('429') || errMsg.includes('quota')) {
-        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">Rate limited — your API quota is exceeded. Wait a minute or check your billing at ai.google.dev.</div>`;
+        const billingUrl = selectedProvider === 'anthropic' ? 'console.anthropic.com' : selectedProvider === 'openai' ? 'platform.openai.com' : 'ai.google.dev';
+        logArea.innerHTML += `<div class="log-entry" style="color:#f87171;font-weight:600">Rate limited — your API quota is exceeded. Wait a minute or check your billing at ${billingUrl}.</div>`;
         break;
       }
 
@@ -669,7 +683,9 @@ async function startAudit() {
     const errBox = document.getElementById('error-box');
     errBox.textContent = auditCancelled
       ? 'Audit was cancelled.'
-      : 'All probes failed — please check your API key and try again. Google Gemini keys work best from the browser.';
+      : selectedProvider === 'google'
+        ? 'All probes failed — please check your API key and try again.'
+        : 'All probes failed — please check your API key and try again. Tip: Google Gemini keys work directly from the browser with no CORS issues.';
     errBox.classList.remove('hidden');
     window.scrollTo(0, 0);
     return;
