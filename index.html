@@ -9,6 +9,12 @@
 <meta property="og:description" content="Is AI Conscious? Test any model with 6 theories, 14 indicators, 22+ probes.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chetana">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23030712' width='100' height='100' rx='20'/><text y='.9em' x='10' font-size='80'>🧠</text></svg>">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #030712; color: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
@@ -1098,6 +1104,10 @@ document.querySelectorAll('.section.reveal').forEach(el => revealObserver.observ
 // ─── Auto-start demo if ?demo=1 ───
 if (window.location.search.includes('demo=1')) {
   window.location.href = 'try.html';
+}
+// ─── Service Worker ───
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
 </body>
