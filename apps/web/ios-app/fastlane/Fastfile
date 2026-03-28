@@ -1,0 +1,107 @@
+# Fastlane configuration for Chetana iOS App Store submission
+# Documentation: https://docs.fastlane.tools
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Build the Next.js web app and sync with Capacitor"
+  lane :prepare do
+    # 1. Build the Next.js static export
+    sh("cd ../.. && pnpm build")
+
+    # 2. Sync with Capacitor iOS project
+    sh("cd ../.. && npx cap sync ios")
+  end
+
+  desc "Build and sign the iOS app for App Store"
+  lane :build do
+    prepare
+
+    # Increment build number automatically
+    increment_build_number(
+      xcodeproj: "../ios/App/App.xcodeproj"
+    )
+
+    # Build the app
+    build_app(
+      workspace: "../ios/App/App.xcworkspace",
+      scheme: "App",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.chetana.consciousness" => "Chetana App Store Profile"
+        }
+      },
+      output_directory: "./build",
+      output_name: "Chetana.ipa"
+    )
+  end
+
+  desc "Upload to App Store Connect for TestFlight"
+  lane :beta do
+    build
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      apple_id: "YOUR_APP_APPLE_ID"
+    )
+  end
+
+  desc "Submit to App Store for review"
+  lane :release do
+    build
+
+    deliver(
+      submit_for_review: true,
+      automatic_release: false,
+      force: true,
+      metadata_path: "./metadata",
+      screenshots_path: "./screenshots",
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false,
+        export_compliance_is_exempt: true,
+        content_rights_contains_third_party_content: false
+      },
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc "Take screenshots for App Store listing"
+  lane :screenshots do
+    snapshot(
+      workspace: "../ios/App/App.xcworkspace",
+      scheme: "App",
+      devices: [
+        "iPhone 16 Pro Max",
+        "iPhone 16 Pro",
+        "iPad Pro 13-inch (M4)"
+      ],
+      languages: ["en-US"],
+      output_directory: "./screenshots"
+    )
+  end
+
+  desc "Register app on App Store Connect"
+  lane :create_app do
+    produce(
+      username: "YOUR_APPLE_ID@email.com",
+      app_identifier: "com.chetana.consciousness",
+      app_name: "Chetana - AI Consciousness",
+      language: "English",
+      app_version: "1.0.0",
+      sku: "com.chetana.consciousness.100"
+    )
+  end
+
+  desc "Sync signing certificates and profiles"
+  lane :certs do
+    match(
+      type: "appstore",
+      app_identifier: "com.chetana.consciousness",
+      readonly: true
+    )
+  end
+
+end
