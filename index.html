@@ -107,6 +107,7 @@ const bgC = document.getElementById('bg');
 const fgC = document.getElementById('fg');
 const bg = bgC.getContext('2d');
 const fg = fgC.getContext('2d');
+if (!bg || !fg) { document.body.style.background = '#030712'; throw new Error('Canvas 2D not supported'); }
 
 let W, H;
 var stars = [], nebulae = [];
@@ -892,11 +893,13 @@ function animate(t) {
   drawFrame(fg,t); drawLetters(fg,t);
   updateFA(t); drawFA(fg,t);
 
-  requestAnimationFrame(animate);
+  animFrameId = requestAnimationFrame(animate);
 }
+let animFrameId;
 // Launch the first asteroid immediately on page open
 launchFA();
-requestAnimationFrame(animate);
+animFrameId = requestAnimationFrame(animate);
+window.addEventListener('beforeunload', () => { if (animFrameId) cancelAnimationFrame(animFrameId); });
 </script>
 </body>
 </html>

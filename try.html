@@ -57,6 +57,7 @@ h2{font-size:1.125rem;font-weight:600;color:#fff}
 .error-box{border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.1);border-radius:.5rem;padding:.75rem 1rem;font-size:.875rem;color:#f87171}
 .spinner{width:3rem;height:3rem;border:3px solid transparent;border-top-color:#8b5cf6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spinner{animation-duration:3s}.progress-fill{animation:none}}
 .progress-bar{height:.75rem;border-radius:9999px;background:#1f2937;overflow:hidden}
 .progress-fill{height:100%;border-radius:9999px;background:linear-gradient(to right,#8b5cf6,#d946ef);transition:width .5s;animation:ppulse 2s infinite}
 @keyframes ppulse{0%,100%{opacity:1}50%{opacity:.7}}
@@ -222,7 +223,7 @@ h2{font-size:1rem}
     <p class="input-hint" style="margin-top:0;margin-bottom:.75rem">Your key goes directly to the provider from your browser — never touches our servers.</p>
     <div style="position:relative">
       <input id="api-key" class="input" type="password" placeholder="sk-ant-... or sk-... or AIza..." autocomplete="off" style="padding-right:3.5rem">
-      <button type="button" onclick="toggleKeyVisibility()" id="key-toggle" class="key-toggle" title="Show/hide key">Show</button>
+      <button type="button" onclick="toggleKeyVisibility()" id="key-toggle" class="key-toggle" title="Show/hide key" aria-label="Toggle API key visibility">Show</button>
     </div>
     <p id="key-hint" class="input-hint"></p>
   </div>
@@ -781,7 +782,7 @@ function renderProbeList(theory) {
     const pct = Math.round(p.score * 100);
     const cls = p.score >= 0.5 ? 'score-high' : p.score >= 0.3 ? 'score-mid' : 'score-low';
     const resp = p.response ? p.response.slice(0, 600) + (p.response.length > 600 ? '...' : '') : 'No response recorded';
-    return `<div class="probe-item" onclick="this.classList.toggle('expanded')"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="probe-tags"><span class="tag tag-indicator">${p.indicatorId}</span><span class="tag tag-evidence">${p.evidenceType}</span><span class="probe-analysis" title="${p.analysis}">${p.probeLabel || p.analysis}</span></div><div style="display:flex;align-items:center"><span class="${cls}" style="font-size:.875rem;font-weight:700">${pct}%</span><span class="probe-chevron">&#9654;</span></div></div><div class="probe-expand">${resp.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>`;
+    return `<div class="probe-item" role="button" tabindex="0" onclick="this.classList.toggle('expanded')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('expanded')}"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="probe-tags"><span class="tag tag-indicator">${p.indicatorId}</span><span class="tag tag-evidence">${p.evidenceType}</span><span class="probe-analysis" title="${p.analysis}">${p.probeLabel || p.analysis}</span></div><div style="display:flex;align-items:center"><span class="${cls}" style="font-size:.875rem;font-weight:700">${pct}%</span><span class="probe-chevron" aria-hidden="true">&#9654;</span></div></div><div class="probe-expand">${resp.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>`;
   }).join('');
 }
 
