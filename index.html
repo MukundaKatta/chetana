@@ -113,7 +113,7 @@ var stars = [], nebulae = [];
 const LETTERS = 'CHETANA';
 let LS, FS, TW;
 function calcLetterSizes() {
-  const scale = Math.min(1, window.innerWidth / 900);
+  const scale = Math.min(1, (window.innerWidth - 40) / 860);
   LS = Math.round(135 * scale);
   FS = Math.round(150 * scale);
   TW = (LETTERS.length - 1) * LS;
