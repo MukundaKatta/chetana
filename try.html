@@ -80,32 +80,41 @@ h1{font-size:1.5rem}
 .card{padding:1rem}
 .results-header{flex-direction:column;align-items:flex-start}
 .results-header>div:last-child{width:100%;justify-content:flex-start}
-.gauge-text{font-size:2.75rem}
-.gauge-container{padding:1rem 0}
-svg{width:180px;height:180px}
+.gauge-text{font-size:2.5rem}
+.gauge-pct{font-size:1rem}
+.gauge-container{padding:.75rem 0}
+.gauge-container svg{width:170px;height:170px}
+.gauge-container div[style*="margin-top"]{margin-top:-120px!important}
+.gauge-container p[style*="margin-top:80"]{margin-top:60px!important}
 .theory-header{flex-wrap:wrap;gap:.25rem}
 .theory-meta{font-size:.5625rem}
-.stats-grid{grid-template-columns:repeat(2,1fr);gap:.5rem}
+.stats-grid{grid-template-columns:repeat(2,1fr)!important;gap:.5rem}
+.stat-card{padding:.75rem}
+.stat-label{font-size:.5625rem}
 .stat-value{font-size:1rem}
-.indicator-grid{grid-template-columns:repeat(2,1fr);gap:.5rem}
+.indicator-grid{grid-template-columns:repeat(2,1fr)!important;gap:.5rem}
 .ind-card{padding:.75rem}
-.probe-item{flex-direction:column;align-items:stretch;padding:.75rem}
-.probe-item>div{flex-direction:column!important;gap:.5rem}
+.ind-id{font-size:.5625rem}
+.probe-item{padding:.75rem}
+.probe-item>div:first-child{flex-direction:row!important;flex-wrap:wrap;gap:.5rem}
 .probe-tags{flex-wrap:wrap}
-.probe-analysis{max-width:100%;white-space:normal}
-.probe-expand{font-size:.75rem;max-height:150px}
-.probe-filters{gap:.25rem}
-.filter-btn{padding:.25rem .5rem;font-size:.6875rem}
+.probe-analysis{max-width:100%;white-space:normal;margin-left:0}
+.probe-expand{font-size:.75rem;max-height:200px}
+.probe-filters{gap:.25rem;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:.25rem}
+.filter-btn{padding:.3rem .625rem;font-size:.6875rem;flex-shrink:0}
 .btn-demo{padding:1rem 1.25rem;gap:.75rem}
 .demo-title{font-size:.9375rem}
 .demo-desc{font-size:.75rem}
 .divider{font-size:.75rem;gap:.5rem}
 .btn-primary{padding:.875rem 1.5rem;font-size:1rem}
 .disclaimer{padding:1rem}
-.disclaimer-buttons{flex-direction:column;align-items:center}
+.disclaimer-buttons{flex-direction:column;align-items:stretch}
+.disclaimer-buttons .btn-primary{width:100%}
+.disclaimer-buttons .btn-secondary{width:100%;text-align:center}
 .log-area{font-size:.6875rem;max-height:160px;padding:.5rem}
 .privacy-note{font-size:.6875rem}
 .error-box{font-size:.8125rem}
+h2{font-size:1rem}
 }
 .theory-row{margin-bottom:1rem}
 .theory-header{display:flex;justify-content:space-between;margin-bottom:.375rem}

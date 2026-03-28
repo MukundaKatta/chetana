@@ -111,12 +111,19 @@ const fg = fgC.getContext('2d');
 let W, H;
 var stars = [], nebulae = [];
 const LETTERS = 'CHETANA';
-const LS = 135, FS = 150;
-const TW = (LETTERS.length - 1) * LS;
+let LS, FS, TW;
+function calcLetterSizes() {
+  const scale = Math.min(1, window.innerWidth / 900);
+  LS = Math.round(135 * scale);
+  FS = Math.round(150 * scale);
+  TW = (LETTERS.length - 1) * LS;
+}
+calcLetterSizes();
 
 function resize() {
   W = bgC.width = fgC.width = window.innerWidth;
   H = bgC.height = fgC.height = window.innerHeight;
+  calcLetterSizes();
   initStars(); initNebulae();
 }
 resize();
