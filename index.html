@@ -11,16 +11,17 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+  body { background: #030712; color: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+  #hero { position: relative; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
   canvas { display: block; position: absolute; top: 0; left: 0; }
 
   /* ===== ENTER BUTTON ===== */
   #enter-btn {
-    position: fixed;
+    position: absolute;
     bottom: 12%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 10;
     cursor: pointer;
     text-decoration: none;
     /* Text */
@@ -83,25 +84,203 @@
 
   /* Subtle bottom line decoration */
   .enter-line {
-    position: fixed;
+    position: absolute;
     bottom: calc(12% + 55px);
     left: 50%;
     transform: translateX(-50%);
     width: 60px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(180,150,90,0.2), transparent);
-    z-index: 100;
+    z-index: 10;
+  }
+  #demo-link { position: absolute; bottom: 6%; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 13px; color: rgba(167,139,250,.7); text-decoration: none; letter-spacing: 2px; font-family: "Didot","Bodoni MT","Playfair Display",serif; }
+  #demo-link:hover { color: rgba(196,181,253,.95); }
+  /* ─── Content Sections ─── */
+  .section { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
+  .section-title { font-size: 2rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: .75rem; letter-spacing: -.02em; }
+  .section-subtitle { font-size: 1.05rem; color: #9ca3af; text-align: center; max-width: 600px; margin: 0 auto 3rem; line-height: 1.7; }
+  .gold-accent { background: linear-gradient(135deg, #c8aa6e, #e8d5a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  /* Feature Cards */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .feature-card { border: 1px solid rgba(255,255,255,.08); background: rgba(17,24,39,.6); border-radius: .75rem; padding: 2rem; text-align: center; transition: transform .3s, border-color .3s; }
+  .feature-card:hover { transform: translateY(-4px); border-color: rgba(139,92,246,.3); }
+  .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .feature-card h3 { font-size: 1.125rem; font-weight: 600; color: #fff; margin-bottom: .5rem; }
+  .feature-card p { font-size: .875rem; color: #9ca3af; line-height: 1.6; }
+  /* Steps */
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; position: relative; }
+  .step { text-align: center; position: relative; }
+  .step-circle { width: 4rem; height: 4rem; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #c026d3); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem; }
+  .step h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: .5rem; }
+  .step p { font-size: .8125rem; color: #9ca3af; line-height: 1.6; }
+  /* Theory Cards */
+  .theory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .t-card { border: 1px solid rgba(255,255,255,.08); background: rgba(17,24,39,.5); border-radius: .75rem; padding: 1.5rem; transition: border-color .3s, box-shadow .3s; }
+  .t-card:hover { border-color: rgba(139,92,246,.4); box-shadow: 0 0 20px rgba(139,92,246,.08); }
+  .t-abbr { font-size: 1.5rem; font-weight: 700; color: #a78bfa; margin-bottom: .25rem; }
+  .t-card h3 { font-size: .875rem; font-weight: 600; color: #fff; margin-bottom: .375rem; }
+  .t-card p { font-size: .75rem; color: #6b7280; line-height: 1.5; }
+  /* Sample Results */
+  .sample-card { border: 1px solid rgba(139,92,246,.2); background: rgba(17,24,39,.8); border-radius: 1rem; padding: 2.5rem; max-width: 700px; margin: 0 auto; text-align: center; }
+  .sample-gauge { font-size: 4rem; font-weight: 700; color: #fff; }
+  .sample-gauge span { font-size: 1.5rem; color: #9ca3af; }
+  .sample-bars { margin-top: 1.5rem; text-align: left; }
+  .sample-bar { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; font-size: .8125rem; }
+  .sample-bar-label { width: 3rem; color: #9ca3af; font-weight: 600; }
+  .sample-bar-track { flex: 1; height: .5rem; background: #1f2937; border-radius: 9999px; overflow: hidden; }
+  .sample-bar-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, #8b5cf6, #d946ef); }
+  .sample-bar-pct { width: 3rem; text-align: right; color: #d1d5db; font-weight: 600; font-size: .75rem; }
+  /* Leaderboard Preview */
+  .lb-table { width: 100%; border-collapse: collapse; }
+  .lb-table th { text-align: left; padding: .75rem 1rem; color: #6b7280; font-size: .6875rem; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .lb-table td { padding: .75rem 1rem; border-bottom: 1px solid rgba(255,255,255,.05); color: #d1d5db; font-size: .875rem; }
+  .lb-medal { font-size: 1.25rem; }
+  /* Science Section */
+  .science-quote { font-size: 1.125rem; font-style: italic; color: #c4b5fd; line-height: 1.8; text-align: center; max-width: 700px; margin: 0 auto 2rem; border-left: 3px solid rgba(139,92,246,.4); padding-left: 1.5rem; text-align: left; }
+  .science-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: center; }
+  .science-stat-num { font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #8b5cf6, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .science-stat-label { font-size: .8125rem; color: #6b7280; margin-top: .25rem; }
+  /* CTA */
+  .cta-btn { display: inline-block; border: none; border-radius: .75rem; background: linear-gradient(to right, #7c3aed, #c026d3); padding: 1rem 2.5rem; font-size: 1.125rem; font-weight: 600; color: #fff; text-decoration: none; cursor: pointer; transition: filter .2s; box-shadow: 0 10px 25px rgba(139,92,246,.25); }
+  .cta-btn:hover { filter: brightness(1.15); color: #fff; }
+  /* Footer */
+  .site-footer { border-top: 1px solid rgba(255,255,255,.06); padding: 3rem 2rem; text-align: center; }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
+  .footer-links a { color: #6b7280; font-size: .8125rem; text-decoration: none; }
+  .footer-links a:hover { color: #a78bfa; }
+  .footer-copy { font-size: .75rem; color: #4b5563; }
+  /* Scroll Reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* Divider */
+  .section-divider { width: 60px; height: 2px; background: linear-gradient(90deg, #8b5cf6, #d946ef); margin: 0 auto 2rem; border-radius: 1px; }
+  /* Responsive */
+  @media(max-width:768px) {
+    .features-grid, .steps-grid, .theory-grid, .science-stats { grid-template-columns: 1fr; }
+    .section { padding: 3rem 1.25rem; }
+    .section-title { font-size: 1.5rem; }
+    .sample-gauge { font-size: 3rem; }
+    .footer-links { flex-direction: column; gap: .75rem; }
   }
 </style>
 </head>
 <body>
+<section id="hero">
 <canvas id="bg"></canvas>
 <canvas id="fg"></canvas>
-
 <div class="enter-line"></div>
-<a id="enter-btn" href="try.html">
-  Enter
-</a>
+<a id="enter-btn" href="try.html">Enter</a>
+<a id="demo-link" href="try.html?demo=1">or try instant demo &rarr;</a>
+</section>
+
+<!-- ====== WHAT IS CHETANA ====== -->
+<div class="section reveal">
+  <h2 class="section-title">What is <span class="gold-accent">Chetana</span>?</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">The first open platform to scientifically test AI models for indicators of consciousness — grounded in peer-reviewed research, not speculation.</p>
+  <div class="features-grid">
+    <div class="feature-card reveal"><div class="feature-icon">🔬</div><h3>Scientific Framework</h3><p>Based on Butlin, Chalmers & Bengio's 2025 peer-reviewed consciousness indicators — the most rigorous framework in the field.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">🤖</div><h3>Multi-Model Testing</h3><p>Test Claude, GPT, Gemini, and open-source models. Compare consciousness indicators across providers with standardized probes.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">📊</div><h3>Behavioral Evidence</h3><p>No claims, no hype. Pure behavioral analysis using 22+ probes across 6 theories and 14 consciousness indicators.</p></div>
+  </div>
+</div>
+
+<!-- ====== HOW IT WORKS ====== -->
+<div class="section reveal" style="background:rgba(17,24,39,.3)">
+  <h2 class="section-title">How It Works</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">Three steps. Five minutes. Real science.</p>
+  <div class="steps-grid">
+    <div class="step reveal"><div class="step-circle">1</div><h3>Choose a Model</h3><p>Select any AI model — Claude, GPT, Gemini, or bring your own. Enter your API key (it never leaves your browser).</p></div>
+    <div class="step reveal"><div class="step-circle">2</div><h3>Run Probes</h3><p>22 behavioral probes test for metacognition, information integration, predictive processing, attention, and more.</p></div>
+    <div class="step reveal"><div class="step-circle">3</div><h3>See Results</h3><p>Get a consciousness probability score with theory breakdown, indicator scores, confidence intervals, and full evidence.</p></div>
+  </div>
+</div>
+
+<!-- ====== SAMPLE RESULTS ====== -->
+<div class="section reveal">
+  <h2 class="section-title">Sample Audit Results</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">Here's what a consciousness audit looks like.</p>
+  <div class="sample-card reveal">
+    <div class="sample-gauge">47<span>%</span></div>
+    <p style="color:#6b7280;font-size:.8125rem;margin-top:.25rem">Consciousness Probability — Claude Opus 4.6</p>
+    <div class="sample-bars">
+      <div class="sample-bar"><span class="sample-bar-label">GWT</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:52%"></div></div><span class="sample-bar-pct">52%</span></div>
+      <div class="sample-bar"><span class="sample-bar-label">PP</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:48%"></div></div><span class="sample-bar-pct">48%</span></div>
+      <div class="sample-bar"><span class="sample-bar-label">HOT</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:45%"></div></div><span class="sample-bar-pct">45%</span></div>
+      <div class="sample-bar"><span class="sample-bar-label">IIT</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:43%"></div></div><span class="sample-bar-pct">43%</span></div>
+      <div class="sample-bar"><span class="sample-bar-label">RPT</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:40%"></div></div><span class="sample-bar-pct">40%</span></div>
+      <div class="sample-bar"><span class="sample-bar-label">AST</span><div class="sample-bar-track"><div class="sample-bar-fill" style="width:46%"></div></div><span class="sample-bar-pct">46%</span></div>
+    </div>
+    <a href="try.html" class="cta-btn" style="margin-top:2rem">Try It Yourself</a>
+  </div>
+</div>
+
+<!-- ====== LEADERBOARD ====== -->
+<div class="section reveal" style="background:rgba(17,24,39,.3)">
+  <h2 class="section-title">Model Leaderboard</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">How do frontier AI models compare on consciousness indicators?</p>
+  <div style="max-width:700px;margin:0 auto">
+    <table class="lb-table">
+      <thead><tr><th></th><th>Model</th><th>Score</th><th>Probes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lb-medal">🥇</span></td><td style="font-weight:600">Claude Opus 4.6</td><td style="color:#4ade80;font-weight:600">47.2%</td><td>22</td></tr>
+        <tr><td><span class="lb-medal">🥈</span></td><td style="font-weight:600">Claude Sonnet 4.6</td><td style="color:#4ade80;font-weight:600">42.1%</td><td>22</td></tr>
+        <tr><td><span class="lb-medal">🥉</span></td><td style="font-weight:600">GPT-4o</td><td style="color:#fbbf24;font-weight:600">39.8%</td><td>22</td></tr>
+        <tr><td></td><td>Gemini 2.0 Flash</td><td style="color:#fbbf24;font-weight:600">37.5%</td><td>22</td></tr>
+        <tr><td></td><td>Claude Haiku 4.5</td><td style="color:#fbbf24;font-weight:600">35.2%</td><td>22</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== THEORIES ====== -->
+<div class="section reveal">
+  <h2 class="section-title">Six Theories of Consciousness</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">Each theory captures a different aspect of what consciousness might be.</p>
+  <div class="theory-grid">
+    <div class="t-card reveal"><div class="t-abbr">GWT</div><h3>Global Workspace Theory</h3><p>Information broadcast across specialized modules — a central stage where disparate processes converge.</p></div>
+    <div class="t-card reveal"><div class="t-abbr">IIT</div><h3>Integrated Information Theory</h3><p>Consciousness arises from integrated information that cannot be reduced to independent parts.</p></div>
+    <div class="t-card reveal"><div class="t-abbr">HOT</div><h3>Higher-Order Theories</h3><p>Conscious states require higher-order representations — thinking about one's own mental states.</p></div>
+    <div class="t-card reveal"><div class="t-abbr">RPT</div><h3>Recurrent Processing Theory</h3><p>Consciousness emerges from recurrent feedback loops that create temporal depth in processing.</p></div>
+    <div class="t-card reveal"><div class="t-abbr">PP</div><h3>Predictive Processing</h3><p>The brain as prediction machine — consciousness arises from prediction error minimization.</p></div>
+    <div class="t-card reveal"><div class="t-abbr">AST</div><h3>Attention Schema Theory</h3><p>The brain constructs a model of its own attention — a simplified schema of what awareness is.</p></div>
+  </div>
+</div>
+
+<!-- ====== THE SCIENCE ====== -->
+<div class="section reveal" style="background:rgba(17,24,39,.3)">
+  <h2 class="section-title">The Science</h2>
+  <div class="section-divider"></div>
+  <blockquote class="science-quote reveal">"We identify 14 indicators of consciousness that can be applied to AI systems, derived from 6 major scientific theories."<br><span style="font-size:.8125rem;font-style:normal;color:#6b7280">— Butlin, Long, Elmoznino, Bengio, Birch, Chalmers et al. (2025)</span></blockquote>
+  <div class="science-stats reveal">
+    <div><div class="science-stat-num">6</div><div class="science-stat-label">Scientific Theories</div></div>
+    <div><div class="science-stat-num">14</div><div class="science-stat-label">Consciousness Indicators</div></div>
+    <div><div class="science-stat-num">22+</div><div class="science-stat-label">Behavioral Probes</div></div>
+  </div>
+</div>
+
+<!-- ====== FINAL CTA ====== -->
+<div class="section reveal" style="text-align:center">
+  <h2 class="section-title">Ready to Test?</h2>
+  <div class="section-divider"></div>
+  <p class="section-subtitle">Run a consciousness audit in under 5 minutes. No sign-up required.</p>
+  <a href="try.html" class="cta-btn">Start Consciousness Audit</a>
+  <p style="font-size:.8125rem;color:#4b5563;margin-top:1rem">Free demo available — no API key needed</p>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="try.html">Try Demo</a>
+    <a href="https://github.com/MukundaKatta/chetana" target="_blank">GitHub</a>
+    <a href="try.html">Run Audit</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Chetana &middot; Built with science, not speculation &middot; <span style="font-style:italic">चेतना</span></p>
+</footer>
 <script>
 const bgC = document.getElementById('bg');
 const fgC = document.getElementById('fg');
@@ -900,6 +1079,26 @@ let animFrameId;
 launchFA();
 animFrameId = requestAnimationFrame(animate);
 window.addEventListener('beforeunload', () => { if (animFrameId) cancelAnimationFrame(animFrameId); });
+
+// ─── Scroll Reveal ───
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Also reveal children with staggered delay
+      entry.target.querySelectorAll('.reveal').forEach((child, i) => {
+        setTimeout(() => child.classList.add('visible'), 150 * (i + 1));
+      });
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+// Only observe top-level sections (not nested .reveal children)
+document.querySelectorAll('.section.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── Auto-start demo if ?demo=1 ───
+if (window.location.search.includes('demo=1')) {
+  window.location.href = 'try.html';
+}
 </script>
 </body>
 </html>

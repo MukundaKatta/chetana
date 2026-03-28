@@ -169,6 +169,37 @@ h2{font-size:1rem}
 .probe-item.expanded .probe-expand{display:block}
 .probe-chevron{color:#4b5563;font-size:.75rem;transition:transform .2s;flex-shrink:0;margin-left:.5rem}
 .probe-item.expanded .probe-chevron{transform:rotate(90deg);color:#a78bfa}
+/* ─── NEW: Radar Chart ─── */
+.radar-wrap{display:flex;justify-content:center;padding:1rem 0}
+/* ─── NEW: Spectrum Bar ─── */
+.spectrum{position:relative;height:2rem;border-radius:9999px;background:linear-gradient(to right,#ef4444,#f97316,#eab308,#22c55e,#06b6d4);overflow:visible;margin-top:1rem}
+.spectrum-marker{position:absolute;top:-4px;width:3px;height:calc(100% + 8px);background:#fff;border-radius:2px;transform:translateX(-50%);box-shadow:0 0 8px rgba(255,255,255,.6);transition:left 1.5s ease-out}
+.spectrum-labels{display:flex;justify-content:space-between;font-size:.625rem;color:#6b7280;margin-top:.375rem}
+/* ─── NEW: Animated Count-Up ─── */
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeSlideUp .6s ease-out both}
+.fade-in-d1{animation-delay:.1s}.fade-in-d2{animation-delay:.2s}.fade-in-d3{animation-delay:.3s}.fade-in-d4{animation-delay:.4s}
+/* ─── NEW: Enhanced Indicator Cards ─── */
+.ind-card{transition:transform .2s,border-color .2s}
+.ind-card:hover{transform:translateY(-2px);border-color:rgba(139,92,246,.3)}
+.ind-theory-tag{font-size:.5rem;padding:.125rem .375rem;border-radius:.25rem;background:rgba(139,92,246,.15);color:#a78bfa;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.ind-bar .ind-fill{transition:width 1.2s ease-out}
+/* ─── NEW: Share Toast ─── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:#1f2937;border:1px solid rgba(139,92,246,.3);color:#e5e7eb;padding:.75rem 1.5rem;border-radius:.5rem;font-size:.875rem;z-index:100;transition:transform .3s ease-out;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* ─── NEW: Comparison Table ─── */
+.compare-table{width:100%;border-collapse:collapse;font-size:.8125rem}
+.compare-table th{text-align:left;padding:.5rem .75rem;color:#6b7280;font-weight:600;font-size:.625rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(255,255,255,.1)}
+.compare-table td{padding:.5rem .75rem;border-bottom:1px solid rgba(255,255,255,.05);color:#d1d5db}
+.compare-table td.best{color:#4ade80;font-weight:600}
+.compare-table tr:hover td{background:rgba(139,92,246,.05)}
+/* ─── NEW: Leaderboard ─── */
+.lb-rank{display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:50%;font-size:.625rem;font-weight:700}
+.lb-1{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}.lb-2{background:#94a3b8;color:#000}.lb-3{background:#cd7f32;color:#000}
+.lb-other{background:rgba(255,255,255,.1);color:#6b7280}
+/* ─── NEW: Gauge Particles ─── */
+.gauge-container{position:relative}
+#gauge-particles{position:absolute;top:0;left:50%;transform:translateX(-50%);pointer-events:none}
 </style>
 </head>
 <body>
@@ -286,6 +317,7 @@ h2{font-size:1rem}
       <p style="color:#9ca3af;margin-top:.25rem" id="results-subtitle"></p>
     </div>
     <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+      <button class="btn-secondary" onclick="shareResults()">Share</button>
       <button class="btn-secondary" onclick="exportResults()">Export JSON</button>
       <button class="btn-secondary" onclick="resetAudit()">New Audit</button>
       <span class="status-badge">Complete</span>
@@ -297,6 +329,7 @@ h2{font-size:1rem}
       <h2 class="text-center">Overall Consciousness Probability</h2>
       <div class="gauge-container">
         <div class="text-center">
+          <canvas id="gauge-particles" width="220" height="220"></canvas>
           <svg width="220" height="220" viewBox="0 0 220 220">
             <circle cx="110" cy="110" r="90" fill="none" stroke="#1f2937" stroke-width="10"/>
             <circle id="gauge-arc" cx="110" cy="110" r="90" fill="none" stroke="url(#gGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="565.49" stroke-dashoffset="565.49" transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 1.5s ease-out"/>
@@ -316,7 +349,24 @@ h2{font-size:1rem}
     </div>
   </div>
 
-  <div class="stats-grid mt-6" id="stats-grid"></div>
+  <!-- Consciousness Spectrum -->
+  <div class="card mt-6 fade-in fade-in-d2">
+    <h2>Consciousness Spectrum</h2>
+    <div class="spectrum"><div class="spectrum-marker" id="spectrum-marker" style="left:0%"></div></div>
+    <div class="spectrum-labels"><span>No Evidence</span><span>Minimal</span><span>Moderate</span><span>Strong</span><span>Very Strong</span></div>
+  </div>
+
+  <!-- Radar Chart -->
+  <div class="two-col mt-6">
+    <div class="card fade-in fade-in-d2">
+      <h2 class="text-center">Theory Radar</h2>
+      <div class="radar-wrap"><svg id="radar-chart" width="260" height="260" viewBox="0 0 260 260"></svg></div>
+    </div>
+    <div class="card fade-in fade-in-d3" id="stats-card">
+      <h2>Statistics</h2>
+      <div class="stats-grid mt-4" id="stats-grid"></div>
+    </div>
+  </div>
 
   <div class="mt-6">
     <h2>Indicator Scores</h2>
@@ -330,6 +380,23 @@ h2{font-size:1rem}
     </div>
     <p style="font-size:.75rem;color:#4b5563;margin-bottom:.5rem">Click any probe to see the AI's full response</p>
     <div class="probe-list" id="probe-list"></div>
+  </div>
+
+  <!-- Session Comparison -->
+  <div class="mt-6 hidden" id="comparison-section">
+    <h2>Session Comparison</h2>
+    <div class="card mt-4" style="overflow-x:auto">
+      <table class="compare-table" id="compare-table"></table>
+    </div>
+  </div>
+
+  <!-- Mini Leaderboard -->
+  <div class="mt-6" id="leaderboard-section">
+    <h2>Leaderboard</h2>
+    <p style="font-size:.75rem;color:#4b5563;margin-bottom:.75rem">Based on your audit history</p>
+    <div class="card" style="overflow-x:auto">
+      <table class="compare-table" id="leaderboard-table"></table>
+    </div>
   </div>
 
   <div class="disclaimer mt-10">
@@ -740,9 +807,14 @@ function renderResults(modelName) {
   document.getElementById('results-subtitle').textContent = `${modelName} · ${r.probeCount} probes · ${new Date(r.timestamp).toLocaleDateString()}`;
 
   const pctVal = Math.round(r.overall * 100);
-  document.getElementById('gauge-pct').textContent = pctVal;
+  // Animated count-up for gauge
+  animateCountUp(document.getElementById('gauge-pct'), pctVal, 1500);
   const circ = 2 * Math.PI * 90;
   document.getElementById('gauge-arc').setAttribute('stroke-dashoffset', circ - r.overall * circ);
+  // Start gauge particles
+  startGaugeParticles(r.overall);
+  // Spectrum bar
+  updateSpectrum(r.overall);
   const lo = Math.max(0, r.mean - r.ci), hi = Math.min(1, r.mean + r.ci);
   document.getElementById('gauge-ci').textContent = `95% CI: [${(lo*100).toFixed(1)}% — ${(hi*100).toFixed(1)}%]`;
 
@@ -773,7 +845,10 @@ function renderResults(modelName) {
     const p = Math.round(score * 100);
     const cls = score >= 0.5 ? 'score-high' : score >= 0.3 ? 'score-mid' : 'score-low';
     const iName = INDICATOR_NAMES[id] || '';
-    indHtml += `<div class="ind-card"><div class="ind-header"><span class="ind-id">${id}</span><span class="${cls}" style="font-size:.75rem;font-weight:600">${p}%</span></div><div style="font-size:.75rem;color:#9ca3af;margin-top:.125rem">${iName}</div><div class="ind-bar"><div class="ind-fill" style="width:${p}%"></div></div></div>`;
+    const theory = INDICATOR_THEORY_MAP[id] || '';
+    const theoryLabel = theory ? THEORIES[theory]?.name || '' : '';
+    const barColor = score >= 0.5 ? 'linear-gradient(to right,#22c55e,#4ade80)' : score >= 0.3 ? 'linear-gradient(to right,#eab308,#fbbf24)' : 'linear-gradient(to right,#ef4444,#f87171)';
+    indHtml += `<div class="ind-card fade-in" style="animation-delay:${0.1*testedIndicators.indexOf(id)}s"><div class="ind-header"><span><span class="ind-id">${id}</span>${theoryLabel ? ` <span class="ind-theory-tag">${theoryLabel}</span>` : ''}</span><span class="${cls}" style="font-size:.75rem;font-weight:600">${p}%</span></div><div style="font-size:.75rem;color:#9ca3af;margin-top:.125rem" title="${iName}">${iName}</div><div class="ind-bar"><div class="ind-fill" style="width:${p}%;background:${barColor}"></div></div></div>`;
   }
   document.getElementById('indicator-grid').innerHTML = indHtml;
 
@@ -783,6 +858,20 @@ function renderResults(modelName) {
     filterHtml += `<button class="filter-btn" onclick="filterProbes(this,'${t}')">${THEORIES[t].name}</button>`;
   }
   document.getElementById('probe-filters').innerHTML = filterHtml;
+
+  // Render radar chart
+  renderRadar(r.theoryScores, r.theoryCounts || {});
+
+  // Smooth scroll to results
+  setTimeout(() => {
+    document.getElementById('stage-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+
+  // Save to localStorage and session
+  saveAuditToHistory(r);
+  sessionAudits.push(r);
+  renderComparison();
+  renderLeaderboard();
 }
 
 function filterProbes(btn, theory) {
@@ -943,6 +1032,214 @@ async function startDemo() {
   auditResults = { overall, theoryScores, theoryCounts, indicatorScores, mean, stdDev, ci, probeCount: results.length, modelName, timestamp: new Date().toISOString() };
   setTimeout(() => renderResults(modelName), 600);
 }
+
+
+// ─── Animated Count-Up ───
+function animateCountUp(el, target, duration = 1200) {
+  const start = performance.now();
+  const from = 0;
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(from + (target - from) * ease);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ─── Radar Chart ───
+function renderRadar(theoryScores, theoryCounts) {
+  const svg = document.getElementById('radar-chart');
+  if (!svg) return;
+  const cx = 130, cy = 130, maxR = 100;
+  const theories = ["gwt","pp","hot","iit","rpt","ast"];
+  const labels = ["GWT","PP","HOT","IIT","RPT","AST"];
+  let html = '';
+  // Grid rings
+  for (const pct of [0.25, 0.5, 0.75, 1]) {
+    const r = maxR * pct;
+    const points = theories.map((_, i) => {
+      const angle = -Math.PI/2 + i * (2*Math.PI/6);
+      return `${cx + r*Math.cos(angle)},${cy + r*Math.sin(angle)}`;
+    }).join(' ');
+    html += `<polygon points="${points}" fill="none" stroke="rgba(255,255,255,${pct === 1 ? 0.15 : 0.06})" stroke-width="1"/>`;
+  }
+  // Axes
+  theories.forEach((_, i) => {
+    const angle = -Math.PI/2 + i * (2*Math.PI/6);
+    const x2 = cx + maxR * Math.cos(angle), y2 = cy + maxR * Math.sin(angle);
+    html += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="rgba(255,255,255,.08)" stroke-width="1"/>`;
+    const lx = cx + (maxR+18) * Math.cos(angle), ly = cy + (maxR+18) * Math.sin(angle);
+    html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" fill="#6b7280" font-size="11" font-weight="600">${labels[i]}</text>`;
+  });
+  // Score polygon
+  const scorePoints = theories.map((t, i) => {
+    const score = (theoryCounts[t] > 0) ? (theoryScores[t] || 0) : 0;
+    const angle = -Math.PI/2 + i * (2*Math.PI/6);
+    return `${cx + maxR*score*Math.cos(angle)},${cy + maxR*score*Math.sin(angle)}`;
+  }).join(' ');
+  html += `<polygon points="${scorePoints}" fill="url(#radarGrad)" stroke="#a78bfa" stroke-width="2" opacity="0.85"/>`;
+  // Score dots
+  theories.forEach((t, i) => {
+    const score = (theoryCounts[t] > 0) ? (theoryScores[t] || 0) : 0;
+    if (score > 0) {
+      const angle = -Math.PI/2 + i * (2*Math.PI/6);
+      const x = cx + maxR*score*Math.cos(angle), y = cy + maxR*score*Math.sin(angle);
+      html += `<circle cx="${x}" cy="${y}" r="4" fill="#a78bfa" stroke="#fff" stroke-width="1.5"/>`;
+    }
+  });
+  html += `<defs><linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(139,92,246,.3)"/><stop offset="100%" stop-color="rgba(217,70,239,.2)"/></linearGradient></defs>`;
+  svg.innerHTML = html;
+}
+
+// ─── Gauge Particles ───
+let gaugeParticleAnim;
+function startGaugeParticles(score) {
+  const canvas = document.getElementById('gauge-particles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const particles = Array.from({length: 18}, () => ({
+    angle: Math.random() * Math.PI * 2,
+    speed: 0.003 + Math.random() * 0.008,
+    r: 85 + Math.random() * 15,
+    size: 1 + Math.random() * 2,
+    alpha: 0.2 + Math.random() * 0.5
+  }));
+  if (gaugeParticleAnim) cancelAnimationFrame(gaugeParticleAnim);
+  function draw() {
+    ctx.clearRect(0, 0, 220, 220);
+    particles.forEach(p => {
+      p.angle += p.speed;
+      // Only draw particles along the scored arc
+      const normAngle = ((p.angle % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+      if (normAngle <= score * Math.PI * 2) {
+        const drawAngle = -Math.PI/2 + normAngle;
+        const x = 110 + p.r * Math.cos(drawAngle);
+        const y = 110 + p.r * Math.sin(drawAngle);
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(167,139,250,${p.alpha})`;
+        ctx.fill();
+      }
+    });
+    gaugeParticleAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── Spectrum Bar ───
+function updateSpectrum(score) {
+  const marker = document.getElementById('spectrum-marker');
+  if (marker) setTimeout(() => { marker.style.left = (score * 100) + '%'; }, 100);
+}
+
+// ─── Share Results ───
+function shareResults() {
+  if (!auditResults) return;
+  const compact = {
+    o: Math.round(auditResults.overall*1000), m: auditResults.modelName,
+    t: Object.fromEntries(Object.entries(auditResults.theoryScores).map(([k,v]) => [k, Math.round(v*1000)])),
+    c: auditResults.theoryCounts, p: auditResults.probeCount, d: auditResults.timestamp?.slice(0,10)
+  };
+  const encoded = btoa(JSON.stringify(compact));
+  const url = window.location.origin + window.location.pathname + '?r=' + encoded;
+  navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard!'));
+}
+function showToast(msg) {
+  let toast = document.getElementById('share-toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'share-toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ─── localStorage Persistence ───
+function saveAuditToHistory(audit) {
+  try {
+    const history = JSON.parse(localStorage.getItem('chetana-audit-history') || '[]');
+    history.unshift({ model: audit.modelName, overall: audit.overall, theoryScores: audit.theoryScores, theoryCounts: audit.theoryCounts, probeCount: audit.probeCount, timestamp: audit.timestamp });
+    if (history.length > 50) history.length = 50;
+    localStorage.setItem('chetana-audit-history', JSON.stringify(history));
+  } catch(e) {}
+}
+
+// ─── Leaderboard ───
+function renderLeaderboard() {
+  const section = document.getElementById('leaderboard-section');
+  const table = document.getElementById('leaderboard-table');
+  if (!section || !table) return;
+  let history = [];
+  try { history = JSON.parse(localStorage.getItem('chetana-audit-history') || '[]'); } catch(e) {}
+  if (history.length === 0) { section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  // Group by model, take best score
+  const best = {};
+  history.forEach(h => {
+    if (!best[h.model] || h.overall > best[h.model].overall) best[h.model] = h;
+  });
+  const ranked = Object.values(best).sort((a, b) => b.overall - a.overall);
+  let html = '<thead><tr><th>Rank</th><th>Model</th><th>Score</th><th>Probes</th><th>Date</th></tr></thead><tbody>';
+  ranked.forEach((r, i) => {
+    const rankCls = i === 0 ? 'lb-1' : i === 1 ? 'lb-2' : i === 2 ? 'lb-3' : 'lb-other';
+    const isCurrentModel = auditResults && r.model === auditResults.modelName;
+    html += `<tr style="${isCurrentModel ? 'background:rgba(139,92,246,.08)' : ''}"><td><span class="lb-rank ${rankCls}">${i+1}</span></td><td style="font-weight:${isCurrentModel?600:400}">${r.model}</td><td><span class="${r.overall>=0.5?'score-high':r.overall>=0.3?'score-mid':'score-low'}" style="font-weight:600">${(r.overall*100).toFixed(1)}%</span></td><td>${r.probeCount}</td><td style="font-size:.75rem;color:#6b7280">${r.timestamp?.slice(0,10)||''}</td></tr>`;
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// ─── Session Comparison ───
+const sessionAudits = [];
+function renderComparison() {
+  const section = document.getElementById('comparison-section');
+  const table = document.getElementById('compare-table');
+  if (!section || !table || sessionAudits.length < 2) { if(section) section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  const theories = ["gwt","pp","hot","iit","rpt","ast"];
+  let html = '<thead><tr><th>Model</th><th>Overall</th>';
+  theories.forEach(t => html += `<th>${THEORIES[t].name}</th>`);
+  html += '</tr></thead><tbody>';
+  // Find best per column
+  const bestOverall = Math.max(...sessionAudits.map(a => a.overall));
+  const bestTheory = {};
+  theories.forEach(t => { bestTheory[t] = Math.max(...sessionAudits.map(a => a.theoryScores[t] || 0)); });
+  sessionAudits.forEach(a => {
+    html += `<tr><td style="font-weight:500">${a.modelName}</td>`;
+    html += `<td class="${a.overall === bestOverall ? 'best' : ''}">${(a.overall*100).toFixed(1)}%</td>`;
+    theories.forEach(t => {
+      const s = a.theoryScores[t] || 0;
+      const tested = a.theoryCounts && a.theoryCounts[t] > 0;
+      html += `<td class="${s === bestTheory[t] && tested ? 'best' : ''}">${tested ? (s*100).toFixed(0)+'%' : '—'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// ─── Load shared results from URL ───
+function loadSharedResults() {
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get('r');
+  if (!encoded) return false;
+  try {
+    const data = JSON.parse(atob(encoded));
+    auditResults = {
+      overall: data.o / 1000, modelName: data.m,
+      theoryScores: Object.fromEntries(Object.entries(data.t).map(([k,v]) => [k, v/1000])),
+      theoryCounts: data.c, probeCount: data.p, timestamp: data.d,
+      indicatorScores: {}, mean: data.o/1000, stdDev: 0, ci: 0
+    };
+    allProbeResults = [];
+    renderResults(data.m);
+    return true;
+  } catch(e) { return false; }
+}
+// Check URL on load
+if (loadSharedResults()) { /* rendered from URL */ }
 </script>
+<div id="share-toast" class="toast"></div>
 </body>
 </html>
+
