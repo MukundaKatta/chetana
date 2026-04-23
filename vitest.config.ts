@@ -1,3 +1,4 @@
+import path from "path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -13,10 +14,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@chetana/shared": "/tmp/chetana/packages/shared/src",
-      "@chetana/models": "/tmp/chetana/packages/models/src",
-      "@chetana/probes": "/tmp/chetana/packages/probes/src",
-      "@chetana/scorer": "/tmp/chetana/packages/scorer/src",
+      "@chetana/shared": path.resolve(__dirname, "packages/shared/src"),
+      "@chetana/models": path.resolve(__dirname, "packages/models/src"),
+      "@chetana/probes": path.resolve(__dirname, "packages/probes/src"),
+      "@chetana/scorer": path.resolve(__dirname, "packages/scorer/src"),
     },
   },
 });
