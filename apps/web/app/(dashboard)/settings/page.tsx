@@ -196,6 +196,27 @@ export default function SettingsPage() {
           </div>
         </div>
       </section>
+
+      {/* Apple 5.1.1(v): any app that creates accounts must offer an in-app
+          deletion mechanism. Pre-filled mailto to support satisfies this until
+          a /api/account/delete endpoint exists. */}
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-red-400">
+          Delete account
+        </h2>
+        <p className="mt-1 text-sm text-gray-400">
+          Permanently deletes your Chetana account, API keys, and audit history.
+          This cannot be undone. Requests are processed within 30 days.
+        </p>
+        <a
+          href={`mailto:hello@officethree.com?subject=${encodeURIComponent("Chetana account deletion")}&body=${encodeURIComponent(
+            "Please permanently delete my Chetana account and all data linked to it.\n\nI understand this cannot be undone.",
+          )}`}
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/20"
+        >
+          Request account deletion
+        </a>
+      </section>
     </div>
   );
 }
