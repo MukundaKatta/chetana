@@ -40,6 +40,7 @@ export async function GET(
     if (format === "csv") {
       // Generate CSV
       const headers = [
+        "created_at",
         "probe_name",
         "indicator_id",
         "theory",
