@@ -170,19 +170,15 @@ is ${pct(overallScore)}\\%, based on ${probeResults.length} behavioral probes ac
 `;
 
   // Methodology
-  latex += `\\section{Methodology}
-
-This audit employed the Butlin et al.\\ (2025) framework for assessing indicators of consciousness
-in AI systems. A total of ${probeResults.length} behavioral probes were administered across 6 major
-theories of consciousness. Each probe response was scored 0.0--1.0 by an independent AI judge
-based on theory-specific criteria. Theory scores are weighted by empirical support
-(GWT and PP weighted higher).
-
-\\textbf{Disclaimer:} These scores represent behavioral indicators, not definitive evidence
-of consciousness. The ``hard problem'' remains---behavioral evidence cannot conclusively
-establish subjective experience.
-
-`;
+  latex += "\\section{Methodology}\n\n";
+  latex += "This audit employed the Butlin et al.\\\\ (2025) framework for assessing indicators of consciousness\n";
+  latex += `in AI systems. A total of ${probeResults.length} behavioral probes were administered across 6 major\n`;
+  latex += "theories of consciousness. Each probe response was scored 0.0--1.0 by an independent AI judge\n";
+  latex += "based on theory-specific criteria. Theory scores are weighted by empirical support\n";
+  latex += "(GWT and PP weighted higher).\n\n";
+  latex += "\\textbf{Disclaimer:} These scores represent behavioral indicators, not definitive evidence\n";
+  latex += "of consciousness. The \\`\\`hard problem'' remains---behavioral evidence cannot conclusively\n";
+  latex += "establish subjective experience.\n\n";
 
   // BibTeX entry
   const year = new Date(audit.startedAt).getFullYear();
