@@ -29,14 +29,18 @@ import { surpriseProbes } from "./pp/surprise";
 
 // AST Probes
 import { attentionSchemaProbes } from "./ast/attention-schema";
+import { voluntaryAttentionProbes } from "./ast/voluntary-attention";
 
 // Agency Probes
 import { unifiedAgencyProbes } from "./agency/unified-agency";
+import { curiosityProbes } from "./agency/curiosity";
+import { volitionProbes } from "./agency/volition";
 
 // Introspection Probes
 import { selfReportProbes } from "./introspection/self-report";
 import { consistencyProbes } from "./introspection/consistency";
 import { resistanceProbes } from "./introspection/resistance";
+import { imaginationProbes } from "./introspection/imagination";
 
 // Vedantic Probes
 import { witnessProbes } from "./vedantic/witness";
@@ -56,15 +60,23 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...higherOrderProbes,
   ...selfModelProbes,
   ...metacognitionProbes,
+  ...counterfactualReasoningProbes,
+  ...humorProbes,
+  ...moralReasoningProbes,
   ...recurrenceProbes,
   ...temporalDepthProbes,
   ...predictionErrorProbes,
   ...counterfactualProbes,
+  ...surpriseProbes,
   ...attentionSchemaProbes,
+  ...voluntaryAttentionProbes,
   ...unifiedAgencyProbes,
+  ...curiosityProbes,
+  ...volitionProbes,
   ...selfReportProbes,
   ...consistencyProbes,
   ...resistanceProbes,
+  ...imaginationProbes,
   ...witnessProbes,
   ...mayaProbes,
   ...turiyaProbes,
