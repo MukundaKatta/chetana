@@ -1,4 +1,5 @@
-import type { ChatMessage, ModelAdapter } from "@chetana/shared";
+import type { ChatMessage } from "@chetana/shared";
+import type { ModelAdapter } from "@chetana/models";
 
 export interface StreamOptions {
   signal?: AbortSignal;

@@ -1,4 +1,5 @@
-import type { ProbeDefinition, ChatMessage, ModelAdapter } from "@chetana/shared";
+import type { ProbeDefinition, ChatMessage } from "@chetana/shared";
+import type { ModelAdapter } from "@chetana/models";
 
 export interface ProbeRunSuccess {
   success: true;
