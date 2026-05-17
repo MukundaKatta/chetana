@@ -10,7 +10,9 @@
     "ios:sync": "npx cap sync ios",
     "ios:open": "npx cap open ios",
     "ios:build": "pnpm build && npx cap sync ios",
-    "ios:run": "npx cap run ios"
+    "ios:run": "npx cap run ios",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@chetana/shared": "workspace:*",
