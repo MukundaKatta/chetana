@@ -79,7 +79,7 @@ function ToastItem({
 }) {
   const config = variantConfig[t.variant];
   const Icon = config.icon;
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const dur = t.duration ?? DEFAULT_DURATION;
