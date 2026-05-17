@@ -59,7 +59,7 @@ export function withAriaLabel<P extends Record<string, unknown>>(
  */
 export function useAnnounce(politeness: "polite" | "assertive" = "polite") {
   const [message, setMessage] = useState("");
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const announce = useCallback(
     (text: string) => {

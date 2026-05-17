@@ -47,7 +47,7 @@ export function ResponsiveChart({
     width: 0,
     height: 0,
   });
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const computeHeight = useCallback(
     (width: number): number => {
@@ -128,7 +128,7 @@ export function useResponsiveDimensions(
     width: 0,
     height: 0,
   });
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     const el = ref.current;
