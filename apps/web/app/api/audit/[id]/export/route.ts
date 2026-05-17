@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
+
+const exportFormatSchema = z.enum(["json", "csv"]);
+const uuidSchema = z.string().uuid("Invalid audit ID format");
 
 export async function GET(
   request: NextRequest,
@@ -7,6 +11,28 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    // Validate audit ID is a valid UUID
+    const idValidation = uuidSchema.safeParse(id);
+    if (!idValidation.success) {
+      return NextResponse.json(
+        { error: "Invalid audit ID: must be a valid UUID" },
+        { status: 400 }
+      );
+    }
+
+    // Validate format parameter
+    const formatParam = request.nextUrl.searchParams.get("format") || "json";
+    const formatValidation = exportFormatSchema.safeParse(formatParam);
+    if (!formatValidation.success) {
+      return NextResponse.json(
+        { error: "Invalid format: must be 'json' or 'csv'" },
+        { status: 400 }
+      );
+    }
+
+    const format = formatValidation.data;
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -35,8 +61,6 @@ export async function GET(
       .eq("audit_id", id)
       .order("created_at", { ascending: true });
 
-    const format = request.nextUrl.searchParams.get("format") || "json";
-
     if (format === "csv") {
       // Generate CSV
       const headers = [
@@ -48,20 +72,37 @@ export async function GET(
         "analysis",
         "prompt",
         "response",
+        "created_at",
+        "started_at",
+        "completed_at",
       ];
 
-      const rows = (probeResults || []).map((r) =>
-        headers
+      const rows = (probeResults || []).map((r) => {
+        const row: Record<string, string> = {
+          probe_name: r.probe_name || "",
+          indicator_id: r.indicator_id || "",
+          theory: r.theory || "",
+          evidence_type: r.evidence_type || "",
+          score: String(r.score ?? ""),
+          analysis: r.analysis || "",
+          prompt: r.prompt || "",
+          response: r.response || "",
+          created_at: r.created_at || "",
+          started_at: r.started_at || audit.started_at || "",
+          completed_at: r.completed_at || audit.completed_at || "",
+        };
+
+        return headers
           .map((h) => {
-            const val = String(r[h as keyof typeof r] || "");
+            const val = row[h] || "";
             // Escape CSV values
             if (val.includes(",") || val.includes('"') || val.includes("\n")) {
               return `"${val.replace(/"/g, '""')}"`;
             }
             return val;
           })
-          .join(",")
-      );
+          .join(",");
+      });
 
       const csv = [headers.join(","), ...rows].join("\n");
 
@@ -102,6 +143,16 @@ export async function GET(
         analysis: r.analysis,
         prompt: r.prompt,
         response: r.response,
+        createdAt: r.created_at,
+        rawOutput: r.raw_output || null,
+        scoringReasoning: r.scoring_reasoning || null,
+        confidence: r.confidence || null,
+        evidence: {
+          type: r.evidence_type,
+          analysis: r.analysis,
+          indicators: r.evidence_indicators || null,
+          supportingQuotes: r.supporting_quotes || null,
+        },
       })),
       statistics: computeStatistics(probeResults || []),
     };

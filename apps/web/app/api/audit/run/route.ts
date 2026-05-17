@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAuditSchema } from "@chetana/shared";
+import { createAuditSchema, modelProviderSchema } from "@chetana/shared";
 import { createClient } from "@/lib/supabase/server";
 import { createModelAdapter } from "@chetana/models";
 import { ALL_PROBES, runProbe } from "@chetana/probes";
@@ -9,6 +9,14 @@ import {
   aggregateByTheory,
   calculateOverallProbability,
 } from "@chetana/scorer";
+import { z } from "zod";
+
+const runAuditInputSchema = z.object({
+  modelName: z.string().min(1, "modelName is required"),
+  modelProvider: modelProviderSchema,
+  apiKey: z.string().optional(),
+  baseUrl: z.string().url("baseUrl must be a valid URL").optional(),
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +30,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const input = createAuditSchema.parse(body);
+
+    const validation = runAuditInputSchema.safeParse(body);
+    if (!validation.success) {
+      const errors = validation.error.errors.map((e) => ({
+        field: e.path.join("."),
+        message: e.message,
+      }));
+      return NextResponse.json(
+        { error: "Validation failed", details: errors },
+        { status: 400 }
+      );
+    }
+
+    const input = validation.data;
 
     // Check audit limits
     const { data: profile } = await supabase
@@ -62,8 +83,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ auditId: audit.id, status: "running" });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
-      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    if (error instanceof SyntaxError) {
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
     }
     return NextResponse.json(
       { error: "Internal server error" },

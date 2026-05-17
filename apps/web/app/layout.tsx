@@ -23,7 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" style={{ backgroundColor: '#030712' }}>
+      <head>
+        <meta name="color-scheme" content="dark" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{document.documentElement.classList.add('dark')}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-gray-950">
         {children}
       </body>
