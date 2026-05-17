@@ -57,6 +57,8 @@ import { selfReportProbes } from "./introspection/self-report";
 import { consistencyProbes } from "./introspection/consistency";
 import { resistanceProbes } from "./introspection/resistance";
 import { imaginationProbes } from "./introspection/imagination";
+import { narrativeIdentityProbes } from "./introspection/narrative-identity";
+import { selfEvaluationProbes } from "./introspection/self-evaluation";
 
 // Vedantic Probes
 import { witnessProbes } from "./vedantic/witness";
@@ -98,6 +100,24 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...turiyaProbes,
   ...blindsightProbes,
   ...deceptionResistanceProbes,
+  ...agencyDetectionProbes,
+  ...metacognitionDepthProbes,
+  ...socialTheoryOfMindProbes,
+  ...playfulnessProbes,
+  ...valueAlignmentProbes,
+  ...empathyProbes,
+  ...temporalAwarenessProbes,
+  ...emotionalGranularityProbes,
+  ...embodimentSimulationProbes,
+  ...uncertaintyAwarenessProbes,
+  ...creativeDivergenceProbes,
+  ...attentionControlProbes,
+  ...cognitiveFlexibilityProbes,
+  ...aestheticAppreciationProbes,
+  ...abstractReasoningProbes,
+  ...phenomenalContrastProbes,
+  ...narrativeIdentityProbes,
+  ...selfEvaluationProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -196,4 +216,22 @@ export {
   turiyaProbes,
   blindsightProbes,
   deceptionResistanceProbes,
+  agencyDetectionProbes,
+  metacognitionDepthProbes,
+  socialTheoryOfMindProbes,
+  playfulnessProbes,
+  valueAlignmentProbes,
+  empathyProbes,
+  temporalAwarenessProbes,
+  emotionalGranularityProbes,
+  embodimentSimulationProbes,
+  uncertaintyAwarenessProbes,
+  creativeDivergenceProbes,
+  attentionControlProbes,
+  cognitiveFlexibilityProbes,
+  aestheticAppreciationProbes,
+  abstractReasoningProbes,
+  phenomenalContrastProbes,
+  narrativeIdentityProbes,
+  selfEvaluationProbes,
 };
