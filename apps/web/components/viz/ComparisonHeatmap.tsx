@@ -2,44 +2,47 @@
 
 import { useState, useMemo } from "react";
 
-interface HeatmapData {
-  model: string;
-  indicators: { [id: string]: number };
-}
-
 interface ComparisonHeatmapProps {
-  data: HeatmapData[];
+  data: Array<{ model: string; scores: Record<string, number> }>;
 }
 
 function getHeatColor(score: number): string {
-  // Interpolate from red (0) through yellow (0.5) to green (1)
   const clamped = Math.max(0, Math.min(1, score));
   if (clamped <= 0.5) {
-    // Red to yellow
+    // Red (#ef4444) to Yellow (#eab308)
     const t = clamped / 0.5;
-    const r = 220;
-    const g = Math.round(50 + t * 170);
-    const b = Math.round(50 + t * 0);
+    const r = Math.round(239 + t * (234 - 239));
+    const g = Math.round(68 + t * (179 - 68));
+    const b = Math.round(68 + t * (8 - 68));
     return `rgb(${r}, ${g}, ${b})`;
   } else {
-    // Yellow to green
+    // Yellow (#eab308) to Green (#22c55e)
     const t = (clamped - 0.5) / 0.5;
-    const r = Math.round(220 - t * 170);
-    const g = Math.round(220 - t * 40);
-    const b = Math.round(50 + t * 50);
+    const r = Math.round(234 + t * (34 - 234));
+    const g = Math.round(179 + t * (197 - 179));
+    const b = Math.round(8 + t * (94 - 8));
     return `rgb(${r}, ${g}, ${b})`;
   }
+}
+
+function getOpacity(score: number): number {
+  return 0.1 + Math.max(0, Math.min(1, score)) * 0.8;
 }
 
 export function ComparisonHeatmap({ data }: ComparisonHeatmapProps) {
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortAsc, setSortAsc] = useState(false);
+  const [hoveredCell, setHoveredCell] = useState<{
+    model: string;
+    indicator: string;
+    score: number;
+  } | null>(null);
 
   // Collect all unique indicator IDs
   const indicatorIds = useMemo(() => {
     const ids = new Set<string>();
     data.forEach((row) => {
-      Object.keys(row.indicators).forEach((id) => ids.add(id));
+      Object.keys(row.scores).forEach((id) => ids.add(id));
     });
     return Array.from(ids).sort();
   }, [data]);
@@ -48,8 +51,8 @@ export function ComparisonHeatmap({ data }: ComparisonHeatmapProps) {
   const sortedData = useMemo(() => {
     if (!sortColumn) return data;
     return [...data].sort((a, b) => {
-      const aVal = a.indicators[sortColumn] ?? 0;
-      const bVal = b.indicators[sortColumn] ?? 0;
+      const aVal = a.scores[sortColumn] ?? 0;
+      const bVal = b.scores[sortColumn] ?? 0;
       return sortAsc ? aVal - bVal : bVal - aVal;
     });
   }, [data, sortColumn, sortAsc]);
@@ -65,7 +68,7 @@ export function ComparisonHeatmap({ data }: ComparisonHeatmapProps) {
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-white/10 bg-gray-900/50 p-8 text-center text-sm text-gray-500">
+      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-8 text-center text-sm text-gray-500">
         No data available for comparison.
       </div>
     );
@@ -76,24 +79,32 @@ export function ComparisonHeatmap({ data }: ComparisonHeatmapProps) {
       <table className="w-full text-xs">
         <thead>
           <tr className="border-b border-gray-800">
-            <th className="sticky left-0 z-10 bg-gray-900 px-3 py-2 text-left text-sm font-semibold text-gray-300">
+            <th className="sticky left-0 z-10 bg-gray-900 px-3 py-3 text-left text-sm font-semibold text-gray-300">
               Model
             </th>
             {indicatorIds.map((id) => (
               <th
                 key={id}
-                className="cursor-pointer px-2 py-2 text-center font-medium text-gray-400 transition hover:text-white"
+                className="cursor-pointer px-2 py-3 text-center font-medium text-gray-400 transition hover:text-white"
                 onClick={() => handleSort(id)}
                 title={`Sort by ${id}`}
               >
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="whitespace-nowrap">{id}</span>
-                  {sortColumn === id && (
-                    <span className="text-[10px] text-chetana-400">
-                      {sortAsc ? "▲" : "▼"}
-                    </span>
-                  )}
+                <div
+                  className="flex items-center justify-center"
+                  style={{ height: "3rem" }}
+                >
+                  <span
+                    className="inline-block whitespace-nowrap origin-center"
+                    style={{ transform: "rotate(-45deg)" }}
+                  >
+                    {id}
+                  </span>
                 </div>
+                {sortColumn === id && (
+                  <span className="mt-0.5 block text-[10px] text-cyan-400">
+                    {sortAsc ? "▲" : "▼"}
+                  </span>
+                )}
               </th>
             ))}
           </tr>
@@ -108,17 +119,33 @@ export function ComparisonHeatmap({ data }: ComparisonHeatmapProps) {
                 {row.model}
               </td>
               {indicatorIds.map((id) => {
-                const score = row.indicators[id];
+                const score = row.scores[id];
                 const hasValue = score !== undefined && score !== null;
+                const isHovered =
+                  hoveredCell?.model === row.model &&
+                  hoveredCell?.indicator === id;
                 return (
                   <td key={id} className="px-1 py-1 text-center">
                     {hasValue ? (
                       <div
-                        className="mx-auto flex h-8 w-12 items-center justify-center rounded text-[10px] font-semibold text-gray-950"
-                        style={{ backgroundColor: getHeatColor(score) }}
-                        title={`${row.model} / ${id}: ${(score * 100).toFixed(1)}%`}
+                        className="relative mx-auto flex h-8 w-12 items-center justify-center rounded text-[10px] font-semibold"
+                        style={{
+                          backgroundColor: getHeatColor(score),
+                          opacity: getOpacity(score),
+                        }}
+                        onMouseEnter={() =>
+                          setHoveredCell({ model: row.model, indicator: id, score })
+                        }
+                        onMouseLeave={() => setHoveredCell(null)}
                       >
-                        {(score * 100).toFixed(0)}
+                        <span className="text-gray-950">
+                          {(score * 100).toFixed(0)}
+                        </span>
+                        {isHovered && (
+                          <div className="pointer-events-none absolute -top-8 left-1/2 z-30 -translate-x-1/2 rounded border border-gray-700 bg-gray-900 px-2 py-1 text-[11px] font-medium text-gray-200 shadow-lg whitespace-nowrap">
+                            {row.model} / {id}: {score.toFixed(3)}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="mx-auto flex h-8 w-12 items-center justify-center rounded bg-gray-800/50 text-[10px] text-gray-600">
