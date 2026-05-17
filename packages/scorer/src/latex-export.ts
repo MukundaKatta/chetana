@@ -159,7 +159,8 @@ is ${pct(overallScore)}\\%, based on ${probeResults.length} behavioral probes ac
   }
 
   if (probeResults.length > 30) {
-    latex += `\\multicolumn{4}{c}{\\textit{... and ${probeResults.length - 30} more probes}} \\\\\n`;
+    const remaining = probeResults.length - 30;
+    latex += "\\multicolumn{4}{c}{\\textit{... and " + String(remaining) + " more probes}} \\\\\n";
   }
 
   latex += `\\bottomrule
