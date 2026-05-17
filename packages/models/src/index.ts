@@ -4,12 +4,18 @@ import { AnthropicAdapter } from "./anthropic";
 import { OpenAIAdapter } from "./openai";
 import { GoogleAdapter } from "./google";
 import { OllamaAdapter } from "./ollama";
+import { MistralAdapter } from "./mistral";
+import { DeepSeekAdapter } from "./deepseek";
+import { OpenRouterAdapter } from "./openrouter";
 
 export type { ModelAdapter, ModelAdapterConfig } from "./interface";
 export { AnthropicAdapter } from "./anthropic";
 export { OpenAIAdapter } from "./openai";
 export { GoogleAdapter } from "./google";
 export { OllamaAdapter } from "./ollama";
+export { MistralAdapter } from "./mistral";
+export { DeepSeekAdapter } from "./deepseek";
+export { OpenRouterAdapter } from "./openrouter";
 
 export function createModelAdapter(
   provider: ModelProvider,
@@ -24,6 +30,12 @@ export function createModelAdapter(
       return new GoogleAdapter(config);
     case "ollama":
       return new OllamaAdapter(config);
+    case "mistral":
+      return new MistralAdapter(config);
+    case "deepseek":
+      return new DeepSeekAdapter(config);
+    case "openrouter":
+      return new OpenRouterAdapter(config);
     default:
       throw new Error(`Unknown provider: ${provider}`);
   }

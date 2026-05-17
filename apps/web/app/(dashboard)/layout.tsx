@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { KeyboardShortcutsProvider } from "@/components/KeyboardShortcuts";
 
 const NAV_ITEMS = [
   { href: "/audit/new", label: "New Audit", icon: "+" },
@@ -16,6 +17,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
+    <KeyboardShortcutsProvider>
     <div className="flex min-h-screen bg-gray-950 text-gray-100">
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-gray-900 border-r border-white/10">
@@ -71,5 +73,6 @@ export default function DashboardLayout({
         <div className="mx-auto max-w-7xl px-6 py-8">{children}</div>
       </main>
     </div>
+    </KeyboardShortcutsProvider>
   );
 }

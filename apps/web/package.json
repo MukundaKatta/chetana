@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ios:sync": "npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "pnpm build && npx cap sync ios",
+    "ios:run": "npx cap run ios"
   },
   "dependencies": {
     "@chetana/shared": "workspace:*",

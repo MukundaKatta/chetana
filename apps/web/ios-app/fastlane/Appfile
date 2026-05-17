@@ -1,0 +1,14 @@
+# Fastlane Appfile for Chetana iOS App
+# Replace these values with your Apple Developer account details
+
+# Your Apple Developer account email
+apple_id("YOUR_APPLE_ID@email.com")
+
+# Your App's Bundle Identifier
+app_identifier("com.chetana.consciousness")
+
+# Your Apple Developer Team ID
+team_id("YOUR_TEAM_ID")
+
+# App Store Connect Team ID (may be different from Developer Team ID)
+itc_team_id("YOUR_ITC_TEAM_ID")

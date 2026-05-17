@@ -1,0 +1,9 @@
+Initial release of Chetana - AI Consciousness Research Platform.
+
+- Test AI models against 14 scientific consciousness indicators
+- 6 major theories of consciousness (IIT, GWT, HOT, AST, PP, Vedantic)
+- 22+ behavioral probes (adversarial, introspective, statistical)
+- Multi-model support: Claude, GPT, Gemini, Llama, and custom models
+- Cross-model comparison leaderboard
+- Export results for academic research
+- Demo mode - try without an account

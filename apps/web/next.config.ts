@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     "@chetana/probes",
     "@chetana/scorer",
   ],
+  // Static export for Capacitor iOS wrapper
+  output: "export",
 };
 
 export default nextConfig;

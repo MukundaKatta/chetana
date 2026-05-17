@@ -1,0 +1,8 @@
+# Fastlane build artifacts
+build/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/test_output/
+
+# Screenshots (large binary files - generate locally)
+screenshots/

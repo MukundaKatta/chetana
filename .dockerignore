@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.local
+.env.*.local
+ios-app
+*.md
+.turbo
+.vercel
+coverage
+.nyc_output
+*.log
+.DS_Store
+dist
+.cache

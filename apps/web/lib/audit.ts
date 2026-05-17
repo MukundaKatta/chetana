@@ -34,20 +34,59 @@ export function getAuditStatusColor(status: string): string {
   }
 }
 
-export function estimateAuditCost(probeCount: number): {
-  estimatedTokens: number;
-  estimatedCostCents: number;
-  estimatedTimeMinutes: number;
-} {
-  const avgTokensPerProbe = 2000;
-  const estimatedTokens = probeCount * avgTokensPerProbe * 2; // 2x for judge scoring
-  const costPerMToken = 3; // rough estimate in dollars
-  const estimatedCostCents = Math.round(
-    (estimatedTokens / 1_000_000) * costPerMToken * 100
-  );
-  const estimatedTimeMinutes = Math.round(probeCount * 0.3);
+export interface CostEstimate {
+  inputTokens: number;
+  outputTokens: number;
+  costPerProbe: number; // in cents
+  totalCost: number; // in cents
+  timeEstimate: number; // in minutes
+}
 
-  return { estimatedTokens, estimatedCostCents, estimatedTimeMinutes };
+/**
+ * Per-provider pricing in dollars per million tokens: [input, output]
+ */
+const PROVIDER_PRICING: Record<string, { input: number; output: number; latencyPerProbe: number }> = {
+  anthropic: { input: 3, output: 15, latencyPerProbe: 0.35 },   // Claude Sonnet ($3/$15 per M)
+  openai: { input: 5, output: 15, latencyPerProbe: 0.3 },       // GPT-4o ($5/$15 per M)
+  google: { input: 1.25, output: 5, latencyPerProbe: 0.25 },    // Gemini ($1.25/$5 per M)
+  ollama: { input: 0, output: 0, latencyPerProbe: 0.5 },        // Local (free, but slower)
+};
+
+/**
+ * Estimate audit cost with per-provider pricing.
+ * @param probeCount - Number of probes to run
+ * @param modelProvider - Provider name (anthropic, openai, google, ollama)
+ * @param modelName - Optional model name for future fine-grained pricing
+ */
+export function estimateAuditCost(
+  probeCount: number,
+  modelProvider?: string,
+  modelName?: string
+): CostEstimate {
+  const avgInputTokensPerProbe = 1500;
+  const avgOutputTokensPerProbe = 500;
+  // 2x for judge scoring pass
+  const inputTokens = probeCount * avgInputTokensPerProbe * 2;
+  const outputTokens = probeCount * avgOutputTokensPerProbe * 2;
+
+  const provider = modelProvider?.toLowerCase() || "anthropic";
+  const pricing = PROVIDER_PRICING[provider] || PROVIDER_PRICING.anthropic;
+
+  const inputCostDollars = (inputTokens / 1_000_000) * pricing.input;
+  const outputCostDollars = (outputTokens / 1_000_000) * pricing.output;
+  const totalCostDollars = inputCostDollars + outputCostDollars;
+
+  const totalCost = Math.round(totalCostDollars * 100); // cents
+  const costPerProbe = probeCount > 0 ? Math.round((totalCostDollars / probeCount) * 100) : 0;
+  const timeEstimate = Math.round(probeCount * pricing.latencyPerProbe);
+
+  return {
+    inputTokens,
+    outputTokens,
+    costPerProbe,
+    totalCost,
+    timeEstimate,
+  };
 }
 
 // Demo/placeholder data for development

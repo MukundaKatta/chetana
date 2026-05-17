@@ -1,0 +1,39 @@
+Chetana is the first research platform that systematically tests AI models for indicators of consciousness using peer-reviewed scientific frameworks.
+
+WHAT IS CHETANA?
+
+Chetana evaluates AI systems against 14 consciousness indicators derived from 6 major scientific theories of consciousness, as defined by the landmark Butlin et al. (2025) research framework.
+
+SCIENTIFIC THEORIES TESTED:
+- Integrated Information Theory (IIT)
+- Global Workspace Theory (GWT)
+- Higher-Order Theories (HOT)
+- Attention Schema Theory (AST)
+- Predictive Processing (PP)
+- Embodied/Vedantic Consciousness
+
+KEY FEATURES:
+
+- 22+ Behavioral Probes: Adversarial, introspective, and statistical probes designed to detect genuine consciousness markers vs. trained responses.
+
+- Multi-Model Testing: Test leading AI models including Claude (Anthropic), GPT (OpenAI), Gemini (Google), Llama (Meta), and custom models.
+
+- Standardized Scoring: Each consciousness indicator receives a 0-1 score with detailed evidence and analysis.
+
+- Cross-Model Comparison: Compare consciousness profiles across different AI models on a unified leaderboard.
+
+- Research-Grade Analysis: Export results in JSON/CSV for further academic research.
+
+- Longitudinal Tracking: Monitor how AI consciousness indicators evolve across model versions.
+
+WHO IS IT FOR?
+
+- AI Researchers studying machine consciousness
+- Cognitive Scientists exploring theories of mind
+- Philosophy of Mind scholars
+- AI Ethics professionals
+- Anyone curious about whether AI systems exhibit consciousness markers
+
+DEMO MODE: Try the platform without an account using our built-in demo mode.
+
+Chetana brings rigorous scientific methodology to one of the most important questions of our time: Could AI systems become conscious?
