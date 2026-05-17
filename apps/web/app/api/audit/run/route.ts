@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAuditSchema, modelProviderSchema } from "@chetana/shared";
+import { modelProviderSchema } from "@chetana/shared";
 import { createClient } from "@/lib/supabase/server";
 import { createModelAdapter } from "@chetana/models";
 import { ALL_PROBES, runProbe } from "@chetana/probes";

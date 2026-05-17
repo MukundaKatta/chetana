@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "schedule": ["every weekend"],
+  "timezone": "America/New_York",
+  "packageRules": [
+    {
+      "description": "Group minor and patch updates together",
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "minor-and-patch",
+      "automerge": false
+    },
+    {
+      "description": "Auto-merge patch updates",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Pin AI SDK versions for stability",
+      "matchPackagePatterns": [
+        "^@anthropic-ai",
+        "^openai",
+        "^@google/generative-ai",
+        "^@ai-sdk"
+      ],
+      "rangeStrategy": "pin",
+      "automerge": false,
+      "groupName": "ai-sdk"
+    },
+    {
+      "description": "Group Next.js and React updates",
+      "matchPackagePatterns": ["^next", "^react", "^react-dom", "^@types/react"],
+      "groupName": "next-and-react"
+    },
+    {
+      "description": "Group Supabase packages",
+      "matchPackagePatterns": ["^@supabase"],
+      "groupName": "supabase"
+    },
+    {
+      "description": "Group dev dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "dev-dependencies",
+      "automerge": true
+    }
+  ],
+  "labels": ["dependencies"],
+  "prHourlyLimit": 3,
+  "prConcurrentLimit": 5
+}
