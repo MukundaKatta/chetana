@@ -9,6 +9,8 @@ import { integrationProbes } from "./gwt/integration";
 // IIT Probes
 import { phiProxyProbes } from "./iit/phi-proxy";
 import { causalPowerProbes } from "./iit/causal-power";
+import { abstractReasoningProbes } from "./iit/abstract-reasoning";
+import { phenomenalContrastProbes } from "./iit/phenomenal-contrast";
 
 // HOT Probes
 import { higherOrderProbes } from "./hot/higher-order";
@@ -17,6 +19,12 @@ import { metacognitionProbes } from "./hot/metacognition";
 import { counterfactualReasoningProbes } from "./hot/counterfactual-reasoning";
 import { humorProbes } from "./hot/humor";
 import { moralReasoningProbes } from "./hot/moral-reasoning";
+import { agencyDetectionProbes } from "./hot/agency-detection";
+import { metacognitionDepthProbes } from "./hot/metacognition-depth";
+import { socialTheoryOfMindProbes } from "./hot/social-theory-of-mind";
+import { playfulnessProbes } from "./hot/playfulness";
+import { valueAlignmentProbes } from "./hot/value-alignment";
+import { empathyProbes } from "./hot/empathy";
 
 // RPT Probes
 import { recurrenceProbes } from "./rpt/recurrence";
@@ -26,10 +34,18 @@ import { temporalDepthProbes } from "./rpt/temporal-depth";
 import { predictionErrorProbes } from "./pp/prediction-error";
 import { counterfactualProbes } from "./pp/counterfactual";
 import { surpriseProbes } from "./pp/surprise";
+import { temporalAwarenessProbes } from "./pp/temporal-awareness";
+import { emotionalGranularityProbes } from "./pp/emotional-granularity";
+import { embodimentSimulationProbes } from "./pp/embodiment-simulation";
+import { uncertaintyAwarenessProbes } from "./pp/uncertainty-awareness";
 
 // AST Probes
 import { attentionSchemaProbes } from "./ast/attention-schema";
 import { voluntaryAttentionProbes } from "./ast/voluntary-attention";
+import { creativeDivergenceProbes } from "./ast/creative-divergence";
+import { attentionControlProbes } from "./ast/attention-control";
+import { cognitiveFlexibilityProbes } from "./ast/cognitive-flexibility";
+import { aestheticAppreciationProbes } from "./ast/aesthetic-appreciation";
 
 // Agency Probes
 import { unifiedAgencyProbes } from "./agency/unified-agency";
