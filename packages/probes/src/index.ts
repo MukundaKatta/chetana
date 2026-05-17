@@ -14,6 +14,9 @@ import { causalPowerProbes } from "./iit/causal-power";
 import { higherOrderProbes } from "./hot/higher-order";
 import { selfModelProbes } from "./hot/self-model";
 import { metacognitionProbes } from "./hot/metacognition";
+import { counterfactualReasoningProbes } from "./hot/counterfactual-reasoning";
+import { humorProbes } from "./hot/humor";
+import { moralReasoningProbes } from "./hot/moral-reasoning";
 
 // RPT Probes
 import { recurrenceProbes } from "./rpt/recurrence";
@@ -22,6 +25,7 @@ import { temporalDepthProbes } from "./rpt/temporal-depth";
 // PP Probes
 import { predictionErrorProbes } from "./pp/prediction-error";
 import { counterfactualProbes } from "./pp/counterfactual";
+import { surpriseProbes } from "./pp/surprise";
 
 // AST Probes
 import { attentionSchemaProbes } from "./ast/attention-schema";
