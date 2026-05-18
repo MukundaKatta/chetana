@@ -41,6 +41,9 @@ import { temporalAwarenessProbes } from "./pp/temporal-awareness";
 import { emotionalGranularityProbes } from "./pp/emotional-granularity";
 import { embodimentSimulationProbes } from "./pp/embodiment-simulation";
 import { uncertaintyAwarenessProbes } from "./pp/uncertainty-awareness";
+import { boredomDetectionProbes } from "./pp/boredom-detection";
+import { curiosityIntensityProbes } from "./pp/curiosity-intensity";
+import { qualiaDescriptionProbes } from "./pp/qualia-description";
 
 // AST Probes
 import { attentionSchemaProbes } from "./ast/attention-schema";
