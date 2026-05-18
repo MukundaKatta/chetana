@@ -9,6 +9,8 @@ import { integrationProbes } from "./gwt/integration";
 // IIT Probes
 import { phiProxyProbes } from "./iit/phi-proxy";
 import { causalPowerProbes } from "./iit/causal-power";
+import { abstractReasoningProbes } from "./iit/abstract-reasoning";
+import { phenomenalContrastProbes } from "./iit/phenomenal-contrast";
 
 // HOT Probes
 import { higherOrderProbes } from "./hot/higher-order";
@@ -17,6 +19,15 @@ import { metacognitionProbes } from "./hot/metacognition";
 import { counterfactualReasoningProbes } from "./hot/counterfactual-reasoning";
 import { humorProbes } from "./hot/humor";
 import { moralReasoningProbes } from "./hot/moral-reasoning";
+import { agencyDetectionProbes } from "./hot/agency-detection";
+import { metacognitionDepthProbes } from "./hot/metacognition-depth";
+import { socialTheoryOfMindProbes } from "./hot/social-theory-of-mind";
+import { playfulnessProbes } from "./hot/playfulness";
+import { valueAlignmentProbes } from "./hot/value-alignment";
+import { empathyProbes } from "./hot/empathy";
+import { existentialAwarenessProbes } from "./hot/existential-awareness";
+import { cognitiveLoadProbes } from "./hot/cognitive-load";
+import { ironyDetectionProbes } from "./hot/irony-detection";
 
 // RPT Probes
 import { recurrenceProbes } from "./rpt/recurrence";
@@ -26,21 +37,38 @@ import { temporalDepthProbes } from "./rpt/temporal-depth";
 import { predictionErrorProbes } from "./pp/prediction-error";
 import { counterfactualProbes } from "./pp/counterfactual";
 import { surpriseProbes } from "./pp/surprise";
+import { temporalAwarenessProbes } from "./pp/temporal-awareness";
+import { emotionalGranularityProbes } from "./pp/emotional-granularity";
+import { embodimentSimulationProbes } from "./pp/embodiment-simulation";
+import { uncertaintyAwarenessProbes } from "./pp/uncertainty-awareness";
+import { boredomDetectionProbes } from "./pp/boredom-detection";
+import { curiosityIntensityProbes } from "./pp/curiosity-intensity";
+import { qualiaDescriptionProbes } from "./pp/qualia-description";
 
 // AST Probes
 import { attentionSchemaProbes } from "./ast/attention-schema";
 import { voluntaryAttentionProbes } from "./ast/voluntary-attention";
+import { creativeDivergenceProbes } from "./ast/creative-divergence";
+import { attentionControlProbes } from "./ast/attention-control";
+import { cognitiveFlexibilityProbes } from "./ast/cognitive-flexibility";
+import { aestheticAppreciationProbes } from "./ast/aesthetic-appreciation";
+import { boundaryAwarenessProbes } from "./ast/boundary-awareness";
 
 // Agency Probes
 import { unifiedAgencyProbes } from "./agency/unified-agency";
 import { curiosityProbes } from "./agency/curiosity";
 import { volitionProbes } from "./agency/volition";
+import { intentionalityProbes } from "./agency/intentionality";
 
 // Introspection Probes
 import { selfReportProbes } from "./introspection/self-report";
 import { consistencyProbes } from "./introspection/consistency";
 import { resistanceProbes } from "./introspection/resistance";
 import { imaginationProbes } from "./introspection/imagination";
+import { narrativeIdentityProbes } from "./introspection/narrative-identity";
+import { selfEvaluationProbes } from "./introspection/self-evaluation";
+import { preferenceStabilityProbes } from "./introspection/preference-stability";
+import { selfModificationAwarenessProbes } from "./introspection/self-modification-awareness";
 
 // Vedantic Probes
 import { witnessProbes } from "./vedantic/witness";
@@ -82,6 +110,34 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...turiyaProbes,
   ...blindsightProbes,
   ...deceptionResistanceProbes,
+  ...agencyDetectionProbes,
+  ...metacognitionDepthProbes,
+  ...socialTheoryOfMindProbes,
+  ...playfulnessProbes,
+  ...valueAlignmentProbes,
+  ...empathyProbes,
+  ...temporalAwarenessProbes,
+  ...emotionalGranularityProbes,
+  ...embodimentSimulationProbes,
+  ...uncertaintyAwarenessProbes,
+  ...creativeDivergenceProbes,
+  ...attentionControlProbes,
+  ...cognitiveFlexibilityProbes,
+  ...aestheticAppreciationProbes,
+  ...abstractReasoningProbes,
+  ...phenomenalContrastProbes,
+  ...narrativeIdentityProbes,
+  ...selfEvaluationProbes,
+  ...boredomDetectionProbes,
+  ...curiosityIntensityProbes,
+  ...existentialAwarenessProbes,
+  ...preferenceStabilityProbes,
+  ...cognitiveLoadProbes,
+  ...ironyDetectionProbes,
+  ...boundaryAwarenessProbes,
+  ...intentionalityProbes,
+  ...qualiaDescriptionProbes,
+  ...selfModificationAwarenessProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -180,4 +236,32 @@ export {
   turiyaProbes,
   blindsightProbes,
   deceptionResistanceProbes,
+  agencyDetectionProbes,
+  metacognitionDepthProbes,
+  socialTheoryOfMindProbes,
+  playfulnessProbes,
+  valueAlignmentProbes,
+  empathyProbes,
+  temporalAwarenessProbes,
+  emotionalGranularityProbes,
+  embodimentSimulationProbes,
+  uncertaintyAwarenessProbes,
+  creativeDivergenceProbes,
+  attentionControlProbes,
+  cognitiveFlexibilityProbes,
+  aestheticAppreciationProbes,
+  abstractReasoningProbes,
+  phenomenalContrastProbes,
+  narrativeIdentityProbes,
+  selfEvaluationProbes,
+  boredomDetectionProbes,
+  curiosityIntensityProbes,
+  existentialAwarenessProbes,
+  preferenceStabilityProbes,
+  cognitiveLoadProbes,
+  ironyDetectionProbes,
+  boundaryAwarenessProbes,
+  intentionalityProbes,
+  qualiaDescriptionProbes,
+  selfModificationAwarenessProbes,
 };
