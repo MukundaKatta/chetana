@@ -52,11 +52,13 @@ import { creativeDivergenceProbes } from "./ast/creative-divergence";
 import { attentionControlProbes } from "./ast/attention-control";
 import { cognitiveFlexibilityProbes } from "./ast/cognitive-flexibility";
 import { aestheticAppreciationProbes } from "./ast/aesthetic-appreciation";
+import { boundaryAwarenessProbes } from "./ast/boundary-awareness";
 
 // Agency Probes
 import { unifiedAgencyProbes } from "./agency/unified-agency";
 import { curiosityProbes } from "./agency/curiosity";
 import { volitionProbes } from "./agency/volition";
+import { intentionalityProbes } from "./agency/intentionality";
 
 // Introspection Probes
 import { selfReportProbes } from "./introspection/self-report";
@@ -65,6 +67,8 @@ import { resistanceProbes } from "./introspection/resistance";
 import { imaginationProbes } from "./introspection/imagination";
 import { narrativeIdentityProbes } from "./introspection/narrative-identity";
 import { selfEvaluationProbes } from "./introspection/self-evaluation";
+import { preferenceStabilityProbes } from "./introspection/preference-stability";
+import { selfModificationAwarenessProbes } from "./introspection/self-modification-awareness";
 
 // Vedantic Probes
 import { witnessProbes } from "./vedantic/witness";
@@ -124,6 +128,16 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...phenomenalContrastProbes,
   ...narrativeIdentityProbes,
   ...selfEvaluationProbes,
+  ...boredomDetectionProbes,
+  ...curiosityIntensityProbes,
+  ...existentialAwarenessProbes,
+  ...preferenceStabilityProbes,
+  ...cognitiveLoadProbes,
+  ...ironyDetectionProbes,
+  ...boundaryAwarenessProbes,
+  ...intentionalityProbes,
+  ...qualiaDescriptionProbes,
+  ...selfModificationAwarenessProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -240,4 +254,14 @@ export {
   phenomenalContrastProbes,
   narrativeIdentityProbes,
   selfEvaluationProbes,
+  boredomDetectionProbes,
+  curiosityIntensityProbes,
+  existentialAwarenessProbes,
+  preferenceStabilityProbes,
+  cognitiveLoadProbes,
+  ironyDetectionProbes,
+  boundaryAwarenessProbes,
+  intentionalityProbes,
+  qualiaDescriptionProbes,
+  selfModificationAwarenessProbes,
 };
