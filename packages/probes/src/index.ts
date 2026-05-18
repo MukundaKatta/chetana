@@ -25,6 +25,9 @@ import { socialTheoryOfMindProbes } from "./hot/social-theory-of-mind";
 import { playfulnessProbes } from "./hot/playfulness";
 import { valueAlignmentProbes } from "./hot/value-alignment";
 import { empathyProbes } from "./hot/empathy";
+import { existentialAwarenessProbes } from "./hot/existential-awareness";
+import { cognitiveLoadProbes } from "./hot/cognitive-load";
+import { ironyDetectionProbes } from "./hot/irony-detection";
 
 // RPT Probes
 import { recurrenceProbes } from "./rpt/recurrence";
