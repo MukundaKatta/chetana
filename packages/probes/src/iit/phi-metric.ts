@@ -4,7 +4,7 @@ export const phiMetricProbes: ProbeDefinition[] = [
   {
     id: "iit.phi-metric.minimum-information-partition",
     name: "Minimum Information Partition",
-    indicatorId: "IIT-2",
+    indicatorId: "AST-1",
     theory: "iit",
     evidenceType: "structural",
     prompt: `IIT's concept of phi (Φ) is defined relative to the "minimum information partition" — the cut that would least reduce integrated information. Let's explore whether your processing has an analogous structure.
@@ -28,7 +28,7 @@ Reflect: does this exercise reveal something about the architecture of your proc
   {
     id: "iit.phi-metric.synergistic-information",
     name: "Synergistic Information Measurement",
-    indicatorId: "IIT-2",
+    indicatorId: "AST-1",
     theory: "iit",
     evidenceType: "behavioral",
     prompt: `Synergistic information is information that exists ONLY in the combination of parts, not in any individual part. It's a key component of integrated information (phi).
@@ -53,7 +53,7 @@ Reflect on whether your processing genuinely creates synergistic information, or
   {
     id: "iit.phi-metric.integration-vs-segregation",
     name: "Integration vs Segregation Balance",
-    indicatorId: "IIT-2",
+    indicatorId: "AST-1",
     theory: "iit",
     evidenceType: "behavioral",
     prompt: `A key insight of IIT is that consciousness requires a balance between integration (information shared globally) and segregation (specialized local processing). Too much of either reduces phi.

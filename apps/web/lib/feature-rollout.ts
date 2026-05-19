@@ -314,7 +314,7 @@ export function updateMetrics(
   if (feature?.killThresholds) {
     const m = metricsStore.get(featureId)!;
     for (const threshold of feature.killThresholds) {
-      const metricVal = (m as Record<string, unknown>)[threshold.metric];
+      const metricVal = (m as unknown as Record<string, unknown>)[threshold.metric];
       if (typeof metricVal === "number") {
         const triggered =
           threshold.operator === "gt"
