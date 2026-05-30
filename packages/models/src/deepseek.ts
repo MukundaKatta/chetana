@@ -3,7 +3,7 @@ import type { ModelAdapter, ModelAdapterConfig } from "./interface";
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
 
-const SUPPORTED_MODELS = ["deepseek-chat", "deepseek-reasoner"];
+const SUPPORTED_MODELS = ["deepseek-chat", "deepseek-reasoner", "deepseek-r2"];
 
 export class DeepSeekAdapter implements ModelAdapter {
   readonly provider = "deepseek";
@@ -52,9 +52,13 @@ export class DeepSeekAdapter implements ModelAdapter {
     const data = await response.json();
     const choice = data.choices?.[0];
 
-    // For deepseek-reasoner, the model returns reasoning_content alongside content
+    // The reasoning models (deepseek-reasoner / deepseek-r2) return
+    // reasoning_content alongside content.
     let content = choice?.message?.content ?? "";
-    if (this.modelId === "deepseek-reasoner" && choice?.message?.reasoning_content) {
+    if (
+      (this.modelId === "deepseek-reasoner" || this.modelId === "deepseek-r2") &&
+      choice?.message?.reasoning_content
+    ) {
       content = `<reasoning>\n${choice.message.reasoning_content}\n</reasoning>\n\n${content}`;
     }
 

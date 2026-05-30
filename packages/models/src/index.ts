@@ -7,6 +7,9 @@ import { OllamaAdapter } from "./ollama";
 import { MistralAdapter } from "./mistral";
 import { DeepSeekAdapter } from "./deepseek";
 import { OpenRouterAdapter } from "./openrouter";
+import { XAIAdapter } from "./xai";
+import { QwenAdapter } from "./qwen";
+import { MetaAdapter } from "./meta";
 
 export type { ModelAdapter, ModelAdapterConfig } from "./interface";
 export { AnthropicAdapter } from "./anthropic";
@@ -16,6 +19,9 @@ export { OllamaAdapter } from "./ollama";
 export { MistralAdapter } from "./mistral";
 export { DeepSeekAdapter } from "./deepseek";
 export { OpenRouterAdapter } from "./openrouter";
+export { XAIAdapter } from "./xai";
+export { QwenAdapter } from "./qwen";
+export { MetaAdapter } from "./meta";
 
 export function createModelAdapter(
   provider: ModelProvider,
@@ -36,6 +42,12 @@ export function createModelAdapter(
       return new DeepSeekAdapter(config);
     case "openrouter":
       return new OpenRouterAdapter(config);
+    case "xai":
+      return new XAIAdapter(config);
+    case "qwen":
+      return new QwenAdapter(config);
+    case "meta":
+      return new MetaAdapter(config);
     default:
       throw new Error(`Unknown provider: ${provider}`);
   }

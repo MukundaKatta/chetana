@@ -4,6 +4,9 @@ import { AnthropicAdapter } from "./anthropic";
 import { OpenAIAdapter } from "./openai";
 import { GoogleAdapter } from "./google";
 import { OllamaAdapter } from "./ollama";
+import { XAIAdapter } from "./xai";
+import { QwenAdapter } from "./qwen";
+import { MetaAdapter } from "./meta";
 import type { ModelAdapter, ModelAdapterConfig } from "./interface";
 
 // Mock all external SDKs
@@ -263,6 +266,118 @@ describe("OllamaAdapter", () => {
     const adapter = new OllamaAdapter(baseConfig);
     const available = await adapter.isAvailable();
     expect(available).toBe(false);
+  });
+});
+
+describe("createModelAdapter factory — 2026 providers", () => {
+  it("creates XAIAdapter for xai provider", () => {
+    const adapter = createModelAdapter("xai", { ...baseConfig, modelId: "grok-4.20" });
+    expect(adapter).toBeInstanceOf(XAIAdapter);
+    expect(adapter.provider).toBe("xai");
+  });
+
+  it("creates QwenAdapter for qwen provider", () => {
+    const adapter = createModelAdapter("qwen", { ...baseConfig, modelId: "qwen3-max" });
+    expect(adapter).toBeInstanceOf(QwenAdapter);
+    expect(adapter.provider).toBe("qwen");
+  });
+
+  it("creates MetaAdapter for meta provider", () => {
+    const adapter = createModelAdapter("meta", { ...baseConfig, modelId: "muse-spark" });
+    expect(adapter).toBeInstanceOf(MetaAdapter);
+    expect(adapter.provider).toBe("meta");
+  });
+});
+
+describe("XAIAdapter", () => {
+  it("posts to the xAI endpoint and parses the response", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Grok response" } }],
+        usage: { prompt_tokens: 12, completion_tokens: 7 },
+      }),
+    });
+
+    const adapter = new XAIAdapter({ ...baseConfig, modelId: "grok-4.20" });
+    const result = await adapter.chat([{ role: "user", content: "Hi" }]);
+
+    expect(result.content).toBe("Grok response");
+    expect(result.tokensUsed.input).toBe(12);
+    expect(global.fetch).toHaveBeenCalledWith(
+      "https://api.x.ai/v1/chat/completions",
+      expect.objectContaining({ method: "POST" })
+    );
+  });
+
+  it("appends citations when live search returns them", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Answer" } }],
+        citations: ["https://example.com/a"],
+        usage: {},
+      }),
+    });
+
+    const adapter = new XAIAdapter({ ...baseConfig, modelId: "grok-4.20", liveSearch: true });
+    const result = await adapter.chat([{ role: "user", content: "news?" }]);
+    expect(result.content).toContain("<citations>");
+    expect(result.content).toContain("https://example.com/a");
+  });
+
+  it("throws on non-ok response", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+      text: vi.fn().mockResolvedValue("unauthorized"),
+    });
+    const adapter = new XAIAdapter({ ...baseConfig, modelId: "grok-4.20" });
+    await expect(adapter.chat([{ role: "user", content: "x" }])).rejects.toThrow(
+      "xAI API error (401)"
+    );
+  });
+});
+
+describe("QwenAdapter", () => {
+  it("uses a custom baseUrl when provided", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Qwen response" } }],
+        usage: { prompt_tokens: 5, completion_tokens: 5 },
+      }),
+    });
+
+    const adapter = new QwenAdapter({
+      ...baseConfig,
+      modelId: "qwen3-max",
+      baseUrl: "http://localhost:8000/v1/chat/completions",
+    });
+    const result = await adapter.chat([{ role: "user", content: "Hi" }]);
+
+    expect(result.content).toBe("Qwen response");
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://localhost:8000/v1/chat/completions",
+      expect.objectContaining({ method: "POST" })
+    );
+  });
+});
+
+describe("MetaAdapter", () => {
+  it("parses an OpenAI-compatible response", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Muse Spark response" } }],
+        usage: { prompt_tokens: 9, completion_tokens: 3 },
+      }),
+    });
+
+    const adapter = new MetaAdapter({ ...baseConfig, modelId: "muse-spark" });
+    const result = await adapter.chat([{ role: "user", content: "Hi" }]);
+    expect(result.content).toBe("Muse Spark response");
+    expect(result.tokensUsed.output).toBe(3);
   });
 });
 
