@@ -40,3 +40,21 @@ export { extractReasoningTrace, redactTrace } from "./reasoning-trace";
 export type { ExtractedTrace } from "./reasoning-trace";
 export { uncertaintyWeightedAggregate, fromTheoryScores } from "./uncertainty-weighting";
 export type { TheoryConfidence, UncertaintyWeightedResult } from "./uncertainty-weighting";
+
+// Reproducibility / research / ethics modules
+export { buildReproManifest, verifyReproManifest } from "./repro-manifest";
+export type { ReproManifest, ReproManifestInput } from "./repro-manifest";
+export { toJsonLd, fromJsonLd, toBibTeX, toDatasetCard } from "./research-export";
+export type { AuditExportInput, DatasetCardInput } from "./research-export";
+export { assessWelfare, ethicsReviewFor } from "./welfare";
+export type { WelfareSignals, WelfareAssessment, WelfareLevel, EthicsReview } from "./welfare";
+export {
+  createDisclosure,
+  transition,
+  attachMethodology,
+  attachLimitations,
+  setEmbargo,
+} from "./disclosure";
+export type { DisclosureState, DisclosureRecord, TransitionContext } from "./disclosure";
+export { preregister, diffExecution } from "./preregistration";
+export type { Preregistration, PreregistrationInput, ExecutionRecord, Deviation } from "./preregistration";
