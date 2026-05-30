@@ -6,3 +6,4 @@ export * from "./model-versions";
 export * from "./model-registry";
 export * from "./provenance";
 export * from "./hash";
+export * from "./multimodal";

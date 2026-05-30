@@ -58,3 +58,19 @@ export {
 export type { DisclosureState, DisclosureRecord, TransitionContext } from "./disclosure";
 export { preregister, diffExecution } from "./preregistration";
 export type { Preregistration, PreregistrationInput, ExecutionRecord, Deviation } from "./preregistration";
+
+// Visualization data transforms, runners, and platform utilities
+export {
+  buildVersionTimeline,
+  buildTheoryWaterfall,
+  buildQuadrant,
+  buildIndicatorHeatmap,
+  buildTraceFlow,
+} from "./viz-data";
+export type { VersionPoint, WaterfallStep, Quadrant, QuadrantPoint, HeatmapCell, TraceNode } from "./viz-data";
+export { runBenchmark, defaultGrader } from "./benchmark-runner";
+export type { BenchmarkItem, MinimalChat, BenchmarkRunResult } from "./benchmark-runner";
+export { MemoCache, deriveMemoKey } from "./memoization";
+export type { MemoKeyParts } from "./memoization";
+export { sanitizeForJudge, redactPII, signPayload, verifyPayload } from "./security";
+export type { SanitizedOutput, RedactionResult } from "./security";

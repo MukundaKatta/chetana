@@ -210,6 +210,12 @@ export async function runProbe(
   };
 }
 
+export {
+  runAgenticTask,
+  runWithConcurrency,
+} from "./agentic-harness";
+export type { ToolStub, AgenticTask, AgenticTranscript } from "./agentic-harness";
+
 export async function runAllProbes(
   options: ProbeRunnerOptions
 ): Promise<Omit<ProbeResult, "id" | "auditId" | "createdAt">[]> {
