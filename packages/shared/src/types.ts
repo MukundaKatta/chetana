@@ -16,7 +16,17 @@ export type IndicatorId =
   | "AST-1"
   | "AGENCY-1";
 
-export type ModelProvider = "anthropic" | "openai" | "google" | "ollama" | "mistral" | "deepseek" | "openrouter";
+export type ModelProvider =
+  | "anthropic"
+  | "openai"
+  | "google"
+  | "ollama"
+  | "mistral"
+  | "deepseek"
+  | "openrouter"
+  | "xai"
+  | "qwen"
+  | "meta";
 
 export type AuditStatus = "pending" | "running" | "completed" | "failed";
 

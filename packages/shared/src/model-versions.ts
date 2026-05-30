@@ -40,6 +40,18 @@ const MODEL_VERSION_REGISTRY: ModelVersion[] = [
     displayName: "Claude 3.5 Haiku",
     releasedAt: "2024-10-22",
   },
+  {
+    provider: "anthropic",
+    modelId: "claude-opus-4",
+    displayName: "Claude Opus 4",
+    releasedAt: "2025-05-22",
+  },
+  {
+    provider: "anthropic",
+    modelId: "claude-sonnet-4",
+    displayName: "Claude Sonnet 4",
+    releasedAt: "2025-05-22",
+  },
 
   // OpenAI
   {
@@ -67,6 +79,24 @@ const MODEL_VERSION_REGISTRY: ModelVersion[] = [
     displayName: "GPT-4o Mini",
     releasedAt: "2024-07-18",
   },
+  {
+    provider: "openai",
+    modelId: "gpt-5.4",
+    displayName: "GPT-5.4",
+    releasedAt: "2026-02-01",
+  },
+  {
+    provider: "openai",
+    modelId: "gpt-5.4-thinking",
+    displayName: "GPT-5.4 Thinking",
+    releasedAt: "2026-02-01",
+  },
+  {
+    provider: "openai",
+    modelId: "gpt-5.4-pro",
+    displayName: "GPT-5.4 Pro",
+    releasedAt: "2026-02-01",
+  },
 
   // Google
   {
@@ -81,8 +111,26 @@ const MODEL_VERSION_REGISTRY: ModelVersion[] = [
     displayName: "Gemini 1.5 Flash",
     releasedAt: "2024-05-14",
   },
+  {
+    provider: "google",
+    modelId: "gemini-3.1-pro",
+    displayName: "Gemini 3.1 Pro",
+    releasedAt: "2026-02-01",
+  },
+  {
+    provider: "google",
+    modelId: "gemini-3.1-ultra",
+    displayName: "Gemini 3.1 Ultra",
+    releasedAt: "2026-02-01",
+  },
 
   // Mistral
+  {
+    provider: "mistral",
+    modelId: "mistral-large-3",
+    displayName: "Mistral Large 3",
+    releasedAt: "2026-01-15",
+  },
   {
     provider: "mistral",
     modelId: "mistral-large-latest",
@@ -116,6 +164,48 @@ const MODEL_VERSION_REGISTRY: ModelVersion[] = [
     displayName: "DeepSeek Reasoner (R1)",
     releasedAt: "2025-01-20",
     parameterCount: "671B",
+  },
+  {
+    provider: "deepseek",
+    modelId: "deepseek-r2",
+    displayName: "DeepSeek Reasoner (R2)",
+    releasedAt: "2026-01-30",
+  },
+
+  // xAI
+  {
+    provider: "xai",
+    modelId: "grok-4.20",
+    displayName: "Grok 4.20",
+    releasedAt: "2026-02-01",
+  },
+
+  // Qwen
+  {
+    provider: "qwen",
+    modelId: "qwen3-max",
+    displayName: "Qwen 3 Max",
+    releasedAt: "2025-09-05",
+  },
+  {
+    provider: "qwen",
+    modelId: "qwen3-235b-a22b",
+    displayName: "Qwen 3 235B-A22B",
+    releasedAt: "2025-04-29",
+  },
+
+  // Meta
+  {
+    provider: "meta",
+    modelId: "muse-spark",
+    displayName: "Meta Muse Spark",
+    releasedAt: "2026-03-01",
+  },
+  {
+    provider: "meta",
+    modelId: "llama-4-maverick",
+    displayName: "Llama 4 Maverick",
+    releasedAt: "2025-04-05",
   },
 ];
 

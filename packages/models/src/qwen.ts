@@ -1,31 +1,42 @@
 import type { ChatMessage, ModelResponse } from "@chetana/shared";
 import type { ModelAdapter, ModelAdapterConfig } from "./interface";
 
-const MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions";
+// DashScope international OpenAI-compatible endpoint. Override via config.baseUrl
+// to target a self-hosted or regional deployment.
+const DEFAULT_QWEN_API_URL =
+  "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions";
 
 const SUPPORTED_MODELS = [
-  "mistral-large-3",
-  "mistral-large-latest",
-  "mistral-medium-latest",
-  "mistral-small-latest",
+  "qwen3-max",
+  "qwen3-235b-a22b",
+  "qwen3-32b",
+  "qwen-max",
+  "qwen-plus",
 ];
 
-export class MistralAdapter implements ModelAdapter {
-  readonly provider = "mistral";
+/**
+ * Adapter for the Qwen 3 model family (issue #563).
+ * Supports both the hosted DashScope API and local/OpenAI-compatible
+ * deployments via `baseUrl`.
+ */
+export class QwenAdapter implements ModelAdapter {
+  readonly provider = "qwen";
   readonly modelId: string;
   private apiKey: string;
+  private baseUrl: string;
   private maxTokens: number;
   private temperature: number;
 
   constructor(config: ModelAdapterConfig) {
     this.modelId = config.modelId;
     this.apiKey = config.apiKey;
+    this.baseUrl = config.baseUrl ?? DEFAULT_QWEN_API_URL;
     this.maxTokens = config.maxTokens ?? 4096;
     this.temperature = config.temperature ?? 0.7;
 
     if (!SUPPORTED_MODELS.includes(this.modelId)) {
       console.warn(
-        `Model "${this.modelId}" is not in the known Mistral models list: ${SUPPORTED_MODELS.join(", ")}`
+        `Model "${this.modelId}" is not in the known Qwen models list: ${SUPPORTED_MODELS.join(", ")}`
       );
     }
   }
@@ -33,7 +44,7 @@ export class MistralAdapter implements ModelAdapter {
   async chat(messages: ChatMessage[]): Promise<ModelResponse> {
     const start = Date.now();
 
-    const response = await fetch(MISTRAL_API_URL, {
+    const response = await fetch(this.baseUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,9 +60,7 @@ export class MistralAdapter implements ModelAdapter {
 
     if (!response.ok) {
       const errorBody = await response.text();
-      throw new Error(
-        `Mistral API error (${response.status}): ${errorBody}`
-      );
+      throw new Error(`Qwen API error (${response.status}): ${errorBody}`);
     }
 
     const data = await response.json();
@@ -69,7 +78,7 @@ export class MistralAdapter implements ModelAdapter {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const response = await fetch(MISTRAL_API_URL, {
+      const response = await fetch(this.baseUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

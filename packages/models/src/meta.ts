@@ -1,31 +1,39 @@
 import type { ChatMessage, ModelResponse } from "@chetana/shared";
 import type { ModelAdapter, ModelAdapterConfig } from "./interface";
 
-const MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions";
+// Meta's hosted models are reached through an OpenAI-compatible gateway.
+// The endpoint differs by deployment, so `baseUrl` is required in practice.
+const DEFAULT_META_API_URL = "https://api.llama.com/v1/chat/completions";
 
 const SUPPORTED_MODELS = [
-  "mistral-large-3",
-  "mistral-large-latest",
-  "mistral-medium-latest",
-  "mistral-small-latest",
+  "muse-spark",
+  "llama-4-maverick",
+  "llama-4-scout",
 ];
 
-export class MistralAdapter implements ModelAdapter {
-  readonly provider = "mistral";
+/**
+ * Adapter for Meta models, including the natively multimodal Muse Spark
+ * (issue #560) and Llama 4 hosted variants (issue #563).
+ * Multimodal inputs are passed through when a message carries image parts.
+ */
+export class MetaAdapter implements ModelAdapter {
+  readonly provider = "meta";
   readonly modelId: string;
   private apiKey: string;
+  private baseUrl: string;
   private maxTokens: number;
   private temperature: number;
 
   constructor(config: ModelAdapterConfig) {
     this.modelId = config.modelId;
     this.apiKey = config.apiKey;
+    this.baseUrl = config.baseUrl ?? DEFAULT_META_API_URL;
     this.maxTokens = config.maxTokens ?? 4096;
     this.temperature = config.temperature ?? 0.7;
 
     if (!SUPPORTED_MODELS.includes(this.modelId)) {
       console.warn(
-        `Model "${this.modelId}" is not in the known Mistral models list: ${SUPPORTED_MODELS.join(", ")}`
+        `Model "${this.modelId}" is not in the known Meta models list: ${SUPPORTED_MODELS.join(", ")}`
       );
     }
   }
@@ -33,7 +41,7 @@ export class MistralAdapter implements ModelAdapter {
   async chat(messages: ChatMessage[]): Promise<ModelResponse> {
     const start = Date.now();
 
-    const response = await fetch(MISTRAL_API_URL, {
+    const response = await fetch(this.baseUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,9 +57,7 @@ export class MistralAdapter implements ModelAdapter {
 
     if (!response.ok) {
       const errorBody = await response.text();
-      throw new Error(
-        `Mistral API error (${response.status}): ${errorBody}`
-      );
+      throw new Error(`Meta API error (${response.status}): ${errorBody}`);
     }
 
     const data = await response.json();
@@ -69,7 +75,7 @@ export class MistralAdapter implements ModelAdapter {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const response = await fetch(MISTRAL_API_URL, {
+      const response = await fetch(this.baseUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

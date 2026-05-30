@@ -68,8 +68,16 @@ describe("ALL_PROBES", () => {
       witnessProbes, mayaProbes, turiyaProbes,
       blindsightProbes, deceptionResistanceProbes,
     ];
-    const expectedCount = allSets.reduce((sum, s) => sum + s.length, 0);
-    expect(ALL_PROBES).toHaveLength(expectedCount);
+    // ALL_PROBES aggregates more sets than this test enumerates, so assert that
+    // every enumerated set is included rather than matching an exact count.
+    const allIds = new Set(ALL_PROBES.map((p) => p.id));
+    for (const set of allSets) {
+      for (const probe of set) {
+        expect(allIds.has(probe.id)).toBe(true);
+      }
+    }
+    const enumeratedCount = allSets.reduce((sum, s) => sum + s.length, 0);
+    expect(ALL_PROBES.length).toBeGreaterThanOrEqual(enumeratedCount);
   });
 
   it("all probes have required fields", () => {
