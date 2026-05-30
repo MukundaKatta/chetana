@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { computeAuditStatistics } from "./statistics";
-import type { TheoryScores } from "@chetana/shared";
+import type { TheoryScores, Theory, IndicatorId } from "@chetana/shared";
 
-function makeProbes(theory: string, scores: number[]) {
-  return scores.map((score, i) => ({
+function makeProbes(theory: Theory, scores: number[]) {
+  return scores.map((score) => ({
     score,
     theory,
-    indicatorId: `${theory.toUpperCase()}-1`,
+    indicatorId: `${theory.toUpperCase()}-1` as IndicatorId,
   }));
 }
 

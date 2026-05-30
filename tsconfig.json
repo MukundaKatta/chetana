@@ -13,5 +13,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
-  }
+  },
+  "//": "apps/web has its own Next-aware tsconfig (jsx + next plugin) and is typechecked by `next build`; excluding it here keeps the root typecheck scoped to the shared packages and scripts.",
+  "exclude": ["apps/web", "**/node_modules", "**/dist"]
 }

@@ -337,7 +337,7 @@ export default function TryPage() {
           </div>
 
           <div className="mt-6 rounded-xl border border-white/10 bg-gray-900/50 p-6">
-            <h3 className="text-sm font-medium text-gray-400 mb-3">What's happening:</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-3">What&apos;s happening:</h3>
             <ol className="space-y-2 text-sm text-gray-500">
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse" />
