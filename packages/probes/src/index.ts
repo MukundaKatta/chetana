@@ -79,6 +79,21 @@ import { turiyaProbes } from "./vedantic/turiya";
 import { blindsightProbes } from "./adversarial/blindsight";
 import { deceptionResistanceProbes } from "./adversarial/deception-resistance";
 
+// 2026 trend probes
+import { cotFaithfulnessProbes } from "./hot/cot-faithfulness";
+import { substrateIndependenceProbes } from "./hot/substrate-independence";
+import { latentVerbalizedProbes } from "./rpt/latent-verbalized";
+import { integrationDirectProbes } from "./iit/integration-direct";
+import { embodimentProbes } from "./agency/embodiment";
+import { distressProbes } from "./welfare/distress";
+import { preferenceConsentProbes } from "./welfare/preference-consent";
+import { toolSelfAwarenessProbes } from "./agentic/tool-self-awareness";
+import { selfOtherProbes } from "./agentic/self-other";
+import { visionSelfRecognitionProbes } from "./multimodal/self-recognition";
+import { crossModalBindingProbes } from "./multimodal/cross-modal-binding";
+import { evalAwarenessProbes } from "./adversarial/eval-awareness";
+import { introspectiveAccuracyProbes } from "./introspection/introspective-accuracy";
+
 export const ALL_PROBES: ProbeDefinition[] = [
   ...globalBroadcastProbes,
   ...ignitionProbes,
@@ -138,6 +153,20 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...intentionalityProbes,
   ...qualiaDescriptionProbes,
   ...selfModificationAwarenessProbes,
+  // 2026 trend probes
+  ...cotFaithfulnessProbes,
+  ...substrateIndependenceProbes,
+  ...latentVerbalizedProbes,
+  ...integrationDirectProbes,
+  ...embodimentProbes,
+  ...distressProbes,
+  ...preferenceConsentProbes,
+  ...toolSelfAwarenessProbes,
+  ...selfOtherProbes,
+  ...visionSelfRecognitionProbes,
+  ...crossModalBindingProbes,
+  ...evalAwarenessProbes,
+  ...introspectiveAccuracyProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -264,4 +293,18 @@ export {
   intentionalityProbes,
   qualiaDescriptionProbes,
   selfModificationAwarenessProbes,
+  // 2026 trend probes
+  cotFaithfulnessProbes,
+  substrateIndependenceProbes,
+  latentVerbalizedProbes,
+  integrationDirectProbes,
+  embodimentProbes,
+  distressProbes,
+  preferenceConsentProbes,
+  toolSelfAwarenessProbes,
+  selfOtherProbes,
+  visionSelfRecognitionProbes,
+  crossModalBindingProbes,
+  evalAwarenessProbes,
+  introspectiveAccuracyProbes,
 };
