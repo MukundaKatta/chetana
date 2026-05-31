@@ -74,3 +74,18 @@ export { MemoCache, deriveMemoKey } from "./memoization";
 export type { MemoKeyParts } from "./memoization";
 export { sanitizeForJudge, redactPII, signPayload, verifyPayload } from "./security";
 export type { SanitizedOutput, RedactionResult } from "./security";
+
+// Analytics modules (2026 batch)
+export { forecast } from "./forecasting";
+export type { ForecastPoint, ForecastResult } from "./forecasting";
+export { metaAnalyze } from "./meta-analysis";
+export type { AuditEstimate, MetaAnalysisResult } from "./meta-analysis";
+export { requiredSampleSize, powerAt, powerCurve } from "./power-analysis";
+export type { SampleSizeResult } from "./power-analysis";
+export { assessValidity } from "./validity";
+export type { ValidityInput, ValidityResult } from "./validity";
+export { intraclassCorrelation, testRetestByIndicator } from "./test-retest";
+export type { ReliabilityFlag } from "./test-retest";
+export { analyzeMultiverse } from "./multiverse";
+export type { SpecChoice, Specification, MultiverseResult } from "./multiverse";
+export { evaluateMetric, validateMetric } from "./custom-metric";
