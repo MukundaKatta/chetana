@@ -97,3 +97,29 @@ export { appendAuditLogEntry, verifyAuditLog } from "./audit-log";
 export type { AuditLogEntry, AuditLogContent, VerificationResult } from "./audit-log";
 export { computeUptime, errorBudget, meterUsage } from "./ops";
 export type { StatusInterval, UptimeResult, ErrorBudgetResult, UsageRecord, PricePerMillion, UsageSummary } from "./ops";
+
+// Platform logic modules (2026 batch, option B)
+export { encodeCursor, decodeCursor, paginate } from "./pagination";
+export type { Paginated, CursorPayload, PaginateOptions } from "./pagination";
+export {
+  buildExportBundle, buildDeletionPlan, selectExpired,
+  hasConsent, withdrawConsent, needsAcceptance, resolveResidencyEndpoint, RESIDENCY_REGIONS,
+} from "./data-governance";
+export type {
+  UserData, ExportBundle, DeletionPlan, Retainable, ConsentPurpose, ConsentRecord,
+  Acceptance, ResidencyRegion,
+} from "./data-governance";
+export { can, permissionsFor, effectiveRole, maskValue, applyMasking } from "./access-control";
+export type { Role, Permission, MaskingPolicy } from "./access-control";
+export {
+  proratedSeatCharge, seatsAvailable, consumeToken, computeInvoice, evaluateCap,
+} from "./billing";
+export type {
+  RateLimitState, RateLimitConfig, RateLimitResult, LineItem, Invoice, CapStatus,
+} from "./billing";
+export { evaluateRules } from "./alerting";
+export type { Comparator, AlertRule, FiredAlert, EvaluateOptions, EvaluateResult } from "./alerting";
+export { buildCohortTrajectories } from "./cohort";
+export type { CohortAuditPoint, TrajectoryPoint, CohortTrajectory } from "./cohort";
+export { scheduleJobs, queueDepthByPriority } from "./priority-queue";
+export type { Priority, QueuedJob, ScheduleOptions } from "./priority-queue";
