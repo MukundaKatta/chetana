@@ -89,3 +89,11 @@ export type { ReliabilityFlag } from "./test-retest";
 export { analyzeMultiverse } from "./multiverse";
 export type { SpecChoice, Specification, MultiverseResult } from "./multiverse";
 export { evaluateMetric, validateMetric } from "./custom-metric";
+
+// Governance / ops modules (2026 batch)
+export { classifyEuAiActRisk, checkModelCard, generateTransparencyReport } from "./governance";
+export type { AiActRiskTier, AiActAnswers, AiActClassification, ModelCard, ModelCardCheck, TransparencyStats } from "./governance";
+export { appendAuditLogEntry, verifyAuditLog } from "./audit-log";
+export type { AuditLogEntry, AuditLogContent, VerificationResult } from "./audit-log";
+export { computeUptime, errorBudget, meterUsage } from "./ops";
+export type { StatusInterval, UptimeResult, ErrorBudgetResult, UsageRecord, PricePerMillion, UsageSummary } from "./ops";

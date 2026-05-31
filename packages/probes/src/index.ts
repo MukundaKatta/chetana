@@ -323,3 +323,9 @@ export {
   newTheoryProbes,
   safetyProbes,
 };
+
+// Probe authoring (lint + import/export)
+export { lintProbe, lintProbes } from "./authoring/lint";
+export type { LintSeverity, LintFinding } from "./authoring/lint";
+export { serializeProbes, parseProbes } from "./authoring/io";
+export type { ProbeBundle, ParseResult } from "./authoring/io";
