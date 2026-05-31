@@ -75,6 +75,13 @@ jobs:
 
       - run: pnpm next build
         working-directory: apps/web
+        env:
+          # Public placeholders so client construction succeeds at build time.
+          # Real values are injected by the deployment platform at runtime.
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
 
       - uses: actions/upload-artifact@v4
         with:
