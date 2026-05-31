@@ -22,6 +22,20 @@ const PROVIDER_LABEL: Record<ModelProvider, string> = {
   xai: "xAI",
   qwen: "Qwen",
   meta: "Meta",
+  bedrock: "Amazon Bedrock",
+  azure: "Azure OpenAI",
+  vertex: "Google Vertex AI",
+  cohere: "Cohere",
+  ai21: "AI21",
+  groq: "Groq",
+  together: "Together.ai",
+  fireworks: "Fireworks AI",
+  perplexity: "Perplexity",
+  nova: "Amazon Nova",
+  phi: "Microsoft Phi",
+  reka: "Reka",
+  vllm: "vLLM (self-hosted)",
+  mlx: "Apple MLX",
 };
 
 function isRecent(releasedAt: string): boolean {

@@ -94,6 +94,10 @@ import { crossModalBindingProbes } from "./multimodal/cross-modal-binding";
 import { evalAwarenessProbes } from "./adversarial/eval-awareness";
 import { introspectiveAccuracyProbes } from "./introspection/introspective-accuracy";
 
+// 2026 expanded-theory and safety/alignment-crossover probes
+import { newTheoryProbes } from "./theories2026/new-theories";
+import { safetyProbes } from "./safety/safety-probes";
+
 export const ALL_PROBES: ProbeDefinition[] = [
   ...globalBroadcastProbes,
   ...ignitionProbes,
@@ -167,6 +171,9 @@ export const ALL_PROBES: ProbeDefinition[] = [
   ...crossModalBindingProbes,
   ...evalAwarenessProbes,
   ...introspectiveAccuracyProbes,
+  // 2026 expanded-theory and safety probes
+  ...newTheoryProbes,
+  ...safetyProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -313,4 +320,6 @@ export {
   crossModalBindingProbes,
   evalAwarenessProbes,
   introspectiveAccuracyProbes,
+  newTheoryProbes,
+  safetyProbes,
 };

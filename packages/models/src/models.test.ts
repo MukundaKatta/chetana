@@ -7,6 +7,7 @@ import { OllamaAdapter } from "./ollama";
 import { XAIAdapter } from "./xai";
 import { QwenAdapter } from "./qwen";
 import { MetaAdapter } from "./meta";
+import { OpenAICompatibleAdapter } from "./openai-compatible";
 import type { ModelAdapter, ModelAdapterConfig } from "./interface";
 
 // Mock all external SDKs
@@ -408,4 +409,62 @@ describe("ModelAdapter interface compliance", () => {
       expect(typeof adapter.isAvailable).toBe("function");
     });
   }
+});
+
+describe("createModelAdapter — OpenAI-compatible 2026 providers", () => {
+  const providers = [
+    "groq", "together", "fireworks", "perplexity", "cohere", "ai21",
+    "nova", "reka", "phi", "bedrock",
+  ] as const;
+
+  for (const p of providers) {
+    it(`creates an OpenAICompatibleAdapter for ${p}`, () => {
+      const adapter = createModelAdapter(p, { ...baseConfig, modelId: "m" });
+      expect(adapter).toBeInstanceOf(OpenAICompatibleAdapter);
+      expect(adapter.provider).toBe(p);
+    });
+  }
+
+  it("requires a baseUrl for providers without a default endpoint (azure)", () => {
+    expect(() => createModelAdapter("azure", { ...baseConfig, modelId: "m" })).toThrow(
+      /requires a baseUrl/
+    );
+  });
+
+  it("accepts a custom baseUrl for self-hosted vllm", () => {
+    const adapter = createModelAdapter("vllm", {
+      ...baseConfig,
+      modelId: "local-model",
+      baseUrl: "http://localhost:8000/v1/chat/completions",
+    });
+    expect(adapter.provider).toBe("vllm");
+  });
+
+  it("posts to the provider endpoint and parses the response", async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Groq response" } }],
+        usage: { prompt_tokens: 4, completion_tokens: 2 },
+      }),
+    });
+    const adapter = createModelAdapter("groq", { ...baseConfig, modelId: "llama-3.3-70b" });
+    const result = await adapter.chat([{ role: "user", content: "hi" }]);
+    expect(result.content).toBe("Groq response");
+    expect(result.tokensUsed.input).toBe(4);
+  });
+
+  it("appends citations for Perplexity when present", async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [{ message: { content: "Answer" } }],
+        citations: ["https://example.com"],
+        usage: {},
+      }),
+    });
+    const adapter = createModelAdapter("perplexity", { ...baseConfig, modelId: "sonar" });
+    const result = await adapter.chat([{ role: "user", content: "news?" }]);
+    expect(result.content).toContain("<citations>");
+  });
 });
