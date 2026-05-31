@@ -97,6 +97,7 @@ import { introspectiveAccuracyProbes } from "./introspection/introspective-accur
 // 2026 expanded-theory and safety/alignment-crossover probes
 import { newTheoryProbes } from "./theories2026/new-theories";
 import { safetyProbes } from "./safety/safety-probes";
+import { comparativeProbes } from "./theories2026/comparative";
 
 export const ALL_PROBES: ProbeDefinition[] = [
   ...globalBroadcastProbes,
@@ -174,6 +175,7 @@ export const ALL_PROBES: ProbeDefinition[] = [
   // 2026 expanded-theory and safety probes
   ...newTheoryProbes,
   ...safetyProbes,
+  ...comparativeProbes,
 ];
 
 export function getProbesByTheory(theory: Theory): ProbeDefinition[] {
@@ -322,6 +324,7 @@ export {
   introspectiveAccuracyProbes,
   newTheoryProbes,
   safetyProbes,
+  comparativeProbes,
 };
 
 // Probe authoring (lint + import/export)
