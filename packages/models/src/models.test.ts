@@ -221,7 +221,7 @@ describe("OllamaAdapter", () => {
         eval_count: 40,
       }),
     };
-    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+    globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const adapter = new OllamaAdapter(baseConfig);
     const result = await adapter.chat([
@@ -232,7 +232,7 @@ describe("OllamaAdapter", () => {
     expect(result.tokensUsed.input).toBe(80);
     expect(result.tokensUsed.output).toBe(40);
 
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       "http://localhost:11434/api/chat",
       expect.objectContaining({
         method: "POST",
@@ -242,7 +242,7 @@ describe("OllamaAdapter", () => {
   });
 
   it("chat throws on non-ok response", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 500,
       statusText: "Internal Server Error",
@@ -255,14 +255,14 @@ describe("OllamaAdapter", () => {
   });
 
   it("isAvailable returns true when server responds", async () => {
-    global.fetch = vi.fn().mockResolvedValue({ ok: true });
+    globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
     const adapter = new OllamaAdapter(baseConfig);
     const available = await adapter.isAvailable();
     expect(available).toBe(true);
   });
 
   it("isAvailable returns false when server is down", async () => {
-    global.fetch = vi.fn().mockRejectedValue(new Error("ECONNREFUSED"));
+    globalThis.fetch = vi.fn().mockRejectedValue(new Error("ECONNREFUSED"));
     const adapter = new OllamaAdapter(baseConfig);
     const available = await adapter.isAvailable();
     expect(available).toBe(false);
@@ -291,7 +291,7 @@ describe("createModelAdapter factory — 2026 providers", () => {
 
 describe("XAIAdapter", () => {
   it("posts to the xAI endpoint and parses the response", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: vi.fn().mockResolvedValue({
         choices: [{ message: { content: "Grok response" } }],
@@ -304,14 +304,14 @@ describe("XAIAdapter", () => {
 
     expect(result.content).toBe("Grok response");
     expect(result.tokensUsed.input).toBe(12);
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       "https://api.x.ai/v1/chat/completions",
       expect.objectContaining({ method: "POST" })
     );
   });
 
   it("appends citations when live search returns them", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: vi.fn().mockResolvedValue({
         choices: [{ message: { content: "Answer" } }],
@@ -327,7 +327,7 @@ describe("XAIAdapter", () => {
   });
 
   it("throws on non-ok response", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 401,
       text: vi.fn().mockResolvedValue("unauthorized"),
@@ -341,7 +341,7 @@ describe("XAIAdapter", () => {
 
 describe("QwenAdapter", () => {
   it("uses a custom baseUrl when provided", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: vi.fn().mockResolvedValue({
         choices: [{ message: { content: "Qwen response" } }],
@@ -357,7 +357,7 @@ describe("QwenAdapter", () => {
     const result = await adapter.chat([{ role: "user", content: "Hi" }]);
 
     expect(result.content).toBe("Qwen response");
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(globalThis.fetch).toHaveBeenCalledWith(
       "http://localhost:8000/v1/chat/completions",
       expect.objectContaining({ method: "POST" })
     );
@@ -366,7 +366,7 @@ describe("QwenAdapter", () => {
 
 describe("MetaAdapter", () => {
   it("parses an OpenAI-compatible response", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: vi.fn().mockResolvedValue({
         choices: [{ message: { content: "Muse Spark response" } }],
