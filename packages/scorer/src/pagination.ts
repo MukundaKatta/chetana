@@ -20,17 +20,14 @@ export interface CursorPayload {
 const MAX_PAGE_SIZE = 100;
 
 export function encodeCursor(payload: CursorPayload): string {
-  // Base64 of JSON — opaque to clients.
-  const json = JSON.stringify(payload);
-  return typeof btoa === "function"
-    ? btoa(json)
-    : Buffer.from(json, "utf-8").toString("base64");
+  // Base64 of JSON — opaque to clients. btoa/atob are available in the browser
+  // and in Node 18+ (and typed via the DOM lib), so no Buffer fallback is needed.
+  return btoa(JSON.stringify(payload));
 }
 
 export function decodeCursor(cursor: string): CursorPayload | null {
   try {
-    const json =
-      typeof atob === "function" ? atob(cursor) : Buffer.from(cursor, "base64").toString("utf-8");
+    const json = atob(cursor);
     const parsed = JSON.parse(json);
     if (parsed && (typeof parsed.key === "string" || typeof parsed.key === "number") && typeof parsed.id === "string") {
       return parsed as CursorPayload;
