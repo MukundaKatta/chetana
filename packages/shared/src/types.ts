@@ -26,7 +26,21 @@ export type ModelProvider =
   | "openrouter"
   | "xai"
   | "qwen"
-  | "meta";
+  | "meta"
+  | "bedrock"
+  | "azure"
+  | "vertex"
+  | "cohere"
+  | "ai21"
+  | "groq"
+  | "together"
+  | "fireworks"
+  | "perplexity"
+  | "nova"
+  | "phi"
+  | "reka"
+  | "vllm"
+  | "mlx";
 
 export type AuditStatus = "pending" | "running" | "completed" | "failed";
 

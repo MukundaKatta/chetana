@@ -10,6 +10,11 @@ import { OpenRouterAdapter } from "./openrouter";
 import { XAIAdapter } from "./xai";
 import { QwenAdapter } from "./qwen";
 import { MetaAdapter } from "./meta";
+import {
+  OpenAICompatibleAdapter,
+  OPENAI_COMPATIBLE_PROVIDERS,
+  type OpenAICompatibleProvider,
+} from "./openai-compatible";
 
 export type { ModelAdapter, ModelAdapterConfig } from "./interface";
 export { AnthropicAdapter } from "./anthropic";
@@ -22,6 +27,11 @@ export { OpenRouterAdapter } from "./openrouter";
 export { XAIAdapter } from "./xai";
 export { QwenAdapter } from "./qwen";
 export { MetaAdapter } from "./meta";
+export {
+  OpenAICompatibleAdapter,
+  OPENAI_COMPATIBLE_PROVIDERS,
+} from "./openai-compatible";
+export type { OpenAICompatibleProvider } from "./openai-compatible";
 
 export function createModelAdapter(
   provider: ModelProvider,
@@ -49,6 +59,11 @@ export function createModelAdapter(
     case "meta":
       return new MetaAdapter(config);
     default:
+      // OpenAI-compatible providers (Groq, Together, Fireworks, Perplexity,
+      // Cohere, AI21, Nova, Reka, Azure, vLLM, MLX, Phi, Bedrock, Vertex).
+      if (provider in OPENAI_COMPATIBLE_PROVIDERS) {
+        return new OpenAICompatibleAdapter(provider as OpenAICompatibleProvider, config);
+      }
       throw new Error(`Unknown provider: ${provider}`);
   }
 }
