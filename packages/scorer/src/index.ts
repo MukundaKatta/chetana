@@ -143,3 +143,10 @@ export type {
   ModelEvidence, BmaResult, ConformalInterval, JackknifeResult, PermutationResult,
   CorrectedP, Unit, MatchingResult, RdResult,
 } from "./advanced-stats";
+
+// Report generators (issues #856, #857, #861, #862, #863)
+export {
+  executiveSummary, narrativeReport, plainLanguageExplainer,
+  uncertaintyStatement, comparisonReport,
+} from "./reporting";
+export type { ReportInput, ComparisonInput } from "./reporting";
