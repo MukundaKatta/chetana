@@ -123,3 +123,13 @@ export { buildCohortTrajectories } from "./cohort";
 export type { CohortAuditPoint, TrajectoryPoint, CohortTrajectory } from "./cohort";
 export { scheduleJobs, queueDepthByPriority } from "./priority-queue";
 export type { Priority, QueuedJob, ScheduleOptions } from "./priority-queue";
+
+// Evaluation-science methods (2026 batch 3)
+export {
+  sprt, leaveOneIndicatorOut, judgeSwapRobustness, noiseRobustness,
+  shapleyValues, causalMediation, itemInformation, selectNextItem, activeLearningSelect,
+} from "./eval-science";
+export type {
+  SprtResult, LooInfluence, JudgeSwapResult, NoisePoint, NoiseRobustnessResult,
+  MediationResult, IrtItem,
+} from "./eval-science";
