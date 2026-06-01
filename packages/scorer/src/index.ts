@@ -133,3 +133,13 @@ export type {
   SprtResult, LooInfluence, JudgeSwapResult, NoisePoint, NoiseRobustnessResult,
   MediationResult, IrtItem,
 } from "./eval-science";
+
+// Advanced statistics (issues #1011-#1017)
+export {
+  bayesianModelAverage, conformalInterval, jackknife, permutationTest,
+  bonferroni, benjaminiHochberg, propensityMatch, regressionDiscontinuity,
+} from "./advanced-stats";
+export type {
+  ModelEvidence, BmaResult, ConformalInterval, JackknifeResult, PermutationResult,
+  CorrectedP, Unit, MatchingResult, RdResult,
+} from "./advanced-stats";
