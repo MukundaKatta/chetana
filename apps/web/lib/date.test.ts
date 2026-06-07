@@ -161,7 +161,11 @@ describe("formatDate", () => {
   });
 
   it("formats a Date object", () => {
-    const result = formatDate(new Date("2026-01-01T00:00:00Z"));
+    // Use midday UTC so the date does not roll back to the previous day in
+    // timezones west of UTC. formatDate renders in the runner's local
+    // timezone by design, so a UTC-midnight input would otherwise make this
+    // assertion timezone-dependent (e.g. "Dec 31, 2025" in US timezones).
+    const result = formatDate(new Date("2026-01-01T12:00:00Z"));
     expect(result).toContain("2026");
     expect(result.length).toBeGreaterThan(0);
   });

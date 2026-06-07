@@ -132,6 +132,44 @@ describe("generateRIS", () => {
   });
 });
 
+describe("UTC date handling", () => {
+  // Audit dates are stored as UTC ISO strings. A citation must be derived
+  // from the UTC components so that it is identical no matter which timezone
+  // generates it. `2026-01-01T00:00:00Z` is the worst case: in any timezone
+  // west of UTC it rolls back to Dec 31, 2025 in local time.
+  const utcMidnightInput: CitationInput = {
+    modelName: "Claude",
+    auditDate: "2026-01-01T00:00:00Z",
+    overallScore: null,
+    theoryScores: null,
+    auditId: "audit-utc",
+    dateAccessed: "2026-01-01T00:00:00Z",
+  };
+
+  it("uses the UTC year for the BibTeX key regardless of timezone", () => {
+    const bibtex = generateBibTeX(utcMidnightInput);
+    expect(bibtex).toContain("@misc{chetana_claude_2026");
+    expect(bibtex).toContain("year      = {2026}");
+  });
+
+  it("uses the UTC year and day for APA at midnight UTC", () => {
+    const apa = generateAPA(utcMidnightInput);
+    expect(apa).toContain("(2026, January 1)");
+  });
+
+  it("uses the UTC day/month/year for MLA at midnight UTC", () => {
+    const mla = generateMLA(utcMidnightInput);
+    expect(mla).toContain("1 Jan 2026");
+  });
+
+  it("uses the UTC date for the RIS DA field at midnight UTC", () => {
+    const ris = generateRIS(utcMidnightInput);
+    expect(ris).toContain("PY  - 2026");
+    expect(ris).toContain("DA  - 2026/01/01");
+    expect(ris).toContain("Y2  - 2026/01/01");
+  });
+});
+
 describe("generateCitation", () => {
   it("routes to correct format generator", () => {
     expect(generateCitation(fullInput, "apa")).toBe(generateAPA(fullInput));
