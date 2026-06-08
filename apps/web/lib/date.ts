@@ -58,7 +58,10 @@ export function formatTimestamp(
     ...options,
   };
 
-  return date.toLocaleDateString(undefined, defaultOptions);
+  // Use toLocaleString (not toLocaleDateString): the date-only formatter is
+  // specified to ignore the hour/minute/second options, so the time portion of
+  // the timestamp would be silently dropped on spec-compliant engines.
+  return date.toLocaleString(undefined, defaultOptions);
 }
 
 /**
