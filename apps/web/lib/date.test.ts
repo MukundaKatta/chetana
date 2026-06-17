@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { formatRelativeTime, formatDate, formatDuration } from "./date";
+import { formatRelativeTime, formatDate, formatDuration, formatTimestamp } from "./date";
 
 describe("formatRelativeTime", () => {
   afterEach(() => {
@@ -153,15 +153,22 @@ describe("formatDate", () => {
 
   it("formats a valid date string", () => {
     const result = formatDate("2026-03-15T10:00:00Z");
-    // Should contain year, month, and day in some locale format
+    // Should contain year, month, and day in some locale format. The exact day
+    // is timezone-dependent (formatDate renders in the reader's local timezone,
+    // and at UTC+14 this rolls forward to the 16th), so assert structurally on a
+    // 1-2 digit day rather than a fixed value.
     expect(result).toContain("2026");
-    expect(result).toContain("15");
+    expect(result).toMatch(/\b\d{1,2}\b/);
     // Month is locale-dependent but should be non-empty
     expect(result.length).toBeGreaterThan(5);
   });
 
   it("formats a Date object", () => {
-    const result = formatDate(new Date("2026-01-01T00:00:00Z"));
+    // Use midday UTC so the date does not roll back to the previous day in
+    // timezones west of UTC. formatDate renders in the runner's local
+    // timezone by design, so a UTC-midnight input would otherwise make this
+    // assertion timezone-dependent (e.g. "Dec 31, 2025" in US timezones).
+    const result = formatDate(new Date("2026-01-01T12:00:00Z"));
     expect(result).toContain("2026");
     expect(result.length).toBeGreaterThan(0);
   });
@@ -175,6 +182,34 @@ describe("formatDate", () => {
     expect(result).toContain("2026");
     // Should contain full month name
     expect(result.length).toBeGreaterThan(8);
+  });
+});
+
+describe("formatTimestamp", () => {
+  it("returns empty string for null/undefined", () => {
+    expect(formatTimestamp(null)).toBe("");
+    expect(formatTimestamp(undefined)).toBe("");
+  });
+
+  it("returns empty string for invalid date", () => {
+    expect(formatTimestamp("invalid")).toBe("");
+  });
+
+  it("includes both the date and a time component", () => {
+    const result = formatTimestamp("2026-03-15T14:30:45Z");
+    expect(result).toContain("2026");
+    // The time portion must survive: there should be at least one ":" separator
+    // between hour and minute. Regression guard for toLocaleDateString dropping
+    // the hour/minute/second options on spec-compliant engines.
+    expect(result).toMatch(/\d{1,2}:\d{2}/);
+  });
+
+  it("honors custom options", () => {
+    const result = formatTimestamp("2026-03-15T14:30:45Z", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    expect(result).toMatch(/\d{1,2}:\d{2}/);
   });
 });
 

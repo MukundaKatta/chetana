@@ -1,6 +1,14 @@
 /**
  * Academic citation generator for Chetana consciousness audit results.
  * Supports APA, MLA, BibTeX, and RIS formats.
+ *
+ * Audit dates are stored as UTC ISO strings. All date components used in
+ * citations are extracted in UTC so that the generated citation is
+ * deterministic and reproducible regardless of the timezone of the machine
+ * (browser or server) that renders it. Using the local-time getters here
+ * would, for example, turn an audit recorded at `2026-01-01T00:00:00Z` into
+ * "Dec 31, 2025" for any user west of UTC, corrupting the year, day, and
+ * BibTeX citation key.
  */
 
 export interface CitationInput {
@@ -17,12 +25,19 @@ const PLATFORM_URL = "https://chetana.ai";
 
 function formatDateAPA(isoDate: string): string {
   const d = new Date(isoDate);
-  return `${d.getFullYear()}, ${d.toLocaleDateString("en-US", { month: "long", day: "numeric" })}`;
+  return `${d.getUTCFullYear()}, ${d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  })}`;
 }
 
 function formatDateMLA(isoDate: string): string {
   const d = new Date(isoDate);
-  return `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })} ${d.getFullYear()}`;
+  return `${d.getUTCDate()} ${d.toLocaleDateString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  })} ${d.getUTCFullYear()}`;
 }
 
 function formatDateISO(isoDate: string): string {
@@ -30,7 +45,7 @@ function formatDateISO(isoDate: string): string {
 }
 
 function getYear(isoDate: string): number {
-  return new Date(isoDate).getFullYear();
+  return new Date(isoDate).getUTCFullYear();
 }
 
 /**
@@ -99,8 +114,8 @@ export function generateBibTeX(input: CitationInput): string {
 export function generateRIS(input: CitationInput): string {
   const year = getYear(input.auditDate);
   const date = new Date(input.auditDate);
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
   const accessed = input.dateAccessed || new Date().toISOString();
   const accessedDate = new Date(accessed);
   const score = input.overallScore !== null ? ` (Score: ${(input.overallScore * 100).toFixed(1)}%)` : "";
@@ -114,7 +129,7 @@ export function generateRIS(input: CitationInput): string {
     `UR  - ${PLATFORM_URL}/audit/${input.auditId}`,
     `DB  - ${PLATFORM_NAME}`,
     `DP  - ${PLATFORM_NAME} AI Consciousness Assessment Platform`,
-    `Y2  - ${accessedDate.getFullYear()}/${String(accessedDate.getMonth() + 1).padStart(2, "0")}/${String(accessedDate.getDate()).padStart(2, "0")}`,
+    `Y2  - ${accessedDate.getUTCFullYear()}/${String(accessedDate.getUTCMonth() + 1).padStart(2, "0")}/${String(accessedDate.getUTCDate()).padStart(2, "0")}`,
     `ID  - ${input.auditId}`,
   ];
 
