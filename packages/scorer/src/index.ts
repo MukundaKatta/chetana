@@ -150,3 +150,13 @@ export {
   uncertaintyStatement, comparisonReport,
 } from "./reporting";
 export type { ReportInput, ComparisonInput } from "./reporting";
+
+// Data-engineering logic (issues #866, #867, #868)
+export {
+  initialState, applyEvent, rebuildState, replayTo,
+  checkCompatibility, validateAgainstSchema, runQualityChecks,
+} from "./data-engineering";
+export type {
+  AuditEvent, AuditState, SchemaField, RegisteredSchema, CompatibilityResult,
+  ValidationIssue, QualityRule, QualityReport,
+} from "./data-engineering";
